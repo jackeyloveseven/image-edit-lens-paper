@@ -83,6 +83,20 @@ all edit families visually intact.
 
 \input{aaai_draft/05_related}
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figs/fig2_method.pdf}
+  \caption{Pipeline. The image stream concatenates noisy target tokens
+  with always-clean condition tokens; each block's post-block residual
+  is tapped and read two ways -- the \emph{depth lens} pushes it through
+  the model's own frozen output head before decoding, the \emph{time
+  lens} instead reads the current step's head output combined with the
+  current latent ($\hat{x}_0{=}x_t{-}\sigma_t v$). Both routes end in a
+  decode-then-CLIP readout, computed identically for both true-CFG
+  passes.}
+  \label{fig:method}
+\end{figure*}
+
 \input{aaai_draft/10_method}
 
 \input{aaai_draft/20_results_decided_early}

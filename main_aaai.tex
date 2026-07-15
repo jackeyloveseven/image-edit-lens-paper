@@ -99,90 +99,9 @@ all edit families visually intact.
 
 \input{aaai_draft/10_method}
 
-\input{aaai_draft/20_results_decided_early}
+\input{aaai_draft/20_experiments}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{figs/fig5_mechanism.pdf}
-  \caption{Left: four ways of turning an intermediate layer's
-  frozen-head output into an image for \emph{car\_red} at $t{=}4$ (A:
-  standard $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped; C:
-  $v_\ell$ decoded directly; D: $-v_\ell$ decoded directly) -- at L24
-  the standard decode is wrong-colored while the sign-flipped/direct
-  decodes already look red, and at L59 this reverses. Right: cross-seed
-  3-way probe accuracy (chance $=0.33$) by layer/step; the headline
-  cell L6/$t$4 ($0.883$) is far above the frozen-head reading at the
-  same cell, and probe accuracy drops at L59 relative to L48--L54.}
-  \label{fig:mechanism}
-\end{figure}
-
-\input{aaai_draft/30_results_translated_late}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig10_boundary.pdf}
-  \caption{A dense, every-layer sweep of \emph{car\_red} over L44--L59
-  sharpens the coarse L48/L54 snap to a precise boundary.
-  \textbf{A}: the standard decode and the direct-$v$ decode cross
-  between L52 and L54 at both steps shown. \textbf{B}: cosine
-  similarity of the intermediate pseudo-velocity to the terminal
-  $v_{59}$ rises sharply in the same band. \textbf{C}: cross-seed probe
-  accuracy is flat from L44 through L58 and drops only at the terminal
-  layer.}
-  \label{fig:boundary}
-\end{figure*}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig12_tuned_lens.jpg}
-  \caption{A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
-  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
-  zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$, watching the edit enter the
-  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
-  head renders the identical L36 hidden state as a color-inverted
-  ghost -- the complement of the true scene -- while the tuned lens at
-  the same cell is already coherent.}
-  \label{fig:tunedlens}
-\end{figure*}
-
-\input{aaai_draft/40_results_dissociation}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig6_causality.pdf}
-  \caption{Causal ablation and transplant, \emph{car\_red} vs.\
-  \emph{beach\_background}. \textbf{A}: ablating a band of layers shows
-  opposite profiles -- car needs its \emph{early} layers, beach needs
-  its \emph{late} ones. \textbf{B}: ablating a window of steps shows
-  car tolerates any single window, beach is destroyed by ablating the
-  earliest one. \textbf{C}: transplanting a donor \emph{car\_red} run's
-  hidden state into a \emph{car\_green} recipient, at any of four layer
-  bands, is \emph{sufficient} to flip the output back to red --
-  including the L48--59 band, which panel A shows is \emph{not
-  necessary} for the car edit at all.}
-  \label{fig:causal}
-\end{figure*}
-
-\input{aaai_draft/45_differential_preview}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever.jpg}
-  \caption{The differential lens as a $\approx$15\%-NFE ($t{=}2$) preview
-  lever: three of a ten-case battery. Left: each case's final edited
-  output. Right: the differential $D$ at layer 52, step 2, with the true
-  edit region outlined in red -- an object slated for removal lights up as
-  a ghost, a keep-vs-replace background segmentation emerges unsupervised,
-  and a tiny recolor glows at its exact site, all at only 15\% of the
-  denoising trajectory.}
-  \label{fig:previewlever}
-\end{figure}
-
-\input{aaai_draft/50_results_generalize_lever}
-
-\input{aaai_draft/60_limits_conclusion}
+\input{aaai_draft/60_conclusion}
 
 \bibliography{references}
 

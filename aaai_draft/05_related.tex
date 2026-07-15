@@ -1,32 +1,62 @@
-% ===== AAAI-27 spine draft: Related Work (~0.5 col) =====
+% ===== AAAI-27 spine draft: Related Work (~0.9 col, expanded) =====
 \section{Related Work}\label{sec:related}
 
 \paragraph{Logit and tuned lenses.} The logit
 lens~\citep{nostalgebraist2020logitlens} projects intermediate residual
 streams through a language model's frozen unembedding; the tuned
 lens~\citep{belrose2023tuned} fits a small per-layer affine map instead.
-We port both to a DiT editor -- staying on the frozen-head side for
-honesty and crossing to the learned side only to render the internal
-image -- with the linear representation
+Both were built for autoregressive text models, where the unembedding
+gives every layer a shared, well-defined target vocabulary; a DiT
+editor has no such vocabulary; a patch's hidden state is not a
+distribution over anything until the whole network has run. We port
+both lens families to this setting -- staying on the frozen-head side
+for honesty and crossing to the learned side only to render the
+internal image -- with the linear representation
 hypothesis~\citep{park2024linear} licensing the informative disagreement
-between a frozen head and a probe.
+between a frozen head and a probe: if the network represents ``red''
+along a roughly linear direction, a probe can find it long before the
+frozen head's fixed final-layer projection can.
+
+\paragraph{Instruction-based diffusion image editing.} Two lines
+established how a diffusion model can be made to follow an edit
+instruction at all. InstructPix2Pix~\citep{brooks2023instructpix2pix}
+trains directly on synthesized instruction-image pairs so the model
+learns the edit end to end; Prompt-to-Prompt~\citep{hertz2023prompttoprompt}
+instead manipulates the model's cross-attention maps at inference time
+to inject the edit while preserving the source's structure, training-free.
+Both contribute a \emph{mechanism for producing} the edit; neither asks
+what representation the network forms once an instruction is given, or
+where in the forward pass that representation becomes the pixels that
+change. \model{} is exactly such an instruction-following editor, and
+our lens targets that open question directly -- not a new editing
+mechanism, but a reading of the one a production model already has.
 
 \paragraph{Thinking with images, and diffusion interpretability.} A
 growing line has multimodal models reason \emph{with} explicit
-intermediate images~\citep{su2025thinkingsurvey,hu2024sketchpad}; we
-supply the mechanistic complement, an image that exists \emph{latently}
-inside a generative editor before any pixel is committed. The Diffusion
-Lens~\citep{toker2024diffusionlens} decodes a text-to-image model's
-\emph{text encoder}; we decode the editing DiT's own denoising stack
-mid-generation, building on the flow-matching
-formulation~\citep{lipman2023flowmatching} and classifier-free
-guidance~\citep{ho2022cfg} that \model{}~\citep{qwen2025image,peebles2023dit}
-uses.
+intermediate images -- sketching, annotating, or otherwise externalizing
+a visual scratchpad as part of the reasoning
+trace~\citep{su2025thinkingsurvey,hu2024sketchpad,wu2024vot,menon2024whiteboard,li2025mvot},
+with production systems now shipping the idea
+too~\citep{openai2025thinking}. We supply the mechanistic complement: an
+image that exists \emph{latently} inside a generative editor before any
+pixel is committed, with no explicit scratchpad or tool call involved.
+The Diffusion Lens~\citep{toker2024diffusionlens} decodes a
+text-to-image model's \emph{text encoder}; we instead decode the editing
+DiT's own denoising stack mid-generation, building on the flow-matching
+and rectified-flow formulation~\citep{lipman2023flowmatching,liu2023rectifiedflow}
+and classifier-free guidance~\citep{ho2022cfg} that
+\model{}~\citep{qwen2025image,peebles2023dit} uses.
 
 \paragraph{Causal interpretability.} Causal tracing / ROME~\citep{meng2022rome}
 patches activations between runs, the move behind our transplant;
 \citet{heimersheim2024activation} catalogue the patching pitfalls that
 motivate reporting ``readable'' and ``necessary'' separately, and
 activation addition~\citep{turner2023actadd} is the steering primitive we
-instantiate with a probe direction. Our semantic readout uses
-CLIP~\citep{radford2021clip} for lack of a better zero-shot alternative.
+instantiate with a probe direction. All three were developed and
+validated on language models with a fixed token vocabulary at every
+patched site; we port the same three primitives (ablate, transplant,
+steer) to a continuous, spatial image stream, where a ``patch'' is a
+region of pixels rather than a token and sufficiency must be checked
+against a rendered image rather than a next-token distribution. Our
+semantic readout uses CLIP~\citep{radford2021clip} for lack of a better
+zero-shot alternative.

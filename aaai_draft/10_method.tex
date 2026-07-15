@@ -1,15 +1,16 @@
 % ===== AAAI-27 spine draft: Method (~1.3 col-page target) =====
-\section{A Layer--Time Lens and Causal Probes}\label{sec:method}
+\section{Proposed Method: A Layer--Time Lens and Causal Probes}\label{sec:method}
 
 We study \model{}, a 60-block DiT editor whose image stream concatenates
-noisy target tokens with always-clean condition tokens. All quantities
-below are read from the \emph{post-block residual} of selected blocks via
-forward hooks, captured in the model's native \texttt{bfloat16}: image-stream
+noisy target tokens with always-clean condition tokens
+(Figure~\ref{fig:method}). All quantities below are read from the
+\emph{post-block residual} of selected blocks via forward hooks,
+captured in the model's native \texttt{bfloat16}: image-stream
 activations reach absmax ${\sim}3{\times}10^{9}$ even at layer 0, so a cast
 to \texttt{float16} silently overflows most elements to \texttt{inf}
 (bf16 capture is a lossless copy, not a downcast).
 
-\paragraph{Three lenses.} The \emph{time lens} decodes the flow-matching
+\paragraph{Four lenses.} The \emph{time lens} decodes the flow-matching
 clean-image estimate $\hat{x}_0 = x_t - \sigma_t v_\theta(x_t,t)$ through
 the VAE at step $t$: what the model currently believes it will output.
 The \emph{depth lens} asks the analogous question across \emph{depth}: it
@@ -27,6 +28,21 @@ one purpose -- rendering the mid-stack code back into an \emph{image} at
 every depth: a per-(layer, timestep) ridge regression from the hidden
 state ($3072$-d) to the conditional-pass velocity ($64$-d), one dictionary
 per cell, with $\lambda$ chosen on a held-out token split.
+
+\paragraph{A differential lens.} The tuned lens renders the whole
+internal image; to isolate the \emph{edit} from the reconstruction, we
+additionally difference it against a control. We run the same source and
+seed twice -- once with the edit prompt, once with the literal
+instruction ``keep the image unchanged'' -- and decode both through the
+same frozen dictionaries (no refit). Because the two runs share a seed,
+their step-0 latents are bit-identical, so
+$D_{\ell,t}=|\text{decode}(h_\ell^{\text{edit}})-\text{decode}(h_\ell^{\text{unchanged}})|$
+isolates the internal edit plan, the reconstruction cancelling by
+construction. A control-fidelity gate -- the correlation between the
+no-op run and the untouched source -- flags the rare case where the model
+cannot leave an image alone before any differential number is trusted;
+because the control is independent of the edit prompt, it can be computed
+once per source image and cached across many candidate edits.
 
 \paragraph{Semantic readout.} Neither lens is itself a score; each
 produces an image. We crop the edited region and score it zero-shot
@@ -60,4 +76,4 @@ empty-ablation and raw-vs-rescaled checks are standing regressions re-run
 per experiment. Porting the method to another editor needs only a
 native-dtype residual hook, the frozen-head gate, and region-restricted
 probes -- exactly the recipe executed unchanged in the cross-model
-replication (\S\ref{sec:generalize}).
+replication reported below under Generalization Across Checkpoints.

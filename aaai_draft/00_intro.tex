@@ -3,10 +3,9 @@
 
 Between reading ``turn the car red'' and painting it, what does a
 diffusion image editor actually do? The mechanics of diffusion suggest
-a gradual-development story: sixty transformer blocks times twenty
-denoising steps, each contributing its small share, the edit surfacing
-progressively like a photograph in developer fluid. This paper measures
-that story and finds it wrong. In the model we study, an edit is not
+a gradual-development story, each of sixty blocks and twenty denoising
+steps contributing its small share -- but this paper measures that
+story and finds it wrong. In the model we study, an edit is not
 developed but \emph{decided early} -- linearly present within the first
 handful of blocks -- and only \emph{translated late}, in the last few
 blocks, from an internal goal-image code into the flow field that does
@@ -44,26 +43,28 @@ explicitly, we find already present \emph{latently} inside a generative
 editor -- formed early, readable, steerable, transplantable, and turned
 to pixels only at the end.
 
-\paragraph{Contributions.}
-\textbf{(1) An instrument.} The first training-free, frozen-head
-layer--time \emph{and} tuned lens for a DiT image editor, paired with
-linear probes and three intervention primitives (ablate, transplant,
-steer) with stated write semantics, under a falsification-first
-protocol -- pre-registered predictions, per-image visual verdicts, and
-bit-exact gates.
-\textbf{(2) A mechanism: the editor thinks with an internal image.} The
-edit is decided early (linearly readable by layer 6), carried as a
+The main contributions of this work are as follows:
+\begin{itemize}
+\item \textbf{An instrument.} The first training-free, frozen-head
+layer--time, tuned, \emph{and} differential lens for a DiT image editor,
+paired with linear probes and three intervention primitives (ablate,
+transplant, steer) with stated write semantics, under a
+falsification-first protocol -- pre-registered predictions, per-image
+visual verdicts, and bit-exact gates.
+\item \textbf{A mechanism: the editor thinks with an internal image.}
+The edit is decided early (linearly readable by layer 6), carried as a
 target-image code for most of the depth, and translated into the
 velocity code only in a sharp, timestep-invariant band (layers
 52--54, transition width one layer) that is edit-family universal and
 survives an independent fine-tune and a 4-step distillation. Readability,
 causal necessity, and linear writability dissociate three different
 ways, and we map where.
-\textbf{(3) Levers.} Because the readings are causal they become
+\item \textbf{Levers.} Because the readings are causal they become
 training-free tools -- most cleanly, truncating classifier-free guidance
 after step 2 saves 45\% of forward passes with all edit families intact,
 isolating CFG's real job as scope resolution rather than deciding the
 edit.
+\end{itemize}
 Every intervention was pre-registered and every verdict made on the
 images themselves; four of our own initial misreadings are retained as
 data. This is exploratory, single-model-family work, and we are explicit

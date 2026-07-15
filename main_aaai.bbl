@@ -1,4 +1,4 @@
-\begin{thebibliography}{14}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
@@ -8,10 +8,24 @@ Belrose, N.; Furman, Z.; Smith, L.; Halawi, D.; Ostrovsky, I.; McKinney, L.;
 \newblock Eliciting Latent Predictions from Transformers with the Tuned Lens.
 \newblock \emph{arXiv preprint arXiv:2303.08112}.
 
+\bibitem[{Brooks, Holynski, and Efros(2023)}]{brooks2023instructpix2pix}
+Brooks, T.; Holynski, A.; and Efros, A.~A. 2023.
+\newblock {InstructPix2Pix}: Learning to Follow Image Editing Instructions.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}.
+
 \bibitem[{Heimersheim and Nanda(2024)}]{heimersheim2024activation}
 Heimersheim, S.; and Nanda, N. 2024.
 \newblock How to Use and Interpret Activation Patching.
 \newblock \emph{arXiv preprint arXiv:2404.15255}.
+
+\bibitem[{Hertz et~al.(2023)Hertz, Mokady, Tenenbaum, Aberman, Pritch, and
+  Cohen-Or}]{hertz2023prompttoprompt}
+Hertz, A.; Mokady, R.; Tenenbaum, J.; Aberman, K.; Pritch, Y.; and Cohen-Or, D.
+  2023.
+\newblock Prompt-to-Prompt Image Editing with Cross-Attention Control.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
 
 \bibitem[{Ho and Salimans(2022)}]{ho2022cfg}
 Ho, J.; and Salimans, T. 2022.
@@ -26,10 +40,25 @@ Hu, Y.; Shi, W.; Fu, X.; Roth, D.; Ostendorf, M.; Zettlemoyer, L.; Smith,
   Multimodal Language Models.
 \newblock In \emph{Advances in Neural Information Processing Systems}.
 
+\bibitem[{Li et~al.(2025)Li, Wu, Zhang, Xia, Mao, Dong, Vuli{\'c}, and
+  Wei}]{li2025mvot}
+Li, C.; Wu, W.; Zhang, H.; Xia, Y.; Mao, S.; Dong, L.; Vuli{\'c}, I.; and Wei,
+  F. 2025.
+\newblock Imagine while Reasoning in Space: Multimodal
+  Visualization-of-Thought.
+\newblock \emph{arXiv preprint arXiv:2501.07542}.
+
 \bibitem[{Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
   Le}]{lipman2023flowmatching}
 Lipman, Y.; Chen, R. T.~Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023.
 \newblock Flow Matching for Generative Modeling.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Liu, Gong, and Liu(2023)}]{liu2023rectifiedflow}
+Liu, X.; Gong, C.; and Liu, Q. 2023.
+\newblock Flow Straight and Fast: Learning to Generate and Transfer Data with
+  Rectified Flow.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
 
@@ -39,11 +68,22 @@ Meng, K.; Bau, D.; Andonian, A.; and Belinkov, Y. 2022.
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, volume~35.
 
+\bibitem[{Menon, Zemel, and Vondrick(2024)}]{menon2024whiteboard}
+Menon, S.; Zemel, R.; and Vondrick, C. 2024.
+\newblock Whiteboard-of-Thought: Thinking Step-by-Step Across Modalities.
+\newblock \emph{arXiv preprint arXiv:2406.14562}.
+
 \bibitem[{nostalgebraist(2020)}]{nostalgebraist2020logitlens}
 nostalgebraist. 2020.
 \newblock Interpreting {GPT}: The Logit Lens.
 \newblock LessWrong.
 \newblock Accessed 2026.
+
+\bibitem[{{OpenAI}(2025)}]{openai2025thinking}
+{OpenAI}. 2025.
+\newblock Thinking with Images.
+\newblock \url{https://openai.com/index/thinking-with-images/}.
+\newblock Introduced with the o3 and o4-mini model release.
 
 \bibitem[{Park, Choe, and Veitch(2024)}]{park2024linear}
 Park, K.; Choe, Y.~J.; and Veitch, V. 2024.
@@ -91,5 +131,11 @@ Turner, A.~M.; Thiergart, L.; Leech, G.; Udell, D.; Vazquez, J.~J.; Mini, U.;
   and MacDiarmid, M. 2023.
 \newblock Activation Addition: Steering Language Models Without Optimization.
 \newblock \emph{arXiv preprint arXiv:2308.10248}.
+
+\bibitem[{Wu et~al.(2024)Wu, Mao, Zhang, Xia, Dong, Cui, and Wei}]{wu2024vot}
+Wu, W.; Mao, S.; Zhang, Y.; Xia, Y.; Dong, L.; Cui, L.; and Wei, F. 2024.
+\newblock Mind's Eye of {LLMs}: Visualization-of-Thought Elicits Spatial
+  Reasoning in Large Language Models.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
 
 \end{thebibliography}

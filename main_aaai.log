@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.10)  15 JUL 2026 16:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.10)  15 JUL 2026 18:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -399,96 +399,102 @@ Overfull \vbox (34.27644pt too high) has occurred while \output is active []
 
 
 
+LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input lin
+e 48.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
+File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
-Underfull \vbox (badness 1478) has occurred while \output is active []
-
-
+LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 48.
+)
 
 [1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
 ocal/texlive/2025/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}
 
 
 
-]
-(./aaai_draft/05_related.tex)
+{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}]
+(./aaai_draft/05_related.tex
 
-<figs/fig2_method.pdf, id=12, 1539.7525pt x 1028.84375pt>
+)
+
+[2 <./figs/fig1_teaser.pdf>]
+<figs/fig2_method.pdf, id=95, 1539.7525pt x 1028.84375pt>
 File: figs/fig2_method.pdf Graphic file (type pdf)
 <use figs/fig2_method.pdf>
 Package pdftex.def Info: figs/fig2_method.pdf  used on input line 88.
 (pdftex.def)             Requested size: 505.89pt x 338.02809pt.
-(./aaai_draft/10_method.tex
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 7.
+ (./aaai_draft/10_method.tex
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 8.
 
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
 
-[2{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc} <./figs/fig1
-_teaser.pdf>])
+) (./aaai_draft/20_experiments.tex
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.95pt on input line 4.
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 10.95pt on input line 4.
 
-(./aaai_draft/20_results_decided_early.tex
 
-[3 <./figs/fig2_method.pdf>])
-<figs/fig5_mechanism.pdf, id=106, 536.04489pt x 232.53325pt>
+[3{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc}]
+
+
+
+[4 <./figs/fig2_method.pdf>]
+<figs/fig5_mechanism.pdf, id=110, 536.04489pt x 232.53325pt>
 File: figs/fig5_mechanism.pdf Graphic file (type pdf)
 <use figs/fig5_mechanism.pdf>
-Package pdftex.def Info: figs/fig5_mechanism.pdf  used on input line 106.
+Package pdftex.def Info: figs/fig5_mechanism.pdf  used on input line 75.
 (pdftex.def)             Requested size: 239.39438pt x 103.84775pt.
- (./aaai_draft/30_results_translated_late.tex
 
 
-
-[4 <./figs/fig5_mechanism.pdf>])
-<figs/fig10_boundary.pdf, id=175, 492.03009pt x 160.86977pt>
+<figs/fig10_boundary.pdf, id=111, 492.03009pt x 160.86977pt>
 File: figs/fig10_boundary.pdf Graphic file (type pdf)
 <use figs/fig10_boundary.pdf>
-Package pdftex.def Info: figs/fig10_boundary.pdf  used on input line 123.
+Package pdftex.def Info: figs/fig10_boundary.pdf  used on input line 154.
 (pdftex.def)             Requested size: 495.77003pt x 162.1016pt.
-<figs/fig12_tuned_lens.jpg, id=176, 2569.6pt x 1096.095pt>
+<figs/fig12_tuned_lens.jpg, id=112, 2569.6pt x 1096.095pt>
 File: figs/fig12_tuned_lens.jpg Graphic file (type jpg)
 <use figs/fig12_tuned_lens.jpg>
-Package pdftex.def Info: figs/fig12_tuned_lens.jpg  used on input line 137.
+Package pdftex.def Info: figs/fig12_tuned_lens.jpg  used on input line 168.
 (pdftex.def)             Requested size: 495.77003pt x 211.47142pt.
- (./aaai_draft/40_results_dissociation.tex)
-<figs/fig6_causality.pdf, id=177, 498.663pt x 166.22101pt>
+
+
+[5 <./figs/fig5_mechanism.pdf>]
+<figs/fig6_causality.pdf, id=181, 498.663pt x 166.22101pt>
 File: figs/fig6_causality.pdf Graphic file (type pdf)
 <use figs/fig6_causality.pdf>
-Package pdftex.def Info: figs/fig6_causality.pdf  used on input line 154.
-(pdftex.def)             Requested size: 495.77003pt x 165.25677pt.
+Package pdftex.def Info: figs/fig6_causality.pdf  used on input line 231.
+(pdftex.def)             Requested size: 234.60545pt x 78.2025pt.
 
 
-(./aaai_draft/45_differential_preview.tex)
-<figs/fig15_preview_lever.jpg, id=178, 1273.75874pt x 1280.785pt>
+<figs/fig15_preview_lever.jpg, id=182, 1273.75874pt x 1280.785pt>
 File: figs/fig15_preview_lever.jpg Graphic file (type jpg)
 <use figs/fig15_preview_lever.jpg>
-Package pdftex.def Info: figs/fig15_preview_lever.jpg  used on input line 172.
+Package pdftex.def Info: figs/fig15_preview_lever.jpg  used on input line 296.
 (pdftex.def)             Requested size: 239.39438pt x 240.71335pt.
 
-(./aaai_draft/50_results_generalize_lever.tex
-
-[5])
-
-(./aaai_draft/60_limits_conclusion.tex)
 
 [6 <./figs/fig10_boundary.pdf>]
+Underfull \vbox (badness 1342) has occurred while \output is active []
 
 
 
-[7 <./figs/fig12_tuned_lens.jpg>]
+)
 
+[7 <./figs/fig12_tuned_lens.jpg> <./figs/fig6_causality.pdf>]
+(./aaai_draft/60_conclusion.tex)
 
+(./main_aaai.bbl
 
-[8
-
- <./figs/fig6_causality.pdf> <./figs/fig15_preview_lever.jpg>]
-(./main_aaai.bbl)
+[8 <./figs/fig15_preview_lever.jpg>])
 
 
 
 [9
-
 
 ] (./main_aaai.aux)
  ***********
@@ -497,11 +503,11 @@ L3 programming layer <2020/03/25>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 7279 strings out of 473190
- 117428 string characters out of 5715799
- 529256 words of memory out of 5000000
- 30399 multiletter control sequences out of 15000+600000
- 593461 words of font info for 58 fonts, out of 8000000 for 9000
+ 7311 strings out of 473190
+ 117231 string characters out of 5715799
+ 525687 words of memory out of 5000000
+ 30438 multiletter control sequences out of 15000+600000
+ 599575 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  95i,8n,117p,356b,416s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
@@ -509,14 +515,15 @@ Here is how much of TeX's memory you used:
 /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
 sr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
 local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
-ocal/texlive/2025/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/tex
-live/2025/texmf-dist/fonts/type1/public/newtx/ztmb.pfb></usr/local/texlive/2025
-/texmf-dist/fonts/type1/public/newtx/ztmr.pfb></usr/local/texlive/2025/texmf-di
-st/fonts/type1/public/newtx/ztmri.pfb>
-Output written on main_aaai.pdf (9 pages, 1805504 bytes).
+ocal/texlive/2025/texmf-dist/fonts/type1/public/tex-gyre/qtmr.pfb></usr/local/t
+exlive/2025/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2
+025/texmf-dist/fonts/type1/public/newtx/ztmb.pfb></usr/local/texlive/2025/texmf
+-dist/fonts/type1/public/newtx/ztmr.pfb></usr/local/texlive/2025/texmf-dist/fon
+ts/type1/public/newtx/ztmri.pfb>
+Output written on main_aaai.pdf (9 pages, 1813239 bytes).
 PDF statistics:
- 354 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
+ 360 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

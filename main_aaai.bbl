@@ -1,0 +1,95 @@
+\begin{thebibliography}{14}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
+  McKinney, Biderman, and Steinhardt}]{belrose2023tuned}
+Belrose, N.; Furman, Z.; Smith, L.; Halawi, D.; Ostrovsky, I.; McKinney, L.;
+  Biderman, S.; and Steinhardt, J. 2023.
+\newblock Eliciting Latent Predictions from Transformers with the Tuned Lens.
+\newblock \emph{arXiv preprint arXiv:2303.08112}.
+
+\bibitem[{Heimersheim and Nanda(2024)}]{heimersheim2024activation}
+Heimersheim, S.; and Nanda, N. 2024.
+\newblock How to Use and Interpret Activation Patching.
+\newblock \emph{arXiv preprint arXiv:2404.15255}.
+
+\bibitem[{Ho and Salimans(2022)}]{ho2022cfg}
+Ho, J.; and Salimans, T. 2022.
+\newblock Classifier-Free Diffusion Guidance.
+\newblock \emph{arXiv preprint arXiv:2207.12598}.
+
+\bibitem[{Hu et~al.(2024)Hu, Shi, Fu, Roth, Ostendorf, Zettlemoyer, Smith, and
+  Krishna}]{hu2024sketchpad}
+Hu, Y.; Shi, W.; Fu, X.; Roth, D.; Ostendorf, M.; Zettlemoyer, L.; Smith,
+  N.~A.; and Krishna, R. 2024.
+\newblock Visual Sketchpad: Sketching as a Visual Chain of Thought for
+  Multimodal Language Models.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
+
+\bibitem[{Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le}]{lipman2023flowmatching}
+Lipman, Y.; Chen, R. T.~Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023.
+\newblock Flow Matching for Generative Modeling.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Meng et~al.(2022)Meng, Bau, Andonian, and Belinkov}]{meng2022rome}
+Meng, K.; Bau, D.; Andonian, A.; and Belinkov, Y. 2022.
+\newblock Locating and Editing Factual Associations in {GPT}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~35.
+
+\bibitem[{nostalgebraist(2020)}]{nostalgebraist2020logitlens}
+nostalgebraist. 2020.
+\newblock Interpreting {GPT}: The Logit Lens.
+\newblock LessWrong.
+\newblock Accessed 2026.
+
+\bibitem[{Park, Choe, and Veitch(2024)}]{park2024linear}
+Park, K.; Choe, Y.~J.; and Veitch, V. 2024.
+\newblock The Linear Representation Hypothesis and the Geometry of Large
+  Language Models.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
+
+\bibitem[{Peebles and Xie(2023)}]{peebles2023dit}
+Peebles, W.; and Xie, S. 2023.
+\newblock Scalable Diffusion Models with Transformers.
+\newblock In \emph{IEEE/CVF International Conference on Computer Vision
+  (ICCV)}.
+
+\bibitem[{{Qwen Team}(2025)}]{qwen2025image}
+{Qwen Team}. 2025.
+\newblock Qwen-Image Technical Report.
+\newblock \emph{arXiv preprint arXiv:2508.02324}.
+
+\bibitem[{Radford et~al.(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal,
+  Sastry, Askell, Mishkin, Clark, Krueger, and Sutskever}]{radford2021clip}
+Radford, A.; Kim, J.~W.; Hallacy, C.; Ramesh, A.; Goh, G.; Agarwal, S.; Sastry,
+  G.; Askell, A.; Mishkin, P.; Clark, J.; Krueger, G.; and Sutskever, I. 2021.
+\newblock Learning Transferable Visual Models From Natural Language
+  Supervision.
+\newblock In \emph{International Conference on Machine Learning (ICML)},
+  8748--8763.
+
+\bibitem[{Su, Xia et~al.(2025)}]{su2025thinkingsurvey}
+Su, Z.; Xia, P.; et~al. 2025.
+\newblock Thinking with Images for Multimodal Reasoning: Foundations, Methods,
+  and Future Frontiers.
+\newblock \emph{arXiv preprint arXiv:2506.23918}.
+
+\bibitem[{Toker et~al.(2024)Toker, Orgad, Ventura, Arad, and
+  Belinkov}]{toker2024diffusionlens}
+Toker, M.; Orgad, H.; Ventura, M.; Arad, D.; and Belinkov, Y. 2024.
+\newblock Diffusion Lens: Interpreting Text Encoders in Text-to-Image
+  Pipelines.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (ACL)}, 9713--9728.
+
+\bibitem[{Turner et~al.(2023)Turner, Thiergart, Leech, Udell, Vazquez, Mini,
+  and MacDiarmid}]{turner2023actadd}
+Turner, A.~M.; Thiergart, L.; Leech, G.; Udell, D.; Vazquez, J.~J.; Mini, U.;
+  and MacDiarmid, M. 2023.
+\newblock Activation Addition: Steering Language Models Without Optimization.
+\newblock \emph{arXiv preprint arXiv:2308.10248}.
+
+\end{thebibliography}

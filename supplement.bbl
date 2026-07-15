@@ -1,0 +1,170 @@
+\begin{thebibliography}{24}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[nostalgebraist(2020)]{nostalgebraist2020logitlens}
+nostalgebraist.
+\newblock Interpreting {GPT}: The logit lens.
+\newblock LessWrong, 2020.
+\newblock URL
+  \url{https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens}.
+\newblock Accessed 2026.
+
+\bibitem[Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
+  McKinney, Biderman, and Steinhardt]{belrose2023tuned}
+Nora Belrose, Zach Furman, Logan Smith, Danny Halawi, Igor Ostrovsky, Lev
+  McKinney, Stella Biderman, and Jacob Steinhardt.
+\newblock Eliciting latent predictions from transformers with the tuned lens.
+\newblock \emph{arXiv preprint arXiv:2303.08112}, 2023.
+
+\bibitem[Peebles and Xie(2023)]{peebles2023dit}
+William Peebles and Saining Xie.
+\newblock Scalable diffusion models with transformers.
+\newblock In \emph{IEEE/CVF International Conference on Computer Vision
+  (ICCV)}, 2023.
+
+\bibitem[{Qwen Team}(2025)]{qwen2025image}
+{Qwen Team}.
+\newblock Qwen-image technical report.
+\newblock \emph{arXiv preprint arXiv:2508.02324}, 2025.
+
+\bibitem[Su et~al.(2025)Su, Xia, et~al.]{su2025thinkingsurvey}
+Zhaochen Su, Peng Xia, et~al.
+\newblock Thinking with images for multimodal reasoning: Foundations, methods,
+  and future frontiers.
+\newblock \emph{arXiv preprint arXiv:2506.23918}, 2025.
+
+\bibitem[Hu et~al.(2024)Hu, Shi, Fu, Roth, Ostendorf, Zettlemoyer, Smith, and
+  Krishna]{hu2024sketchpad}
+Yushi Hu, Weijia Shi, Xingyu Fu, Dan Roth, Mari Ostendorf, Luke Zettlemoyer,
+  Noah~A. Smith, and Ranjay Krishna.
+\newblock Visual sketchpad: Sketching as a visual chain of thought for
+  multimodal language models.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2024.
+
+\bibitem[Menon et~al.(2024)Menon, Zemel, and Vondrick]{menon2024whiteboard}
+Sachit Menon, Richard Zemel, and Carl Vondrick.
+\newblock Whiteboard-of-thought: Thinking step-by-step across modalities.
+\newblock \emph{arXiv preprint arXiv:2406.14562}, 2024.
+
+\bibitem[Wu et~al.(2024)Wu, Mao, Zhang, Xia, Dong, Cui, and Wei]{wu2024vot}
+Wenshan Wu, Shaoguang Mao, Yadong Zhang, Yan Xia, Li~Dong, Lei Cui, and Furu
+  Wei.
+\newblock Mind's eye of {LLMs}: Visualization-of-thought elicits spatial
+  reasoning in large language models.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2024.
+
+\bibitem[Li et~al.(2025)Li, Wu, Zhang, Xia, Mao, Dong, Vuli{\'c}, and
+  Wei]{li2025mvot}
+Chengzu Li, Wenshan Wu, Huanyu Zhang, Yan Xia, Shaoguang Mao, Li~Dong, Ivan
+  Vuli{\'c}, and Furu Wei.
+\newblock Imagine while reasoning in space: Multimodal
+  visualization-of-thought.
+\newblock \emph{arXiv preprint arXiv:2501.07542}, 2025.
+
+\bibitem[{OpenAI}(2025)]{openai2025thinking}
+{OpenAI}.
+\newblock Thinking with images.
+\newblock \url{https://openai.com/index/thinking-with-images/}, 2025.
+\newblock Introduced with the o3 and o4-mini model release.
+
+\bibitem[Park et~al.(2024)Park, Choe, and Veitch]{park2024linear}
+Kiho Park, Yo~Joong Choe, and Victor Veitch.
+\newblock The linear representation hypothesis and the geometry of large
+  language models.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024.
+
+\bibitem[Toker et~al.(2024)Toker, Orgad, Ventura, Arad, and
+  Belinkov]{toker2024diffusionlens}
+Michael Toker, Hadas Orgad, Mor Ventura, Dana Arad, and Yonatan Belinkov.
+\newblock Diffusion lens: Interpreting text encoders in text-to-image
+  pipelines.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (ACL)}, pages 9713--9728, 2024.
+
+\bibitem[Ho et~al.(2020)Ho, Jain, and Abbeel]{ho2020ddpm}
+Jonathan Ho, Ajay Jain, and Pieter Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock \emph{Advances in Neural Information Processing Systems (NeurIPS)},
+  33, 2020.
+
+\bibitem[Song et~al.(2021)Song, Meng, and Ermon]{song2021ddim}
+Jiaming Song, Chenlin Meng, and Stefano Ermon.
+\newblock Denoising diffusion implicit models.
+\newblock \emph{International Conference on Learning Representations (ICLR)},
+  2021.
+
+\bibitem[Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and
+  Ommer]{rombach2022ldm}
+Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj{\"o}rn
+  Ommer.
+\newblock High-resolution image synthesis with latent diffusion models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, pages 10684--10695, 2022.
+
+\bibitem[Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2023flowmatching}
+Yaron Lipman, Ricky T.~Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le.
+\newblock Flow matching for generative modeling.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Liu et~al.(2023)Liu, Gong, and Liu]{liu2023rectifiedflow}
+Xingchao Liu, Chengyue Gong, and Qiang Liu.
+\newblock Flow straight and fast: Learning to generate and transfer data with
+  rectified flow.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Ho and Salimans(2022)]{ho2022cfg}
+Jonathan Ho and Tim Salimans.
+\newblock Classifier-free diffusion guidance.
+\newblock \emph{arXiv preprint arXiv:2207.12598}, 2022.
+
+\bibitem[Meng et~al.(2022)Meng, Bau, Andonian, and Belinkov]{meng2022rome}
+Kevin Meng, David Bau, Alex Andonian, and Yonatan Belinkov.
+\newblock Locating and editing factual associations in {GPT}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~35, 2022.
+
+\bibitem[Heimersheim and Nanda(2024)]{heimersheim2024activation}
+Stefan Heimersheim and Neel Nanda.
+\newblock How to use and interpret activation patching.
+\newblock \emph{arXiv preprint arXiv:2404.15255}, 2024.
+
+\bibitem[Turner et~al.(2023)Turner, Thiergart, Leech, Udell, Vazquez, Mini, and
+  MacDiarmid]{turner2023actadd}
+Alexander~Matt Turner, Lisa Thiergart, Gavin Leech, David Udell, Juan~J.
+  Vazquez, Ulisse Mini, and Monte MacDiarmid.
+\newblock Activation addition: Steering language models without optimization.
+\newblock \emph{arXiv preprint arXiv:2308.10248}, 2023.
+
+\bibitem[Brooks et~al.(2023)Brooks, Holynski, and
+  Efros]{brooks2023instructpix2pix}
+Tim Brooks, Aleksander Holynski, and Alexei~A. Efros.
+\newblock {InstructPix2Pix}: Learning to follow image editing instructions.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 2023.
+
+\bibitem[Hertz et~al.(2023)Hertz, Mokady, Tenenbaum, Aberman, Pritch, and
+  Cohen-Or]{hertz2023prompttoprompt}
+Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel
+  Cohen-Or.
+\newblock Prompt-to-prompt image editing with cross-attention control.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Radford et~al.(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal,
+  Sastry, Askell, Mishkin, Clark, Krueger, and Sutskever]{radford2021clip}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+  Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark,
+  Gretchen Krueger, and Ilya Sutskever.
+\newblock Learning transferable visual models from natural language
+  supervision.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pages
+  8748--8763, 2021.
+
+\end{thebibliography}

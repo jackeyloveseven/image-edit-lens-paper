@@ -1,0 +1,47 @@
+% ===== AAAI-27 spine draft: Decided early (~0.9 col) =====
+\section{The Edit Is Decided Early}\label{sec:early}
+
+\paragraph{In time.} If the edit surfaced progressively, the commit step
+would be late and roughly uniform. Running the time lens over a battery of
+10 cases across 5 edit categories, the step at which $P(\text{target})$
+first reaches within $0.05$ of its final value is instead
+\emph{edit-dependent} and mostly \emph{immediate}: color, background, and
+style edits commit at step 0--2, and only a wholesale new-object
+insertion (\emph{add\_boat}) commits as late as step 7. A finer
+IoU-mask-based onset measurement over 20 cases shows the split is
+categorical, not continuous: 18 of 20 -- spanning final-edit-area
+fraction $0.003$ to $0.99$ -- onset at step 0 regardless of how large or
+novel-looking the finished edit is, and no continuous proxy predicts the
+delay (edge-novelty $\rho{=}0.24$, $p{=}0.30$; area $\rho{=}{-}0.44$,
+running the \emph{wrong} way). Only the two edits that insert genuinely
+novel structure with no existing pixels to build on -- \emph{add\_boat}
+and \emph{add\_runner} -- start late.
+
+\paragraph{In depth, the naive lens says ``late''.} The frozen depth lens
+tells a different-looking story. Decoding \emph{car\_red}'s intermediate
+layers through the model's own head, the edit becomes head-readable only
+in a sharp snap between layers 48 and 54 of 60 -- exactly the familiar
+mid-stack ``nothing happens yet'' appearance of an LLM logit lens.
+
+\paragraph{But a probe reads it 40 layers earlier.} That appearance is
+misleading. A 3-way cross-seed linear probe (which of three colors was
+requested), fit on hidden states from one seed and evaluated on a
+held-out seed, is already at $0.883$ accuracy at \textbf{layer 6}, step 4
+-- five blocks into a 60-block network -- where the frozen head at the
+identical cell reads only $P(\text{red car}){=}0.111$
+(Fig.~\ref{fig:mechanism}). The earliest cell to cross $0.9$ is L36/step 0.
+The decision is present far earlier than the head can read it; it is
+simply held in a basis the head -- built for the network's final-layer
+convention -- cannot parse until the last few blocks. Decided early, read
+out late.
+
+\paragraph{Where the instruction enters.} A complementary text-stream
+ablation locates where the prompt is \emph{consumed}: zeroing the model's
+text tokens in only the first 11 blocks garbles the whole scene, while
+zeroing them after layer 36 barely dents the edit ($P(\text{red}){=}0.993$).
+The instruction is fused into the image stream early and is functionally
+complete by layer 36 -- the ``injection'' stage of the circuit in
+Fig.~\ref{fig:teaser}, whose full text-band table is in the supplement.
+Together with the probe, this gives the paper's five-stage picture:
+injection ($\le$L36), decision ($\le$L6), a target-image code, translation
+(L52--54), and the output head.

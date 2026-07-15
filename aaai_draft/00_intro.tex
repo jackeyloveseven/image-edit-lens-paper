@@ -1,0 +1,70 @@
+% ===== AAAI-27 spine draft: Introduction (~0.9 col-page target) =====
+\section{Introduction}\label{sec:intro}
+
+Between reading ``turn the car red'' and painting it, what does a
+diffusion image editor actually do? The mechanics of diffusion suggest
+a gradual-development story: sixty transformer blocks times twenty
+denoising steps, each contributing its small share, the edit surfacing
+progressively like a photograph in developer fluid. This paper measures
+that story and finds it wrong. In the model we study, an edit is not
+developed but \emph{decided early} -- linearly present within the first
+handful of blocks -- and only \emph{translated late}, in the last few
+blocks, from an internal goal-image code into the flow field that does
+the painting.
+
+Watching this requires an instrument that did not exist. The logit
+lens~\citep{nostalgebraist2020logitlens} and its learned successor, the
+tuned lens~\citep{belrose2023tuned}, let us watch a language model's
+next-token prediction take shape layer by layer by projecting each
+intermediate residual stream through the model's own final unembedding.
+Diffusion transformers (DiTs) that edit
+images~\citep{peebles2023dit,qwen2025image} have no analogous tool:
+there is no vocabulary for an image patch's hidden state, so ``what is
+this layer currently drawing'' has been answerable only by running the
+whole model to the end. We build a layer--time lens for a production DiT
+editor, \model{} (60 blocks), by decoding intermediate residual streams
+through the model's own frozen output head, and -- crucially -- pair
+every passive reading with linear probes and \emph{causal}
+interventions (ablation, transplant, steering) that test whether the
+activations the lens points to are the ones that actually decide the
+edit.
+
+Naively porting the logit-lens recipe reproduces the familiar mid-stack
+``nothing happens yet'' appearance -- and that appearance is itself
+misleading. A linear probe trained on the very activations the frozen
+head cannot decode reaches near-perfect cross-seed accuracy 40+ layers
+earlier (0.88 at layer 6, where the head reads $0.005$--$0.14$). The
+frozen head is reading the network's \emph{output-space} code; the
+decision is present far earlier, just held in a different basis until a
+narrow band near the top of the stack translates it. This places the
+work in the ``thinking with images''
+agenda~\citep{su2025thinkingsurvey}, but at the mechanistic rather than
+the interface level: the intermediate image other work hands a model
+explicitly, we find already present \emph{latently} inside a generative
+editor -- formed early, readable, steerable, transplantable, and turned
+to pixels only at the end.
+
+\paragraph{Contributions.}
+\textbf{(1) An instrument.} The first training-free, frozen-head
+layer--time \emph{and} tuned lens for a DiT image editor, paired with
+linear probes and three intervention primitives (ablate, transplant,
+steer) with stated write semantics, under a falsification-first
+protocol -- pre-registered predictions, per-image visual verdicts, and
+bit-exact gates.
+\textbf{(2) A mechanism: the editor thinks with an internal image.} The
+edit is decided early (linearly readable by layer 6), carried as a
+target-image code for most of the depth, and translated into the
+velocity code only in a sharp, timestep-invariant band (layers
+52--54, transition width one layer) that is edit-family universal and
+survives an independent fine-tune and a 4-step distillation. Readability,
+causal necessity, and linear writability dissociate three different
+ways, and we map where.
+\textbf{(3) Levers.} Because the readings are causal they become
+training-free tools -- most cleanly, truncating classifier-free guidance
+after step 2 saves 45\% of forward passes with all edit families intact,
+isolating CFG's real job as scope resolution rather than deciding the
+edit.
+Every intervention was pre-registered and every verdict made on the
+images themselves; four of our own initial misreadings are retained as
+data. This is exploratory, single-model-family work, and we are explicit
+about where the lens is unreliable.

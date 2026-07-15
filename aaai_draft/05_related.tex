@@ -1,0 +1,32 @@
+% ===== AAAI-27 spine draft: Related Work (~0.5 col) =====
+\section{Related Work}\label{sec:related}
+
+\paragraph{Logit and tuned lenses.} The logit
+lens~\citep{nostalgebraist2020logitlens} projects intermediate residual
+streams through a language model's frozen unembedding; the tuned
+lens~\citep{belrose2023tuned} fits a small per-layer affine map instead.
+We port both to a DiT editor -- staying on the frozen-head side for
+honesty and crossing to the learned side only to render the internal
+image -- with the linear representation
+hypothesis~\citep{park2024linear} licensing the informative disagreement
+between a frozen head and a probe.
+
+\paragraph{Thinking with images, and diffusion interpretability.} A
+growing line has multimodal models reason \emph{with} explicit
+intermediate images~\citep{su2025thinkingsurvey,hu2024sketchpad}; we
+supply the mechanistic complement, an image that exists \emph{latently}
+inside a generative editor before any pixel is committed. The Diffusion
+Lens~\citep{toker2024diffusionlens} decodes a text-to-image model's
+\emph{text encoder}; we decode the editing DiT's own denoising stack
+mid-generation, building on the flow-matching
+formulation~\citep{lipman2023flowmatching} and classifier-free
+guidance~\citep{ho2022cfg} that \model{}~\citep{qwen2025image,peebles2023dit}
+uses.
+
+\paragraph{Causal interpretability.} Causal tracing / ROME~\citep{meng2022rome}
+patches activations between runs, the move behind our transplant;
+\citet{heimersheim2024activation} catalogue the patching pitfalls that
+motivate reporting ``readable'' and ``necessary'' separately, and
+activation addition~\citep{turner2023actadd} is the steering primitive we
+instantiate with a probe direction. Our semantic readout uses
+CLIP~\citep{radford2021clip} for lack of a better zero-shot alternative.

@@ -1,0 +1,63 @@
+% ===== AAAI-27 spine draft: Method (~1.3 col-page target) =====
+\section{A Layer--Time Lens and Causal Probes}\label{sec:method}
+
+We study \model{}, a 60-block DiT editor whose image stream concatenates
+noisy target tokens with always-clean condition tokens. All quantities
+below are read from the \emph{post-block residual} of selected blocks via
+forward hooks, captured in the model's native \texttt{bfloat16}: image-stream
+activations reach absmax ${\sim}3{\times}10^{9}$ even at layer 0, so a cast
+to \texttt{float16} silently overflows most elements to \texttt{inf}
+(bf16 capture is a lossless copy, not a downcast).
+
+\paragraph{Three lenses.} The \emph{time lens} decodes the flow-matching
+clean-image estimate $\hat{x}_0 = x_t - \sigma_t v_\theta(x_t,t)$ through
+the VAE at step $t$: what the model currently believes it will output.
+The \emph{depth lens} asks the analogous question across \emph{depth}: it
+feeds an intermediate layer's hidden state through the model's own frozen
+final head (a non-affine \texttt{AdaLayerNormContinuous} + linear
+\texttt{proj\_out}, bit-exact identical whether invoked at layer 59 or
+re-invoked earlier) and decodes the resulting pseudo-velocity to an
+$\hat x_0$ preview. Because that head's LayerNorm is non-affine, rescaling
+an intermediate state to the terminal norm is a no-op in principle and in
+practice (raw vs.\ rescaled agree to \texttt{max\_rel\_diff}$=0$ on every
+grid; verified three ways) -- the \emph{raw} head is the honest lens, and
+a standing self-consistency gate accompanies every grid we report. The
+\emph{tuned lens}~\citep{belrose2023tuned} crosses to the learned side for
+one purpose -- rendering the mid-stack code back into an \emph{image} at
+every depth: a per-(layer, timestep) ridge regression from the hidden
+state ($3072$-d) to the conditional-pass velocity ($64$-d), one dictionary
+per cell, with $\lambda$ chosen on a held-out token split.
+
+\paragraph{Semantic readout.} Neither lens is itself a score; each
+produces an image. We crop the edited region and score it zero-shot
+against a small bank of natural-language labels with
+CLIP~\citep{radford2021clip}, reporting the target-label probability. This
+is a whole-crop judgment, not a per-patch one, and inherits CLIP's failure
+modes on out-of-distribution previews; we gate on decode coherence and
+flag every violation.
+
+\paragraph{Causal probes.} Reading a lens shows the representation is
+\emph{consistent with} a hypothesis, not that it is \emph{causal}. Three
+interventions, all forward-hook overwrites of the post-block residual,
+test causality. \textbf{Ablate}: zero or mean-replace selected target
+rows at selected layers (an empty spec reproduces the baseline
+bit-for-bit). \textbf{Transplant}: overwrite a recipient run's rows with a
+donor run's, matched by layer/step/patch -- testing \emph{sufficiency}.
+\textbf{Steer}: add a probe direction $\alpha\,d$ (in units of per-row RMS)
+without a donor pass -- testing \emph{linear writability}. All three are
+applied identically to both CFG passes to isolate the intervention rather
+than a lopsided guidance combination.
+
+\paragraph{Protocol: predict, look, gate.} Three rules make the
+\emph{reasoning} reproducible, not just the runs. \textbf{Predict, then
+run}: every intervention was pre-registered; refutations are reported as
+prominently as confirmations, and several headline results are
+pre-registered predictions that failed informatively. \textbf{Look at
+every image}: no verdict rests on CLIP alone -- every run carries a
+per-image visual verdict recorded before the aggregates were read, and
+where the two disagree the image wins. \textbf{Gate the instrument}: the
+empty-ablation and raw-vs-rescaled checks are standing regressions re-run
+per experiment. Porting the method to another editor needs only a
+native-dtype residual hook, the frozen-head gate, and region-restricted
+probes -- exactly the recipe executed unchanged in the cross-model
+replication (\S\ref{sec:generalize}).

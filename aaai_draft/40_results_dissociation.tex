@@ -1,0 +1,48 @@
+% ===== AAAI-27 spine draft: Three dissociations (~1.2 col) =====
+\section{Readable, Necessary, Writable: Three Dissociations}\label{sec:dissoc}
+
+Reading a lens shows only that a representation is \emph{consistent with}
+an edit. Causal probes reveal that readability, causal necessity, and
+linear writability are three different properties, and a layer band can
+have any two without the third.
+
+\paragraph{Readable $\neq$ necessary.} Ablating \emph{car\_red}'s early
+layers (L0--11) is catastrophic ($P(\text{red}){=}0.049$) while ablating
+the late band L48--59 is nearly harmless ($0.826$, versus an unablated
+baseline near $0.93$) -- even though that late band is exactly where the
+frozen head finally reads the edit. \emph{beach\_background} mirrors this
+(L0--11 ablation only partial at $0.193$, L48--59 catastrophic at
+$0.040$), and the split tracks commit time: the early-committing edit
+needs early layers, the late-committing edit needs late ones
+(Fig.~\ref{fig:causal}).
+
+\paragraph{Sufficient $\neq$ necessary.} Transplanting a \emph{car\_red}
+donor's car-region hidden states into a \emph{car\_green} recipient (which
+alone scores $P(\text{red}){=}0.011$) flips the output to red from
+\emph{any} of four donor bands -- including \textbf{L48--59} ($0.940$),
+the very band ablation just showed is dispensable to the recipient. The
+donor's late representation is \emph{sufficient} to install the edit even
+where the recipient's own late computation is not \emph{necessary}. A
+content control confirms specificity: splicing the same donor's
+\emph{background}-region tokens (right band, wrong content) yields a
+garbled ``blue car'' ($0.991$), not red.
+
+\paragraph{Writable, but only onto a carrier.} A single stored
+\emph{direction} -- the probe's $d_{\text{red}}$, no donor pass -- added to
+the recipient's car rows gives a sharp sigmoidal dose-response ($0.024$ at
+$\alpha{=}0.5$, $0.977$ at $\alpha{=}1$, saturating to $\alpha{=}8$); a
+random direction of equal norm is inert ($0.017$), and the negated
+direction overshoots to blue ($0.945$), reproducing the anti-image under
+an active intervention. But writability is bounded: at effective doses the
+steered region is not a recolored car but a flat red patch that
+\emph{replaces} the car's geometry -- the direction installs \emph{which}
+hue, not \emph{where to stop}. Supplying that missing ``where'' with the
+edited object's own silhouette mask turns every previously-failing dose
+into a clean in-place recolor. And conjuring an \emph{object} outruns any
+single direction entirely: the probe direction for object identity is
+inert, because the subspace a variable is read from and the subspace that
+changes it are not the same -- a rank ladder over the donor$-$recipient
+difference resolves identity coarse-to-fine (category at rank 1, a
+coherent instance by rank 4, donor-faithful by rank 64, $2\%$ of the model
+dimension). Readability, necessity, and writability thus dissociate three
+distinct ways, and we map exactly where.

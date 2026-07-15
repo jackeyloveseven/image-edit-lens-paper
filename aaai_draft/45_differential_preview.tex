@@ -1,0 +1,53 @@
+% ===== AAAI-27 spine draft: Differential lens + 15% preview (~0.85 col-page) =====
+\section{A Differential Lens: Previewing the Edit at 15\% NFE}\label{sec:difflens}
+
+The tuned lens renders the whole internal image; to isolate the
+\emph{edit} from the reconstruction we difference it against a control.
+We run the same source and seed twice -- once with the edit prompt, once
+with the literal instruction ``keep the image unchanged'' -- and decode
+both through the \emph{same} frozen dictionaries (no refit). Since the two
+runs share a seed, their step-0 latents are bit-identical, so
+$D_{\ell,t}=|\text{decode}(h_\ell^{\text{edit}})-\text{decode}(h_\ell^{\text{unchanged}})|$
+isolates the internal edit plan, the reconstruction cancelling by
+construction. This also answers \S\ref{sec:translate}'s open caveat that
+the tuned lens's high $R^2$ might be easy background variance: token-level
+$R^2$ \emph{inside} the edit region is $0.88$--$0.97$, matching the
+full-image value -- the dictionaries carry the edit-specific signal
+itself.
+
+\paragraph{Commitment is early; separation is gradual.} A pre-registered
+prediction that $D$ would already localize tightly at every step is
+refuted, informatively. The edit \emph{content} is present at step 0 (the
+tuned lens already shows red eyes, a black trunk), but the
+\emph{differential} at step 0 is a diffuse whole-frame field -- the edit
+prompt perturbs the entire velocity relative to the no-op, not just the
+edited region -- and condenses onto the edit's footprint only gradually
+(localization of $D$'s top mass at L52 climbs monotonically across steps,
+e.g.\ $0.21{\to}0.47{\to}0.67{\to}0.83$ for a cat's-eyes recolor).
+\emph{Committed} (is the content in the internal image) and
+\emph{separated} (has the differential found where it lives) are two
+different quantities, and the value of the no-op control is that it also
+caught a case where the model \emph{cannot} do nothing -- one flat-art
+scene rendered a transparent-PNG checkerboard for ``keep unchanged,''
+which we discard, motivating a control-fidelity gate before any
+differential number is trusted.
+
+\paragraph{A preview lever.} Because the differential carries the edit's
+footprint, we ask whether it does so early enough to be useful. At step 2
+-- the third of 20, $\approx$15\% of the forward passes -- across a
+10-case, five-family battery of natural photographs (all passing the
+control-fidelity gate, $r\in[0.86,0.99]$), the median IoU between
+$D_{\text{L52},t2}$'s top mass and the true edit region is $0.33$,
+$6.6\times$ chance, and all 10 cases sharpen from step 0 to step 2
+(Fig.~\ref{fig:previewlever}): an object slated for removal lights up as a
+ghost, a keep-vs-replace background segmentation emerges unsupervised, and
+a tiny recolor glows at its exact site. (Honestly, a fixed top-10\%
+ground-truth mask under-scores genuinely tiny edits, padding their region
+${\sim}10\times$ with collateral divergence -- a sixth documented
+metric-vs-eye divergence in this work, and the first not caused by CLIP.)
+Because the no-op control is \emph{independent of the edit prompt}, it can
+be computed once per source image and cached; previewing where and how
+large a \emph{candidate} edit will land then costs only the three forward
+passes to reach step 2 plus one frozen-dictionary decode, not a full
+20-step run -- a training-free way to triage many candidate prompts
+against one image before committing to any.

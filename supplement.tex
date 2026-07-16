@@ -135,7 +135,7 @@
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig1_teaser.pdf}
+  \includegraphics[width=0.98\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
   \caption{A layer--time lens for a DiT image editor. Decoding the
   frozen output head at intermediate layers of \emph{car\_red} gives a
   $P(\text{red car})$ grid across layer and denoising step (center); a
@@ -411,7 +411,7 @@ lens} (\S\ref{sec:depthlens}).
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig2_method.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig2_method/fig2_method.pdf}
   \caption{Method overview. The image stream concatenates noisy target
   tokens with always-clean condition tokens (\texttt{zero\_cond\_t});
   each block's post-block residual can be tapped and read two ways: the
@@ -603,7 +603,7 @@ what the mechanism buys in practice (\S\ref{sec:applications},
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig3_commit_curves.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig3_commit_curves/fig3_commit_curves.pdf}
   \caption{Time-lens $P(\text{target})$ at the final readable layer
   (L59) across the denoising trajectory, for 8 of our 10 battery cases
   (\S\ref{sec:when}), colored by edit category. Preserving edits
@@ -693,7 +693,7 @@ first-readable layer.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig4_depth.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig4_depth/fig4_depth.pdf}
   \caption{Depth lens on \emph{car\_red}. Left: decoded depth-lens
   preview at 5 layers $\times$ 3 steps, with the frozen head's
   $P(\text{red car})$ overlaid (red text $>0.5$); L0--L48 renders a
@@ -742,7 +742,7 @@ The depth lens's blind spot is not the same thing as the network's.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig5_mechanism.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
   \caption{Left: four ways of turning an intermediate layer's frozen-head
   output into an image for \emph{car\_red} at $t{=}4$ (A: standard
   $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped
@@ -825,7 +825,7 @@ color-classification probe.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig10_boundary.pdf}
+  \includegraphics[width=0.98\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
   \caption{A dense, every-layer sweep of \emph{car\_red} over L44--L59
   sharpens the coarse L48/L54 snap of Figure~\ref{fig:depth} to a precise
   boundary. \textbf{A}: the standard decode (A) and the direct-$v$ decode
@@ -867,7 +867,7 @@ former happens across L52--54, the latter only at L59.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig12_tuned_lens.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
   \caption{A tuned lens renders the internal image the frozen head
   cannot read. Top: per-(layer, timestep) ridge translators, fit on
   \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
@@ -974,7 +974,7 @@ already ink-styled by mid-depth.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig13_transfer_onset.jpg}
+  \includegraphics[width=\columnwidth]{figs/fig13_transfer_onset/fig13_transfer_onset.jpg}
   \caption{Zero-retrain transfer to a held-out \emph{add\_runner} edit
   (\S\ref{sec:tunedlens}), decoded at L52 through the same translators
   fit for Figure~\ref{fig:tunedlens}. At $t{=}0$ the internal image
@@ -1063,7 +1063,7 @@ prediction made.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig14_diff_lens.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig14_diff_lens/fig14_diff_lens.jpg}
   \caption{A differential lens applied to \emph{color\_eyes} (``change
   the cat's green eyes to red eyes''), decoded at L52 through the
   frozen K1 dictionaries of Figure~\ref{fig:tunedlens}. Top: the edit
@@ -1173,7 +1173,7 @@ for a purely geometric metric.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever.jpg}
+  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
   \caption{The differential lens as a $t{=}2$ ($\approx$15\% NFE)
   preview lever: three of the ten-case battery
   (\S\ref{sec:previewlever}). Left: each case's final edited output.
@@ -1290,7 +1290,7 @@ its instruction rather than by mis-decoding an intermediate layer.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig6_causality.pdf}
+  \includegraphics[width=0.98\textwidth]{figs/fig6_causality/fig6_causality.pdf}
   \caption{Causal ablation and transplant, \emph{car\_red} vs.\
   \emph{beach\_background}. \textbf{A}: ablating a band of layers (all
   20 steps) shows opposite profiles -- car needs its \emph{early} layers,
@@ -1412,7 +1412,7 @@ disruption that happens to read out as the donor's label.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig9_steering.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig9_steering/fig9_steering.pdf}
   \caption{Steering the same \emph{car\_green} recipient toward red by
   adding $\alpha\, d_{\text{red}}$ (the probe direction from
   \S\ref{sec:mechanism}) to car-region rows at L6--23. $P(\text{red})$
@@ -1473,7 +1473,7 @@ image.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig7_applications.pdf}
+  \includegraphics[width=0.98\textwidth]{figs/fig7_applications/fig7_applications.pdf}
   \caption{Three practical uses of the lens. Left: a saliency map built
   from the trained linear probe at the L12/$t$4 hero cell puts $99\%$ of
   its top-decile mass inside the car region, vs.\ $38\%$ for a raw
@@ -1566,7 +1566,7 @@ misleading.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig11_replication.pdf}
+  \includegraphics[width=0.98\textwidth]{figs/fig11_replication/fig11_replication.pdf}
   \caption{Cross-model replication of the core measurements.
   \textbf{A}: the A/C decode-crossover layer (\S\ref{sec:mechanism}) for
   \model{} (reference), an independently fine-tuned checkpoint
@@ -1631,7 +1631,7 @@ was measured on.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig16_crossmodel_lens.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig16_crossmodel_lens/fig16_crossmodel_lens.jpg}
   \caption{The lens toolchain transfers to FireRed-Image-Edit-1.1.
   \textbf{A}: test $R^2$ at $t{=}2$ across the 9 probed layers for the
   three-rung transfer ladder on held-out \emph{car\_red} -- L0 (\model{}
@@ -1821,7 +1821,7 @@ wrong-$\sigma$ dictionary actively hurts).
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig17_k7_ladder.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig17_k7_ladder/fig17_k7_ladder.jpg}
   \caption{\textbf{Rapid-AIO L52 decode ladder under the $\sigma$-matched
   three-rung translator dictionary (K7).} Rows: L0 frozen \model{}
   dictionary, L1 recalibrated, L2 Rapid-AIO-native refit. Columns:
@@ -1874,7 +1874,7 @@ capacity without settling it.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig18_k8_decompose.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig18_k8_decompose/fig18_k8_decompose.jpg}
   \caption{\textbf{Decomposing K7's terminal-step collapse into
   coverage and intrinsic-decodability causes (K8).} \textbf{(a)} Q1:
   as the borrowed \model{} dictionary entry's $\sigma$ closes in on
@@ -1923,7 +1923,7 @@ extrapolation.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig19_k9_curve.jpg}
+  \includegraphics[width=0.98\textwidth]{figs/fig19_k9_curve/fig19_k9_curve.jpg}
   \caption{\textbf{Nested learning curve isolates nonlinearity from
   fit capacity (K9).} \textbf{(a)} Held-out $R^2$ (solid, by
   case$\times$layer) and train--val $R^2$ (dash-dot, layer only) at
@@ -1943,7 +1943,7 @@ spectrum}\label{sec:families}
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/h1a_family_probes.png}
+  \includegraphics[width=0.98\textwidth]{figs/h1a_family_probes/h1a_family_probes.png}
   \caption{Cross-seed probe accuracy per edit family (chance $=0.33$),
   the identical protocol behind Figure~\ref{fig:mechanism} (right):
   three prompts per family (two real edits plus one neutral), probe
@@ -1958,7 +1958,7 @@ spectrum}\label{sec:families}
 
 \begin{figure}[!tp]
   \centering
-  \includegraphics[width=0.88\columnwidth]{figs/h1b_steer_spectrum.jpg}
+  \includegraphics[width=0.88\columnwidth]{figs/h1b_steer_spectrum/h1b_steer_spectrum.jpg}
   \caption{Steering each family's own probe direction ($\alpha{=}2$)
   into a neutral-prompt recipient, at the shallow band L6--23 (middle
   column) and, for the structure families, with a direction re-trained
@@ -2056,14 +2056,14 @@ direction keeps the geometry too.
   \centering
   \begin{subfigure}[b]{0.47\columnwidth}
     \centering
-    \includegraphics[width=\linewidth]{figs/i1d_recompose_grid.jpg}
+    \includegraphics[width=\linewidth]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}
     \caption{}
     \label{fig:recompose}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.47\columnwidth}
     \centering
-    \includegraphics[width=\linewidth]{figs/i2_taxonomy_grid.jpg}
+    \includegraphics[width=\linewidth]{figs/i2_taxonomy_grid/i2_taxonomy_grid.jpg}
     \caption{}
     \label{fig:taxonomy}
   \end{subfigure}
@@ -2602,7 +2602,7 @@ in this paper).
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig8_appendix.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig8_appendix/fig8_appendix.pdf}
   \caption{The self-correction case from \S\ref{sec:limits}. Top: IoU
   of the per-step edit mask against its final mask, for the 6
   non-global-edit battery cases. Five cases ("printing") are already

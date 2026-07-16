@@ -2,6 +2,27 @@
 
 One line each: what it shows -> data source(s) -> generating script.
 
+**2026-07-16: per-figure folders are now the primary source of truth for
+figure provenance.** `figs/` was restructured from a flat directory (all
+image files + scripts loose together) into one subfolder per figure
+(`figs/<name>/`), each containing the image file(s), the plotting script
+if one is preserved, and an `INFO.md` with: intent (one-line, what the
+figure demonstrates), every caption it's used under (AAAI submission /
+supplement.tex, verbatim), the data sources it was built from, and --
+for the figures with no preserved script (`fig12_tuned_lens`,
+`fig13_transfer_onset`, `fig14_diff_lens`, `fig15_preview_lever`,
+`fig16_crossmodel_lens`, `h1a_family_probes`, `h1b_steer_spectrum`,
+`i1d_recompose_grid`, `i2_taxonomy_grid`) -- a note on how it was
+actually produced and how to regenerate it. All `\includegraphics{figs/
+NAME.ext}` references in `main_aaai.tex`/`aaai_draft/*.tex`/
+`supplement.tex` were updated to `figs/NAME/NAME.ext`; recompiled 0
+errors, 0 undefined refs, page counts unchanged (main_aaai.pdf 9pp,
+supplement.pdf 28pp -- the 9pp is a pre-existing AAAI 7pp-body overage
+from a collaborator's content edit, unrelated to this restructuring, not
+yet fixed). The table below (and the v2.x notes further down) is kept
+as historical narrative context; for the current, authoritative
+per-figure record, read `figs/<name>/INFO.md` directly.
+
 - **Fig. 1** (teaser, `fig:teaser`) -- source/edited images + P(red car) layer x
   time grid + five-stage editing-circuit schematic (right panel, v2.1: replaces
   the earlier two-box two-code schematic) -> `runs/wp3_car_red/{source.png,
@@ -207,12 +228,16 @@ number in this revision comes from OUTLINE.md prose alone.
   i2c_swap_control/summary.json` + `.../visual_verdicts.json` (donor-boat
   transplant, `SWAP_L0_23/L24_47/L0_47`, `taxonomy_law_COMPLETE`,
   `family_depth_confirmed`). Table 4 (`tab:taxonomy`) and Figure 13
-  (`figs/i1d_recompose_grid.png` + `figs/i2_taxonomy_grid.png`, combined as
-  two subfigures) are **placeholders**: the PNGs are generator-script boxes
-  stating what is to be rendered (`/tmp/.../scratchpad/make_placeholders.py`
-  at write time), not the actual `intervened.png` grids — a follow-up pass
-  must replace them with real image grids assembled from the `runs/i1*` and
-  `runs/i2*` directories listed in the caption/table.
+  (`figs/i1d_recompose_grid/` + `figs/i2_taxonomy_grid/`, combined as two
+  subfigures) were originally **placeholders** at v2.3 write time: the PNGs
+  were generator-script boxes stating what was to be rendered
+  (`/tmp/.../scratchpad/make_placeholders.py`, since deleted), not the
+  actual `intervened.png` grids. **Superseded 2026-07-14** (confirmed
+  during the K7/K8/K9 provenance audit): both are now real image grids
+  assembled from the `runs/i1*`/`runs/i2*` directories listed above — see
+  `figs/i1d_recompose_grid/INFO.md` / `figs/i2_taxonomy_grid/INFO.md` for
+  the current record. This paragraph is left as historical context for why
+  the caption cites so many `runs/` subdirectories.
 - **CFG truncation (`cfg_until`=4/8 vs full)**: `runs/x1_cfg_truncation/
   summary.json` (`nfe_note`: full=40, cfg4=24/40% saving, cfg8=28/30%
   saving; per-case `wall_time_s`, `diff_vs_full`, `target_score`) +
@@ -315,3 +340,65 @@ and `aaai2027.bst` are byte-identical (md5sum) to the copies in
 the `\twocolumn` layout was rendering correctly all along (checked via
 `pdftoppm` page-1 render), so the only real defect was the checklist
 merge, not the template files themselves.
+
+## Per-figure folder restructuring (2026-07-16)
+
+`figs/` was flat (23 figures' worth of `.pdf`/`.png`/`.jpg`/`.py` files all
+loose in one directory) with no per-image record of intent or provenance
+beyond this file's terse one-liners -- and several figures (the K1/K6
+family: `fig12_tuned_lens`, `fig13_transfer_onset`, `fig14_diff_lens`,
+`fig15_preview_lever`, `fig16_crossmodel_lens`, plus `h1a_family_probes`,
+`h1b_steer_spectrum`) had no entry here at all, or only an entry with no
+generation script. Restructured into `figs/<name>/` per figure, each
+holding the image file(s), the `.py` script if one exists, and an
+`INFO.md` (intent, every caption the figure is used under verbatim, data
+sources, and a regeneration note for the ~9 script-less figures --
+including tracing `fig14_diff_lens.png` to a byte-identical md5 match
+against `runs/k3b_diff_lens_colorcases/color_eyes_strip.png`, and pointing
+the others at their likely `runs/` source folders since no exact-match
+compositing script survives). All 23 `\includegraphics{figs/NAME.ext}`
+call sites across `main_aaai.tex`, `aaai_draft/*.tex` (7 references), and
+`supplement.tex` (23 references) were rewritten to
+`figs/NAME/NAME.ext`; full clean recompile of both documents (0 errors, 0
+undefined refs) confirmed the new paths resolve and pages render
+correctly (spot-checked via `pdftoppm`). Page counts unchanged:
+main_aaai.pdf 9pp (unrelated pre-existing overage, see next paragraph),
+supplement.pdf 28pp. Also used this pass to correct two stale notes above:
+the i1d/i2 "placeholder" warning (superseded 2026-07-14, text hadn't been
+updated) and this file's own top note pointing future readers at
+`figs/<name>/INFO.md` as the current source of truth rather than this
+table.
+
+**Known open issue, not fixed by this pass**: `main_aaai.pdf` is
+currently 9pp (8pp body + 1pp refs), one page over the AAAI-27 7pp-body
+limit verified compliant on 2026-07-14 (8pp = 7+1). Root cause: a
+collaborator's edit expanded `aaai_draft/20_experiments.tex` (merged 5
+old result subsections into one 370-line file) after that verification.
+Not touched here -- deciding what to cut is an editorial call, not a
+provenance-tooling one.
+
+**Side fix, mechanical not editorial**: doing a truly clean rebuild (full
+delete of `.aux/.bbl/.blg/.log` before `pdflatex`+`bibtex`+`pdflatex`x2,
+rather than reusing whatever was already on disk) for this restructuring
+surfaced that `supplement.tex` \S\ref{sec:related} cites
+`ho2020ddpm,song2021ddim,rombach2022ldm` (line ~327, the "Diffusion
+models are most commonly studied through their sampling process..."
+sentence) but all three keys were missing from `references.bib` --
+`bibtex` silently dropped them and `pdflatex` reported "Citation ...
+undefined" (this had been masked because the previously-committed
+`supplement.bbl` was stale: it still had all 3 formatted entries from
+before they were removed from `references.bib`, so anyone reusing that
+`.bbl` instead of rebuilding it from scratch would never see the break).
+Root cause: the collaborator's `references.bib` restructuring (git commit
+`aa1fffa`, net -22 lines) dropped these 3 entries while trimming/
+deduplicating, without touching `supplement.tex` (only `main_aaai.tex`/
+`aaai_draft/` were edited that commit) or regenerating `supplement.bbl`
+to catch the break. Restored verbatim from the pre-restructuring
+`references.bib` (git commit `87d6b75`) -- same title/author/venue/year/
+eprint fields, nothing invented. Recompiled both `main_aaai.pdf` (9pp,
+unaffected -- doesn't cite these 3 keys) and `supplement.pdf` (28pp): 0
+errors, 0 undefined refs/cites, anonymity byte-grep 0 hits on both.
+Treated as a mechanical repair (restoring a dropped, verifiable,
+standard citation) rather than an editorial call, unlike the 9pp overage
+above -- flagging here in case the collaborator meant to drop the
+sentence rather than just the bib entries.

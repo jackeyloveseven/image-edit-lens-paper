@@ -2613,4 +2613,53 @@ in this paper).
   \label{fig:onset}
 \end{figure}
 
+\paragraph{Tuned-lens fitting details.} For each cell (layer $\ell$,
+timestep $t$) we collect paired examples $(h_i,v_i)$ from the
+conditional pass -- the post-block residual $h_i\in\mathbb{R}^{3072}$
+and the model's own ground-truth conditional-pass velocity
+$v_i\in\mathbb{R}^{64}$ -- and fit $\hat v_{\ell,t}=W_{\ell,t}h+b_{\ell,t}$
+by ridge regression, $\min_{W,b}\sum_i\lVert
+v_i-(Wh_i+b)\rVert_2^2+\lambda\lVert W\rVert_F^2$, solved in closed
+form after centering ($W_{\ell,t}=V^\top H(H^\top H+\lambda I)^{-1}$,
+bias from the centering means). $\lambda$ is selected independently
+per cell from the grid $\{10^{-4},10^{-3},10^{-2}\}$ on a held-out
+$10\%$ split of the \emph{fitting} tokens (a random per-token split,
+disjoint from the zero-shot test below); chosen values skew toward
+$10^{-2}$ at shallow layers (L6--L44) and toward $10^{-4}$--$10^{-3}$
+from L56 on. We fit $9$ layers ($6,12,24,36,44,48,52,56,59$) $\times$
+$6$ steps ($0,2,4,8,12,16$) -- $54$ per-step dictionaries, plus $9$
+pooled-over-$t$ dictionaries for a per-layer-only comparison -- a
+coarse grid, not the full $60{\times}20$ cells. Training pairs come
+from three source images, one per training family (\emph{remove\_cup},
+\emph{beach\_background}, \emph{add\_boat}, i.e.\
+\emph{remove}/\emph{background}/\emph{addition}): $4056$, $4056$, and
+$4144$ target-grid tokens respectively, $12256$ pooled tokens per
+per-step cell before the held-out split ($73536$ for a pooled-over-$t$
+dictionary). The zero-shot evaluation (\S\ref{sec:tunedlens}) is a
+second, coarser split than the one used to pick $\lambda$:
+\emph{car\_red} ($4096$ tokens, the color family) is entirely absent
+from the three training images, so held-out $R^2$ there tests
+generalization to an unseen edit family and image, not merely unseen
+tokens within a seen one.
+
+\paragraph{Linear-probe fitting details.} The cross-seed probes
+(\S\ref{sec:mechanism}, \S\ref{sec:families}) are
+\texttt{sklearn.linear\_model.LogisticRegression} (multinomial,
+\texttt{lbfgs}, \texttt{max\_iter=200}) at every cell, with
+scikit-learn's default $L_2$ penalty ($C{=}1$) and no per-cell or
+global regularization sweep -- unlike the tuned lens's per-cell
+$\lambda$, the probe's regularization is fixed throughout. Each patch
+token is its own training example (no pooling), restricted to the
+edit-relevant region: the car's bounding box ($792$ patches) for the
+color probe of \S\ref{sec:mechanism} ($N{=}3{\times}792{=}2376$ per
+split per cell, an $11$-layer $\times$ $5$-step grid), and a
+family-specific region for the four-family probes of
+\S\ref{sec:families} (whole-frame, subsampled, for style; the
+bounding-box complement for background; the bounding box itself for
+removal and addition), swept over $5$ layers $\times$ $3$ steps per
+family. The train/test split is by \emph{seed}, not token or image: fit
+on hidden states from a run at seed $0$, evaluated on an independently
+sampled run at seed $1$, same source image and prompt throughout -- so
+a probe cannot simply memorize a seed-specific noise pattern.
+
 \end{document}

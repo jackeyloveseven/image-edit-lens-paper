@@ -27,7 +27,13 @@ a standing self-consistency gate accompanies every grid we report. The
 one purpose -- rendering the mid-stack code back into an \emph{image} at
 every depth: a per-(layer, timestep) ridge regression from the hidden
 state ($3072$-d) to the conditional-pass velocity ($64$-d), one dictionary
-per cell, with $\lambda$ chosen on a held-out token split.
+per cell, $\hat v_{\ell,t}=W_{\ell,t}h+b_{\ell,t}$ solved in closed form
+after centering ($W_{\ell,t}=V^\top H(H^\top H+\lambda I)^{-1}$), with
+$\lambda$ selected per cell from $\{10^{-4},10^{-3},10^{-2}\}$ on a
+held-out $10\%$ \emph{token} split -- distinct from the zero-shot test
+below, which holds out an entire edit family and source image, not
+merely tokens (full hyperparameters and per-cell counts in the
+supplement).
 
 \paragraph{A differential lens.} The tuned lens renders the whole
 internal image; to isolate the \emph{edit} from the reconstruction, we

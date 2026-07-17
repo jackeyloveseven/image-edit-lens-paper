@@ -20,20 +20,18 @@ final head (a non-affine \texttt{AdaLayerNormContinuous} + linear
 re-invoked earlier) and decodes the resulting pseudo-velocity to an
 $\hat x_0$ preview. Because that head's LayerNorm is non-affine, rescaling
 an intermediate state to the terminal norm is a no-op in principle and in
-practice (raw vs.\ rescaled agree to \texttt{max\_rel\_diff}$=0$ on every
-grid; verified three ways) -- the \emph{raw} head is the honest lens, and
-a standing self-consistency gate accompanies every grid we report. The
+practice (raw vs.\ rescaled agree to \texttt{max\_rel\_diff}$=0$) -- the
+\emph{raw} head is the honest lens, with a standing self-consistency gate
+on every grid we report. The
 \emph{tuned lens}~\citep{belrose2023tuned} crosses to the learned side for
 one purpose -- rendering the mid-stack code back into an \emph{image} at
 every depth: a per-(layer, timestep) ridge regression from the hidden
 state ($3072$-d) to the conditional-pass velocity ($64$-d), one dictionary
 per cell, $\hat v_{\ell,t}=W_{\ell,t}h+b_{\ell,t}$ solved in closed form
 after centering ($W_{\ell,t}=V^\top H(H^\top H+\lambda I)^{-1}$), with
-$\lambda$ selected per cell from $\{10^{-4},10^{-3},10^{-2}\}$ on a
-held-out $10\%$ \emph{token} split -- distinct from the zero-shot test
-below, which holds out an entire edit family and source image, not
-merely tokens (full hyperparameters and per-cell counts in the
-supplement).
+$\lambda$ selected per cell on a held-out $10\%$ \emph{token} split --
+distinct from the zero-shot test below, which holds out an entire edit
+family and source image (full hyperparameters in the supplement).
 
 \paragraph{A differential lens.} The tuned lens renders the whole
 internal image; to isolate the \emph{edit} from the reconstruction, we
@@ -46,9 +44,7 @@ $D_{\ell,t}=|\text{decode}(h_\ell^{\text{edit}})-\text{decode}(h_\ell^{\text{unc
 isolates the internal edit plan, the reconstruction cancelling by
 construction. A control-fidelity gate -- the correlation between the
 no-op run and the untouched source -- flags the rare case where the model
-cannot leave an image alone before any differential number is trusted;
-because the control is independent of the edit prompt, it can be computed
-once per source image and cached across many candidate edits.
+cannot leave an image alone before any differential number is trusted.
 
 \paragraph{Semantic readout.} Neither lens is itself a score; each
 produces an image. We crop the edited region and score it zero-shot
@@ -81,5 +77,5 @@ where the two disagree the image wins. \textbf{Gate the instrument}: the
 empty-ablation and raw-vs-rescaled checks are standing regressions re-run
 per experiment. Porting the method to another editor needs only a
 native-dtype residual hook, the frozen-head gate, and region-restricted
-probes -- exactly the recipe executed unchanged in the cross-model
-replication reported below under Generalization Across Checkpoints.
+probes -- the recipe executed unchanged in the cross-model replication
+below.

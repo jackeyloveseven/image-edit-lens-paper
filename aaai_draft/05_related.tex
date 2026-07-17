@@ -12,10 +12,8 @@ distribution over anything until the whole network has run. We port
 both lens families to this setting -- staying on the frozen-head side
 for honesty and crossing to the learned side only to render the
 internal image -- with the linear representation
-hypothesis~\citep{park2024linear} licensing the informative disagreement
-between a frozen head and a probe: if the network represents ``red''
-along a roughly linear direction, a probe can find it long before the
-frozen head's fixed final-layer projection can.
+hypothesis~\citep{park2024linear} licensing the informative
+disagreement between a frozen head and a probe.
 
 \paragraph{Instruction-based diffusion image editing.} Two lines
 established how a diffusion model can be made to follow an edit
@@ -26,10 +24,9 @@ instead manipulates the model's cross-attention maps at inference time
 to inject the edit while preserving the source's structure, training-free.
 Both contribute a \emph{mechanism for producing} the edit; neither asks
 what representation the network forms once an instruction is given, or
-where in the forward pass that representation becomes the pixels that
-change. \model{} is exactly such an instruction-following editor, and
-our lens targets that open question directly -- not a new editing
-mechanism, but a reading of the one a production model already has.
+where in the forward pass it becomes the pixels that change. Our lens
+targets that open question on exactly such a production editor -- not a
+new editing mechanism, but a reading of the one it already has.
 
 \paragraph{Thinking with images, and diffusion interpretability.} A
 growing line has multimodal models reason \emph{with} explicit
@@ -52,11 +49,9 @@ patches activations between runs, the move behind our transplant;
 \citet{heimersheim2024activation} catalogue the patching pitfalls that
 motivate reporting ``readable'' and ``necessary'' separately, and
 activation addition~\citep{turner2023actadd} is the steering primitive we
-instantiate with a probe direction. All three were developed and
-validated on language models with a fixed token vocabulary at every
-patched site; we port the same three primitives (ablate, transplant,
-steer) to a continuous, spatial image stream, where a ``patch'' is a
-region of pixels rather than a token and sufficiency must be checked
+instantiate with a probe direction. All three were built for language
+models with a token vocabulary at every patched site; we port them to a
+continuous, spatial image stream, where sufficiency must be checked
 against a rendered image rather than a next-token distribution. Our
 semantic readout uses CLIP~\citep{radford2021clip} for lack of a better
 zero-shot alternative.

@@ -3,16 +3,13 @@
 
 \subsection{Experimental Setup}\label{sec:setup}
 
-We evaluate on \model{}, a 60-block DiT editor, using a battery of edit
-instructions spanning five categories -- color, background, style,
-removal, and addition/insertion -- run on natural photographs and one
-flat-art source. Battery size varies with what is being measured (10
-cases across the five categories for the time-lens commit-step sweep
-and for the differential-preview lever, 20 for the finer IoU-based
-onset measurement and for the CFG-truncation check), but the same five
-families recur throughout, and every quantitative number is paired
-with a per-image visual verdict recorded before the aggregate is read,
-following the predict-look-gate protocol described above. Three
+We evaluate on \model{}, a 60-block DiT editor, on edit batteries
+spanning five categories -- color, background, style, removal, and
+addition -- over natural photographs and one flat-art source (10 cases
+for the time-lens commit sweep and the preview lever, 20 for the
+IoU-based onset and CFG-truncation checks); every quantitative number
+is paired with a per-image visual verdict recorded before the
+aggregate is read, per the predict-look-gate protocol above. Three
 readouts do the reporting: the frozen output head's decode, scored
 zero-shot with CLIP against a small label bank; a cross-seed linear
 probe, fit on one seed's hidden states and evaluated on a held-out
@@ -20,8 +17,8 @@ seed; and, for the tuned lens, held-out $R^2$ against the true
 conditional-pass velocity. Two further checkpoints sharing \model{}'s
 transformer classes -- FireRed-Image-Edit-1.1, an independent
 fine-tune, and Rapid-AIO, a 4-step distilled merge -- let us ask
-whether a finding belongs to the architecture or to one training run,
-tested directly below under Generalization Across Checkpoints.
+whether a finding belongs to the architecture or to one training run
+(tested below).
 
 \subsection{The Edit Is Decided Early}\label{sec:early}
 
@@ -54,10 +51,9 @@ held-out seed, is already at $0.883$ accuracy at \textbf{layer 6}, step 4
 -- five blocks into a 60-block network -- where the frozen head at the
 identical cell reads only $P(\text{red car}){=}0.111$
 (Figure~\ref{fig:mechanism}). The earliest cell to cross $0.9$ is L36/step 0.
-The decision is present far earlier than the head can read it; it is
-simply held in a basis the head -- built for the network's final-layer
-convention -- cannot parse until the last few blocks. Decided early, read
-out late.
+The decision is present far earlier than the head can read it, held in
+a basis the head cannot parse until the last few blocks. Decided early,
+read out late.
 
 \paragraph{Where the instruction enters.} A complementary text-stream
 ablation locates where the prompt is \emph{consumed}: zeroing the model's
@@ -72,7 +68,7 @@ injection ($\le$L36), decision ($\le$L6), a target-image code, translation
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \includegraphics[width=0.92\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
   \caption{Left: four ways of turning an intermediate layer's
   frozen-head output into an image for \emph{car\_red} at $t{=}4$ (A:
   standard $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped; C:
@@ -138,20 +134,19 @@ turns orange-red by L36, the scene composes by L44, and the car is fully
 red by L52. The same frozen dictionaries transfer with zero retraining to
 six further held-out cases (style, more colors, removal, background,
 addition); \emph{add\_runner} even reproduces the delayed onset on the
-internal image's own time axis -- an empty path at step 0, a blurred
-figure by step 2, a clear runner by step 4.
+internal image's own time axis -- an empty path at step 0, a clear
+runner by step 4.
 
 \paragraph{The anti-image, mechanized.} This also explains a striking
 artifact: the mid-stack \emph{frozen}-head decode at later steps is a
-color-\emph{inverted} ghost -- a cyan car under a red-brown sky, the exact
-complement of the true scene. It is the image-like mid-stack code forced
-through a head built to consume a velocity: $\hat x_0 = x_t - \sigma v$
-flips the sign of an image-like quantity. The tuned lens at the same cell
-is already coherent.
+color-\emph{inverted} ghost (a cyan car under a red-brown sky) -- the
+image-like mid-stack code forced through a head built to consume a
+velocity, since $\hat x_0 = x_t - \sigma v$ flips the sign of an
+image-like quantity. The tuned lens at the same cell is already coherent.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \includegraphics[width=0.9\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
   \caption{A dense, every-layer sweep of \emph{car\_red} over L44--L59
   sharpens the coarse L48/L54 snap to a precise boundary.
   \textbf{A}: the standard decode and the direct-$v$ decode cross
@@ -165,16 +160,15 @@ is already coherent.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
+  \includegraphics[width=0.85\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
   \caption{A tuned lens renders the internal image the frozen head
   cannot read. Top: per-(layer, timestep) ridge translators, fit on
   \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
   zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$, watching the edit enter the
+  coherent scene at every depth at $t{=}0$ -- the edit enters the
   internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
   head renders the identical L36 hidden state as a color-inverted
-  ghost -- the complement of the true scene -- while the tuned lens at
-  the same cell is already coherent.}
+  ghost, while the tuned lens at the same cell is already coherent.}
   \label{fig:tunedlens}
 \end{figure*}
 
@@ -217,18 +211,17 @@ steered region is not a recolored car but a flat red patch that
 \emph{replaces} the car's geometry -- the direction installs \emph{which}
 hue, not \emph{where to stop}. Supplying that missing ``where'' with the
 edited object's own silhouette mask turns every previously-failing dose
-into a clean in-place recolor. And conjuring an \emph{object} outruns any
-single direction entirely: the probe direction for object identity is
-inert, because the read and write subspaces differ -- a rank ladder
-over the donor$-$recipient
-difference resolves identity coarse-to-fine (category at rank 1, a
-coherent instance by rank 4, donor-faithful by rank 64, $2\%$ of the model
-dimension). Readability, necessity, and writability thus dissociate three
-distinct ways, and we map exactly where.
+into a clean in-place recolor. And conjuring an \emph{object} outruns any single direction: the
+identity probe direction is inert (the read and write subspaces
+differ), while a rank ladder over the donor$-$recipient difference
+resolves identity coarse-to-fine -- category at rank 1, a coherent
+instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
+dimension). Readability, necessity, and writability thus dissociate
+three distinct ways.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.98\columnwidth]{figs/fig6_causality/fig6_causality.pdf}
+  \includegraphics[width=0.9\columnwidth]{figs/fig6_causality/fig6_causality.pdf}
   \caption{Causal ablation and transplant, \emph{car\_red} vs.\
   \emph{beach\_background}. \textbf{A}: ablating a band of layers shows
   opposite profiles -- car needs its \emph{early} layers, beach needs
@@ -246,14 +239,12 @@ distinct ways, and we map exactly where.
 
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
-The differential lens defined in \emph{Proposed Method} isolates the
-internal edit plan from the reconstruction; before using it as a lever we
-first check it is not simply picking up easy background variance rather
-than the edit itself. This also answers the open caveat raised above, in
-\emph{The Edit Is Translated Late}, that the tuned lens's high $R^2$
-might be incidental scene detail: token-level $R^2$ \emph{inside} the
-edit region is $0.88$--$0.97$, matching the full-image value -- the
-dictionaries carry the edit-specific signal itself.
+The differential lens (\emph{Proposed Method}) isolates the internal
+edit plan from the reconstruction. It first settles a caveat left open
+above: token-level $R^2$ \emph{inside} the edit region is
+$0.88$--$0.97$, matching the full-image value, so the tuned
+dictionaries carry the edit-specific signal itself, not incidental
+scene detail.
 
 \paragraph{Commitment is early; separation is gradual.} A pre-registered
 prediction that $D$ would already localize tightly at every step is
@@ -264,12 +255,11 @@ prompt perturbs the entire velocity relative to the no-op, not just the
 edited region -- and condenses onto the edit's footprint only gradually
 (localization of $D$'s top mass at L52 climbs monotonically across steps,
 e.g.\ $0.21{\to}0.47{\to}0.67{\to}0.83$ for a cat's-eyes recolor).
-\emph{Committed} (is the content in the internal image) and
-\emph{separated} (has the differential found where it lives) are two
-different quantities, and the value of the no-op control is that it also
-caught a case where the model \emph{cannot} do nothing -- one flat-art
-scene rendered a transparent-PNG checkerboard for ``keep unchanged,''
-which we discard, motivating a control-fidelity gate before any
+\emph{Committed} (content in the internal image) and \emph{separated}
+(the differential has found where it lives) are different quantities.
+The no-op control also caught one flat-art scene that \emph{cannot}
+``do nothing'' (it renders a transparency checkerboard, and is
+discarded), motivating the control-fidelity gate applied before any
 differential number is trusted.
 
 \paragraph{A preview lever.} Because the differential carries the edit's
@@ -279,38 +269,22 @@ footprint, we ask whether it does so early enough to be useful. At step 2
 control-fidelity gate, $r\in[0.86,0.99]$), the median IoU between
 $D_{\text{L52},t2}$'s top mass and the true edit region is $0.33$,
 $6.6\times$ chance, and all 10 cases sharpen from step 0 to step 2
-(Figure~\ref{fig:previewlever}): an object slated for removal lights up as a
+(figure in the supplement): an object slated for removal lights up as a
 ghost, a keep-vs-replace background segmentation emerges unsupervised, and
-a tiny recolor glows at its exact site. (A fixed top-10\%
-ground-truth mask under-scores genuinely tiny edits, padding their region
-${\sim}10\times$ with collateral divergence.)
-Because the no-op control is \emph{independent of the edit prompt}, it can
-be computed once per source image and cached; previewing where and how
-large a \emph{candidate} edit will land then costs only the three forward
-passes to reach step 2 plus one frozen-dictionary decode, not a full
-20-step run -- a training-free way to triage many candidate prompts
-against one image before committing to any.
-
-\begin{figure}[t]
-	\centering
-	\includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
-	\caption{The differential lens as a $\approx$15\%-NFE ($t{=}2$) preview
-		lever: three of a ten-case battery. Left: each case's final edited
-		output. Right: the differential $D$ at layer 52, step 2, with the true
-		edit region outlined in red -- an object slated for removal lights up as
-		a ghost, a keep-vs-replace background segmentation emerges unsupervised,
-		and a tiny recolor glows at its exact site, all at only 15\% of the
-		denoising trajectory.}
-	\label{fig:previewlever}
-\end{figure}
+a tiny recolor glows at its exact site. Because the no-op control is
+\emph{independent of the edit prompt}, it is computed once per source
+image and cached; previewing a \emph{candidate} edit then costs three
+forward passes plus one frozen-dictionary decode, not a full 20-step run
+-- a training-free way to triage many prompts against one image before
+committing to any.
 
 \subsection{Generalization Across Checkpoints}\label{sec:generalize}
 
 Every finding so far concerns one checkpoint. We re-ran the depth-lens
-crossover, the cross-seed probe, and layer-band ablation on two further
-checkpoints sharing \model{}'s transformer classes: FireRed-Image-Edit-1.1,
-an \emph{independent fine-tune}, and Rapid-AIO, a \emph{4-step distilled}
-merge. \textbf{The translation boundary and the early decision replicate.}
+crossover, the cross-seed probe, and layer-band ablation on the two
+further checkpoints from \emph{Setup} (FireRed-Image-Edit-1.1 and
+Rapid-AIO). \textbf{The translation boundary and the early decision
+replicate.}
 FireRed's A/C crossover lands at L53--56, Rapid-AIO's at L52--54 -- both on
 \model{}'s L52--54 band; FireRed's probe reads $0.852$ at L6 and dips to
 $0.69$ at L59, the same flat-then-dip shape. \textbf{The decision direction
@@ -323,14 +297,13 @@ $R^2$ $0.97$--$0.999$, anti-image reproduced). \textbf{One honest
 divergence}, caught by the check doing its job: ablating L48--59 leaves
 \model{}'s edit intact ($0.826$) but is catastrophic for FireRed ($0.035$)
 -- late-stack redundancy is a property of \emph{training}, not the
-architecture, so the readable$\neq$necessary result reported above, in
-\emph{Readable, Necessary, Writable}, holds architecture-generally
-only in its early half.
+architecture, so the readable$\neq$necessary result above holds
+architecture-generally only in its early half.
 
 \subsection{A Training-Free Lever: Truncating Classifier-Free Guidance}\label{sec:lever}
 
 Because the decision is linearly present by layer 6 and translated by
-layer 53, there is no architectural reason classifier-free guidance needs
+layer 53, classifier-free guidance has no architectural reason to need
 both of its forward passes at all 20 steps. Running the unconditional pass
 only for the first two steps and the conditional pass alone thereafter
 leaves all four edit families visually intact at a \textbf{45\% reduction
@@ -348,23 +321,20 @@ decision structure the lens exposes.
 
 This tool is exploratory. Every number comes primarily from one model,
 one or two seeds, and a double-digit count of hand-chosen images; the
-cross-model checks reported above, in \emph{Generalization Across
-Checkpoints}, cover two checkpoints of the
-same lineage on a subset of measurements, and we make no claim about
-``intent'' or about recovering the network's ``true'' reasoning. The
-semantic readout inherits CLIP's failure modes in identifiable ways: pure
-sampling noise can be mis-scored (a still-noisy decode labeled beach at
-$0.795$), and, in mirror image, an obviously-red recolored car
-\emph{under}-scores ($0.09$--$0.16$) while a \emph{failed} flat patch
-scores higher ($0.70$--$0.84$) -- which is why every quantitative claim is
-paired with a pre-registered visual verdict, and the image wins ties. Four
-of our own initial misreadings are retained as data: a thumbnail
-``revision'' phenomenon that quantification erased (leaving a cleaner
-printing-vs-thinking split), a continuous novelty law that did not
-survive (only a categorical one did), a steering ``clean flip'' that
-was a flat patch replacing the car's geometry, and the over-strong
-conclusion drawn from it -- that a direction cannot carry shape --
-which a silhouette mask refuted. We claim only that, on \model{},
-the readable/necessary/writable dissociations we report are real and
+cross-model checks above cover two checkpoints of the same lineage on
+a subset of measurements; and we claim nothing about ``intent'' or
+about recovering the network's ``true'' reasoning. The semantic
+readout inherits CLIP's failure modes in identifiable ways -- pure
+sampling noise can score as beach at $0.795$, while an obviously-red
+recolored car \emph{under}-scores ($0.09$--$0.16$) against a
+\emph{failed} flat patch ($0.70$--$0.84$) -- which is why every
+quantitative claim is paired with a pre-registered visual verdict, and
+the image wins ties. Four of our own initial misreadings are retained
+as data in the supplement (a thumbnail ``revision'' erased by
+quantification, a continuous novelty law that did not survive, a
+steering ``clean flip'' that was really a flat patch, and the
+over-strong conclusion drawn from it, which a silhouette mask
+refuted). We claim only that, on \model{}, the
+readable/necessary/writable dissociations we report are real and
 repeatable for the seeds and prompts used, because we checked them
 against causal interventions rather than passive readouts alone.

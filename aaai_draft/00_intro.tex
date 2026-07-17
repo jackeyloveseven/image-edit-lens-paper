@@ -33,9 +33,8 @@ Naively porting the logit-lens recipe reproduces the familiar mid-stack
 misleading. A linear probe trained on the very activations the frozen
 head cannot decode reaches near-perfect cross-seed accuracy 40+ layers
 earlier (0.88 at layer 6, where the head reads $0.005$--$0.14$). The
-frozen head is reading the network's \emph{output-space} code; the
-decision is present far earlier, just held in a different basis until a
-narrow band near the top of the stack translates it. This places the
+decision is present far earlier, just held in a basis the head cannot
+parse until a narrow band near the top translates it. This places the
 work in the ``thinking with images''
 agenda~\citep{su2025thinkingsurvey}, but at the mechanistic rather than
 the interface level: the intermediate image other work hands a model
@@ -65,7 +64,6 @@ after step 2 saves 45\% of forward passes with all edit families intact,
 isolating CFG's real job as scope resolution rather than deciding the
 edit.
 \end{itemize}
-Every intervention was pre-registered and every verdict made on the
-images themselves; four of our own initial misreadings are retained as
-data. This is exploratory, single-model-family work, and we are explicit
-about where the lens is unreliable.
+This is exploratory, single-model-family work; every verdict was made
+on the images themselves, and we are explicit about where the lens is
+unreliable.

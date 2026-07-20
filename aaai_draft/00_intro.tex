@@ -18,10 +18,10 @@ no analogous vocabulary: a patch hidden state is not an output
 distribution, so asking what a layer is drawing has required running the
 model to the end.
 
-We build a layer--time lens for a production DiT
-editor, \model{} (60 blocks), by decoding intermediate residual streams
-through the model's own frozen output head, and -- crucially -- pair
-passive readings with linear probes and controlled activation
+We build a layer--time lens for a production DiT editor,
+\model{} (60 blocks), by decoding intermediate residual streams through
+the model's own frozen output head, and -- crucially -- pair passive
+readings with linear probes and controlled activation
 interventions (ablation, transplant, steering) that test what those
 activations can install or write.
 
@@ -52,10 +52,11 @@ distillation. Transplant establishes sufficiency; steering and a
 rank ladder show that readable attributes require a spatial carrier and
 a variable-dependent write subspace.
 \item \textbf{Validation and a lever.} Held-out early best-of-five selection
-validates the readout on Qwen and an independent architecture, with about 68\%
-measured compute reduction. Separately, truncating classifier-free guidance after step 2 saves
-45\% of forward passes across all tested edit families, suggesting that
-CFG's non-redundant role here is scope resolution rather than outcome selection.
+validates the readout on Qwen and an independent architecture, with about
+68\% measured compute reduction. Separately, truncating classifier-free
+guidance after step 2 saves 45\% of forward passes across tested edit
+families, suggesting CFG's non-redundant role here is scope resolution
+rather than outcome selection.
 \end{itemize}
 This is exploratory, single-model-family work; every verdict was made
 on the images themselves, and we are explicit about where the lens is

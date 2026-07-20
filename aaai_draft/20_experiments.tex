@@ -22,6 +22,9 @@ whether a finding persists beyond one training run
 
 \subsection{The Realized Edit Is Predictable Early}\label{sec:early}
 
+\noindent\textbf{Question.} Does the edit unfold gradually, or is the
+final outcome readable before the frozen head agrees?
+
 \paragraph{In time.} If the edit surfaced progressively, the readout would
 saturate late and at roughly the same rate. Running the time lens over a battery of
 10 cases across 5 edit categories, the step at which $P(\text{target})$
@@ -89,44 +92,34 @@ Figure~\ref{fig:teaser}, whose full text-band table is in the supplement.
 Together with the probe, this gives the paper's five-stage picture:
 injection ($\le$L36), early outcome prediction, a target-image code, translation
 (L52--54), and the output head.
+\noindent\textbf{Takeaway.} Time onset is mostly immediate; the frozen depth
+lens looks late, but generation-level probes read the realized outcome from L6.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.92\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
-  \caption{Left: four ways of turning an intermediate layer's
-  frozen-head output into an image for \emph{car\_red} at $t{=}4$ (A:
-  standard $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped; C:
-  $v_\ell$ decoded directly; D: $-v_\ell$ decoded directly) -- at L24
-  the standard decode is wrong-colored while the sign-flipped/direct
-  decodes already look red, and at L59 this reverses. Right: cross-seed
-  3-way probe accuracy (chance $=0.33$) by layer/step; the headline
-  cell L6/$t$4 ($0.883$) is far above the frozen-head reading at the
-  same cell, and probe accuracy drops at L59 relative to L48--L54.}
+  \includegraphics[width=0.96\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \caption{\textbf{Basis mismatch at L6.} Left: four decode conventions for
+  \emph{car\_red} at $t{=}4$ (A: $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B--D:
+  sign-flip / direct-$v$ variants)---standard vs.\ image-like reads swap
+  between L24 and L59. Right: 3-way probe accuracy (chance $0.33$); L6/$t$4
+  ($0.883$) exceeds the frozen-head score at the same cell.}
   \label{fig:mechanism}
 \end{figure}
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.85\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
-  \caption{A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
-  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
-  zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$ -- the edit enters the
-  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
-  head renders the identical L36 hidden state as a color-inverted
-  ghost, while the tuned lens at the same cell is already coherent.}
+  \includegraphics[width=0.92\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.png}
+  \caption{\textbf{Internal image vs.\ frozen-head ghost.} Top: tuned lens
+  (fit on non-color edits, zero-shot on \emph{car\_red}) decodes a coherent
+  scene at every depth at $t{=}0$. Bottom: at $t{=}12$, the frozen head on
+  the same L36 state is a color-inverted ghost; the tuned lens is coherent.}
   \label{fig:tunedlens}
 \end{figure*}
 
 \subsection{The Edit Is Translated Late: Two Codes}\label{sec:translate}
 
-If the realized outcome is predictable early but the frozen head cannot read it
-until layer 52, the mid-stack must hold the edit in a \emph{different
-code}. Three measurements show what that code is and where it is
-converted.
-
-\paragraph{Two decoding conventions cross over.} At an intermediate layer
+\noindent\textbf{Question.} If probes read the outcome early, what mid-stack
+code is converted at L52--54? Three measurements answer this: at an intermediate layer
 the frozen head yields a per-token vector $v_\ell$ we normally treat as a
 velocity, forming $\hat x_0 = x_t - \sigma_t v_\ell$ (variant A). Decoding
 $v_\ell$ instead \emph{directly}, as if it were already a clean latent
@@ -181,18 +174,16 @@ color-\emph{inverted} ghost (a cyan car under a red-brown sky) -- the
 image-like mid-stack code forced through a head built to consume a
 velocity, since $\hat x_0 = x_t - \sigma v$ flips the sign of an
 image-like quantity. The tuned lens at the same cell is already coherent.
+\noindent\textbf{Takeaway.} Mid-stack states are image-like; the L52--54 band
+reconciles them to the velocity convention the head consumes.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
-  \caption{A dense, every-layer sweep of \emph{car\_red} over L44--L59
-  sharpens the coarse L48/L54 snap to a precise boundary.
-  \textbf{A}: the standard decode and the direct-$v$ decode cross
-  between L52 and L54 at both steps shown. \textbf{B}: cosine
-  similarity of the intermediate pseudo-velocity to the terminal
-  $v_{59}$ rises sharply in the same band. \textbf{C}: cross-seed probe
-  accuracy is flat from L44 through L58 and drops only at the terminal
-  layer.}
+  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
+  \emph{car\_red}. \textbf{A}: standard vs.\ direct-$v$ CLIP scores cross in
+  the band (both steps). \textbf{B}: $\cos(v_\ell,v_{59})$ rises sharply.
+  \textbf{C}: probe accuracy stays flat through L58 and drops at L59 only.}
   \label{fig:boundary}
 \end{figure*}
 
@@ -230,8 +221,6 @@ resolves identity coarse-to-fine -- category at rank 1, a coherent
 instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
 dimension). The read and write subspaces differ, and a writable attribute
 still requires a spatial carrier.
-
-
 
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
@@ -326,5 +315,3 @@ $p{=}0.968$) precludes an object-invariant subspace. Because CLIP can prefer a
 flat patch to a true recolor, quantitative claims carry pre-registered visual
 verdicts. We claim tested outcome predictability, transplant sufficiency, and
 carrier-bounded writability, not irreversible commitment or necessity.
-In summary, the lens predicts outcomes and Qwen's late translation; selection
-spans two architectures and routing explains coherent transplant.

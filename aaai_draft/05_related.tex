@@ -31,8 +31,8 @@ new editing mechanism, but a reading of the one it already has.
 \paragraph{Thinking with images, and diffusion interpretability.} A
 growing line has multimodal models reason \emph{with} explicit
 intermediate images by externalizing a visual scratchpad
-\citep{hu2024sketchpad,wu2024vot,li2025mvot}. We supply the mechanistic complement: an
-image that exists \emph{latently} inside a generative editor before any
+\citep{hu2024sketchpad,wu2024vot,li2025mvot}. We supply the mechanistic
+complement: an image that exists \emph{latently} inside a generative editor before any
 output pixel is produced, with no explicit scratchpad or tool call involved.
 The Diffusion Lens~\citep{toker2024diffusionlens} decodes a
 text-to-image model's \emph{text encoder}; DiffLens and
@@ -42,9 +42,10 @@ unifies extraction, patching, steering, and stitching for text-to-image
 U-Nets~\citep{sykora2026dreamreader}; and sparse autoencoders expose causal
 generation features~\citep{surkov2025sae}. Breaking the Lock-in finds early
 cross-seed convergence in text-to-image sampling and intervenes to increase
-diversity~\citep{zhu2026lockin}. Probe-Select~\citep{guo2026probeselect} predicts final
-quality from early activations; ELECT~\citep{kim2025elect} scores early latent
-background consistency; and ADE-CoT~\citep{qu2026adecot} adds adaptive budgets
+diversity~\citep{zhu2026lockin}. Probe-Select~\citep{guo2026probeselect}
+predicts final quality from early activations;
+ELECT~\citep{kim2025elect} scores early latent background consistency;
+and ADE-CoT~\citep{qu2026adecot} adds adaptive budgets
 and stopping at scale. We instead predict \emph{which outcome} a fixed
 underspecified edit realizes and use selection only as a held-out behavioral
 test, while mapping how an image-editing DiT's realized outcome changes code

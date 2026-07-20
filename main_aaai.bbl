@@ -1,4 +1,4 @@
-\begin{thebibliography}{21}
+\begin{thebibliography}{30}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
@@ -13,6 +13,19 @@ Brooks, T.; Holynski, A.; and Efros, A.~A. 2023.
 \newblock {InstructPix2Pix}: Learning to Follow Image Editing Instructions.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}.
+
+\bibitem[{Cho et~al.(2026)Cho, Baek, Kim, and Ham}]{cho2026restore}
+Cho, H.; Baek, D.; Kim, Y.; and Ham, B. 2026.
+\newblock Improving Visual Token Reduction via Rectifying Distortions for
+  Efficient Multimodal {LLM} Inference.
+\newblock \emph{arXiv preprint arXiv:2606.01711}.
+\newblock Accepted at ICML 2026.
+
+\bibitem[{Guo, Wei, and Jing(2026)}]{guo2026probeselect}
+Guo, H.; Wei, H.; and Jing, B. 2026.
+\newblock Toward Early Quality Assessment of Text-to-Image Diffusion Models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 13186--13195.
 
 \bibitem[{Heimersheim and Nanda(2024)}]{heimersheim2024activation}
 Heimersheim, S.; and Nanda, N. 2024.
@@ -40,6 +53,13 @@ Hu, Y.; Shi, W.; Fu, X.; Roth, D.; Ostendorf, M.; Zettlemoyer, L.; Smith,
   Multimodal Language Models.
 \newblock In \emph{Advances in Neural Information Processing Systems}.
 
+\bibitem[{Kim et~al.(2025)Kim, Lee, Kim, and Lee}]{kim2025elect}
+Kim, J.; Lee, S.; Kim, N.; and Lee, S. 2025.
+\newblock {ELECT}: Early Latent Consistency for Zero-Shot Candidate Selection
+  in Instruction-Guided Image Editing.
+\newblock In \emph{IEEE/CVF International Conference on Computer Vision
+  (ICCV)}, 8209--8218.
+
 \bibitem[{Li et~al.(2025)Li, Wu, Zhang, Xia, Mao, Dong, Vuli{\'c}, and
   Wei}]{li2025mvot}
 Li, C.; Wu, W.; Zhang, H.; Xia, Y.; Mao, S.; Dong, L.; Vuli{\'c}, I.; and Wei,
@@ -62,28 +82,26 @@ Liu, X.; Gong, C.; and Liu, Q. 2023.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
 
+\bibitem[{Luo et~al.(2025)Luo, Ding, Chan, Min, Callison-Burch, and
+  Vidal}]{luo2025colan}
+Luo, J.; Ding, T.; Chan, K. H.~R.; Min, H.; Callison-Burch, C.; and Vidal, R.
+  2025.
+\newblock Concept Lancet: Image Editing with Compositional Representation
+  Transplant.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 28502--28512.
+
 \bibitem[{Meng et~al.(2022)Meng, Bau, Andonian, and Belinkov}]{meng2022rome}
 Meng, K.; Bau, D.; Andonian, A.; and Belinkov, Y. 2022.
 \newblock Locating and Editing Factual Associations in {GPT}.
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, volume~35.
 
-\bibitem[{Menon, Zemel, and Vondrick(2024)}]{menon2024whiteboard}
-Menon, S.; Zemel, R.; and Vondrick, C. 2024.
-\newblock Whiteboard-of-Thought: Thinking Step-by-Step Across Modalities.
-\newblock \emph{arXiv preprint arXiv:2406.14562}.
-
 \bibitem[{nostalgebraist(2020)}]{nostalgebraist2020logitlens}
 nostalgebraist. 2020.
 \newblock Interpreting {GPT}: The Logit Lens.
 \newblock LessWrong.
 \newblock Accessed 2026.
-
-\bibitem[{{OpenAI}(2025)}]{openai2025thinking}
-{OpenAI}. 2025.
-\newblock Thinking with Images.
-\newblock \url{https://openai.com/index/thinking-with-images/}.
-\newblock Introduced with the o3 and o4-mini model release.
 
 \bibitem[{Park, Choe, and Veitch(2024)}]{park2024linear}
 Park, K.; Choe, Y.~J.; and Veitch, V. 2024.
@@ -96,6 +114,20 @@ Peebles, W.; and Xie, S. 2023.
 \newblock Scalable Diffusion Models with Transformers.
 \newblock In \emph{IEEE/CVF International Conference on Computer Vision
   (ICCV)}.
+
+\bibitem[{Pegoraro, Johnson, and Nixon(2026)}]{pegoraro2026look}
+Pegoraro, A.; Johnson, D.~D.; and Nixon, J. 2026.
+\newblock Look But Don't Touch: Visual Features in Diffusion Models Are Easy to
+  Detect but Hard to Steer.
+\newblock \emph{arXiv preprint arXiv:2606.31699}.
+
+\bibitem[{Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Yu, Sun, Bai, Chu, Gou,
+  Xiong, and Cai}]{qu2026adecot}
+Qu, X.; Yuan, Z.; Tang, J.; Chen, R.; Tang, D.; Yu, M.; Sun, L.; Bai, Y.; Chu,
+  X.; Gou, G.; Xiong, G.; and Cai, Y. 2026.
+\newblock From Scale to Speed: Adaptive Test-Time Scaling for Image Editing.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 23272--23282.
 
 \bibitem[{{Qwen Team}(2025)}]{qwen2025image}
 {Qwen Team}. 2025.
@@ -111,11 +143,30 @@ Radford, A.; Kim, J.~W.; Hallacy, C.; Ramesh, A.; Goh, G.; Agarwal, S.; Sastry,
 \newblock In \emph{International Conference on Machine Learning (ICML)},
   8748--8763.
 
-\bibitem[{Su, Xia et~al.(2025)}]{su2025thinkingsurvey}
-Su, Z.; Xia, P.; et~al. 2025.
-\newblock Thinking with Images for Multimodal Reasoning: Foundations, Methods,
-  and Future Frontiers.
-\newblock \emph{arXiv preprint arXiv:2506.23918}.
+\bibitem[{Shi et~al.(2025)Shi, Li, Wang, Zhao, Pang, Yang, Yu, and
+  Ren}]{shi2025difflens}
+Shi, Y.; Li, C.; Wang, Y.; Zhao, Y.; Pang, A.; Yang, S.; Yu, J.; and Ren, K.
+  2025.
+\newblock Dissecting and Mitigating Diffusion Bias via Mechanistic
+  Interpretability.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 8192--8202.
+
+\bibitem[{Surkov et~al.(2025)Surkov, Wendler, Mari, Terekhov, Deschenaux, West,
+  Gulcehre, and Bau}]{surkov2025sae}
+Surkov, V.; Wendler, C.; Mari, A.; Terekhov, M.; Deschenaux, J.; West, R.;
+  Gulcehre, C.; and Bau, D. 2025.
+\newblock One-Step is Enough: Sparse Autoencoders for Text-to-Image Diffusion
+  Models.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
+
+\bibitem[{Sykora et~al.(2026)Sykora, Williams, Hu, Duan, Zhou, Wetzstein, and
+  Aigerman}]{sykora2026dreamreader}
+Sykora, Q.; Williams, F.; Hu, Y.; Duan, P.; Zhou, B.; Wetzstein, G.; and
+  Aigerman, N. 2026.
+\newblock {DreamReader}: Interpreting and Editing Diffusion Models via
+  Representation Extraction.
+\newblock \emph{arXiv preprint arXiv:2603.13299}.
 
 \bibitem[{Toker et~al.(2024)Toker, Orgad, Ventura, Arad, and
   Belinkov}]{toker2024diffusionlens}
@@ -137,5 +188,24 @@ Wu, W.; Mao, S.; Zhang, Y.; Xia, Y.; Dong, L.; Cui, L.; and Wei, F. 2024.
 \newblock Mind's Eye of {LLMs}: Visualization-of-Thought Elicits Spatial
   Reasoning in Large Language Models.
 \newblock In \emph{Advances in Neural Information Processing Systems}.
+
+\bibitem[{Zaleska et~al.(2026)Zaleska, Popek, Wysocza{\'n}ska, and
+  Deja}]{zaleska2026icm}
+Zaleska, K.; Popek, {\L}.; Wysocza{\'n}ska, M.; and Deja, K. 2026.
+\newblock Attention, May I Have Your Decision? Localizing Generative Choices in
+  Diffusion Models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 9818--9828.
+
+\bibitem[{Zhang, Hegde, and Zhang(2026)}]{zhang2026curse}
+Zhang, J.; Hegde, C.; and Zhang, Y. 2026.
+\newblock The Curse of Multiple Mediators in Activation Patching.
+\newblock \emph{arXiv preprint arXiv:2606.20945}.
+
+\bibitem[{Zhu et~al.(2026)Zhu, Chen, Lin, Zhang, and Qi}]{zhu2026lockin}
+Zhu, Y.; Chen, R.; Lin, W.; Zhang, J.; and Qi, Y. 2026.
+\newblock Breaking the Lock-in: Diversifying Text-to-Image Generation via
+  Representation Modulation.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
 
 \end{thebibliography}

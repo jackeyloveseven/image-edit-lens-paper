@@ -2,8 +2,12 @@
 for car_red, showing complementary-color mid-stack renderings snapping to red at
 L48-54. Panel B: P(red car) vs layer curves at 5 timesteps, snap zone shaded."""
 import json
+import os
+from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 from PIL import Image
 
@@ -11,13 +15,17 @@ RED = "#C2402A"
 TEAL = "#0F8FA0"
 GRAY_D = "#444444"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-RUN = f"{ROOT}/runs/a1_car_red"
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+RUN = ROOT / "runs" / "a1_car_red"
 
 excerpt_layers = [0, 24, 48, 54, 59]
 excerpt_steps = [0, 4, 19]
 
-d = json.load(open(f"{RUN}/lens_grid.json"))
+d = json.load(open(RUN / "lens_grid.json"))
 cs_raw = d["clip_scores"]["raw"]
 target = "a red car"
 
@@ -30,7 +38,7 @@ gsA = gs[0, 0].subgridspec(len(excerpt_layers), len(excerpt_steps), wspace=0.05,
 for ridx, layer in enumerate(excerpt_layers):
     for cidx, step in enumerate(excerpt_steps):
         ax = fig.add_subplot(gsA[ridx, cidx])
-        img = Image.open(f"{RUN}/lens_l{layer}_t{step}_raw.png")
+        img = Image.open(RUN / f"lens_l{layer}_t{step}_raw.png")
         ax.imshow(img)
         ax.set_xticks([]); ax.set_yticks([])
         for s in ax.spines.values():
@@ -66,5 +74,5 @@ for spine in ["top", "right"]:
 axB.legend(loc="center left", fontsize=7, frameon=False, handlelength=1.6, labelspacing=0.3)
 fig.text(0.74, 0.93, "P(red) vs layer", fontsize=9.5, ha="center", color=GRAY_D)
 
-fig.savefig(f"{ROOT}/paper/figs/fig4_depth.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig4_depth.pdf", bbox_inches="tight")
 print("wrote fig4_depth.pdf")

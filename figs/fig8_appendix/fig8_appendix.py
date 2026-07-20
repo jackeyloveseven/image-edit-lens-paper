@@ -3,8 +3,12 @@ non-global-edit E2 cases, add_boat highlighted as the one delayed-onset case.
 Panel B: cropped boat storyboard (existing rendered reference figure, title
 banner trimmed)."""
 import json
+import os
+from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 from PIL import Image
 
@@ -12,8 +16,12 @@ RED = "#C2402A"
 GRAY_D = "#444444"
 GRAY_M = "#999999"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-e2 = json.load(open(f"{ROOT}/runs/e2_revision/summary.json"))
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+e2 = json.load(open(ROOT / "runs" / "e2_revision" / "summary.json"))
 
 non_global = ["add_boat", "add_latte", "color_car", "color_cup", "remove_cup", "remove_laptop"]
 
@@ -41,7 +49,7 @@ for spine in ["top", "right"]:
 axA.tick_params(labelsize=8.5)
 
 axB = fig.add_subplot(gs[1, 0])
-img = Image.open(f"{ROOT}/runs/e2_revision/boat_storyboard.png")
+img = Image.open(ROOT / "runs" / "e2_revision" / "boat_storyboard.png")
 w, h = img.size
 crop = img.crop((0, int(h * 0.135), w, h))
 axB.imshow(crop)
@@ -51,5 +59,5 @@ for s in axB.spines.values():
 axB.set_title("add-boat storyboard", fontsize=9.5,
                color=GRAY_D, pad=8)
 
-fig.savefig(f"{ROOT}/paper/figs/fig8_appendix.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig8_appendix.pdf", bbox_inches="tight")
 print("wrote fig8_appendix.pdf")

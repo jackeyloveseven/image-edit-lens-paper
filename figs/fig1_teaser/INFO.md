@@ -2,7 +2,9 @@
 
 ## Intent
 
-Teaser: layer x time P(red car) decode grid + five-stage editing-circuit schematic. Establishes the paper's thesis (decided early, translated late) in one image.
+Teaser: layer x time P(red car) decode grid plus a five-stage measured
+layer--time schematic. It distinguishes early outcome prediction from late
+frozen-head translation.
 
 ## Used in
 
@@ -19,12 +21,10 @@ A layer--time lens for a DiT image editor. Decoding the
   sharp snap between layers 48 and 54 is where the head-readable
   signal first appears, but a linear probe shows the edit is already
   linearly decodable from layer 6. We read this as a five-stage
-  \emph{editing circuit} (right): the instruction is injected early,
-  the edit decision is linearly readable by layer 6, most of the stack
+  five-stage picture (right): the instruction is injected early,
+  the realized outcome is predictable from layer 6, most of the stack
   then carries a target-image code, a narrow band (L52--54) translates
-  it into the velocity code, and layer 59's frozen head reads it out --
-  the edit is decided early and translated late, not developed
-  gradually.
+  it into the velocity code, and layer 59's frozen head reads it out.
 
 ### supplement.tex
 
@@ -36,13 +36,10 @@ A layer--time lens for a DiT image editor. Decoding the
   is already linearly decodable from layer 6 (\S\ref{sec:mechanism}). A
   denser sweep (\S\ref{sec:mechanism}) resolves this snap to a sharp,
   timestep-invariant crossover centered at layer $\approx$53. We read
-  this as a five-stage \emph{editing circuit} (right): the instruction
-  is injected early (load-bearing by layer 11, complete by layer 36),
-  the edit decision is linearly readable by layer 6, most of the stack
+  this as five measured stages (right): the instruction is injected
+  early, the realized outcome is predictable from layer 6, most of the stack
   then carries a target-image code, a narrow band (L52--54) translates
   it into the velocity code, and layer 59's frozen head reads it out.
-  In the terms that organize this paper: the edit is decided early and
-  translated late -- not developed gradually.
 
 ## Generation
 
@@ -52,7 +49,7 @@ A layer--time lens for a DiT image editor. Decoding the
 
   - runs/wp3_car_red/{source.png,edited.png}
   - runs/a1_car_red/lens_grid.json (grid)
-  - runs/d2_probe/accuracy_grid.json (Decision box)
+  - runs/t3_implicit_choice/continuous_hue_analysis.json (outcome-prediction box)
   - runs/g2_boundary/boundary_summary.json (Translation box)
   - runs/g3_injection/summary.json (Injection box)
 

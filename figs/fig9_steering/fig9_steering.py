@@ -4,8 +4,12 @@ rows flips the output to red above a sharp alpha~1 threshold; a random
 direction at the same alpha does not; the negative direction overshoots
 to blue, not back to green."""
 import json
+import os
+from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 
 RED = "#C2402A"
@@ -13,8 +17,12 @@ TEAL = "#0F8FA0"
 GRAY_D = "#444444"
 GRAY_M = "#999999"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-g1 = json.load(open(f"{ROOT}/runs/g1_steer/summary.json"))
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+g1 = json.load(open(ROOT / "runs" / "g1_steer" / "summary.json"))
 
 by_cond = {r["condition"]: r for r in g1["results"]}
 alphas = [0.0, 0.5, 1.0, 2.0, 4.0, 8.0]
@@ -43,5 +51,5 @@ for spine in ["top", "right"]:
 ax.legend(fontsize=6.6, frameon=False, loc="center right", handlelength=1.5, labelspacing=0.35)
 ax.set_title("steering dose-response", fontsize=9.3, color=GRAY_D)
 
-fig.savefig(f"{ROOT}/paper/figs/fig9_steering.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig9_steering.pdf", bbox_inches="tight")
 print("wrote fig9_steering.pdf")

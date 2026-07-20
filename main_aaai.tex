@@ -25,7 +25,7 @@
 
 \setcounter{secnumdepth}{0} % AAAI: unnumbered sections by default
 
-\title{When Is the Edit Decided? A Layer--Time Lens on How a Diffusion Editor Thinks with an Internal Image}
+\title{When Does an Image Edit Become Predictable? A Layer--Time Lens for Diffusion Editors}
 \author{
     Anonymous Submission
 }
@@ -39,27 +39,29 @@
 
 \begin{abstract}
 Between reading ``turn the car red'' and painting it, what does a
-diffusion image editor do? The mechanics suggest gradual development --
-sixty transformer blocks times twenty denoising steps, the edit
-surfacing progressively like a photograph in developer fluid. We show
-this picture is wrong in a measurable way. We build the first tuned
-lens for a diffusion-transformer (DiT) image editor, decoding
-intermediate residual streams through the model's own frozen output
-head, and pair every passive reading with causal interventions --
-ablation, transplant, and steering. The editor thinks with an internal
-image: the edit is \emph{decided early} -- linearly readable by layer
-6, where the frozen head still reads noise -- and only
-\emph{translated late}, in a sharp, timestep-invariant band (layers
-52--54 of 60, transition width as narrow as one layer) from an
-internal target-image code into the flow field that paints it. This
-translation boundary is edit-family universal and survives an
-independently fine-tuned checkpoint and a four-step distilled model.
-Readability, causal necessity, and linear writability dissociate three
-distinct ways, and we map exactly where. Because the readings are
-causal, they convert into training-free levers -- including truncating
-classifier-free guidance after step two for a 45\% compute saving with
-all edit families visually intact.
+diffusion image editor represent? We build a tuned layer--time lens for a
+diffusion-transformer (DiT) image editor, decoding intermediate residual
+streams through the model's frozen output head and pair readings with
+controlled interventions. Under fixed underspecified recoloring prompts,
+early states predict realized outcomes while the frozen head still reads
+noise (car: $0.667$ balanced accuracy vs.\ $0.333$, $p{=}0.002$;
+natural-photo tree: hue MAE $55.9^\circ{\to}11.4^\circ$, $p{=}0.005$).
+As a held-out behavioral test, early best-of-five selection works on both
+architectures: recolor success rises from 20\%
+to 67\% on an independent 40-block editor ($p{=}4{\times}10^{-5}$), while
+on the natural-photo tree target error falls from $95.2^\circ$ to
+$46.5^\circ$ (mean rank $1.17$, $p{=}3.7{\times}10^{-7}$). This code is
+\emph{translated late}, in a sharp,
+timestep-invariant band (layers 52--54 of 60, width as narrow as one
+layer), into the velocity field that paints it. The boundary persists
+across tested edit families, an independent fine-tune, and a four-step
+distilled model. Transplant establishes sufficiency; steering shows that
+linear writability requires a spatial carrier. The lens also yields
+training-free levers: truncating classifier-free guidance after step two
+saves 45\% of forward passes while preserving all tested edit families.
 \end{abstract}
+
+\input{aaai_draft/00_intro}
 
 \begin{figure*}[t]
   \centering
@@ -68,17 +70,15 @@ all edit families visually intact.
   frozen output head at intermediate layers of \emph{car\_red} gives a
   $P(\text{red car})$ grid across layer and denoising step (center); a
   sharp snap between layers 48 and 54 is where the head-readable
-  signal first appears, but a linear probe shows the edit is already
-  linearly decodable from layer 6. We read this as a five-stage
-  \emph{editing circuit} (right): injection early, decision linearly
-  readable by L6, a target-image code through most of the stack,
+  signal first appears, while fixed-prompt generation-level probes show
+  the realized outcome is already predictable from layer 6. We read this as five measured
+  stages (right): injection early, an outcome-predictive
+  target-image code through most of the stack,
   translation to the velocity code in a narrow band (L52--54), and
-  readout at L59 -- decided early, translated late, not developed
+  readout at L59 -- predictable early, translated late, not developed
   gradually.}
   \label{fig:teaser}
 \end{figure*}
-
-\input{aaai_draft/00_intro}
 
 \begin{figure*}[t]
 	\centering
@@ -105,5 +105,7 @@ all edit families visually intact.
 \input{aaai_draft/60_conclusion}
 
 \bibliography{references}
+
+\input{reproducibility_checklist}
 
 \end{document}

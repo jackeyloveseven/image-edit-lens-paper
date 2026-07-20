@@ -1,9 +1,16 @@
-import json, matplotlib
+import json, os, matplotlib
+from pathlib import Path
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 import numpy as np
 
-root = "/home/ubuntu/chengyanli/image-edit-lens"
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
 RED = "#C2402A"
 TEAL = "#0F8FA0"
 
@@ -14,8 +21,8 @@ plt.rcParams.update({
     "axes.edgecolor": "#333333",
 })
 
-a3 = json.load(open(f"{root}/runs/a3_summary.json"))["results"]
-a4 = json.load(open(f"{root}/runs/a4_summary.json"))["results"]
+a3 = json.load(open(ROOT / "runs" / "a3_summary.json"))["results"]
+a4 = json.load(open(ROOT / "runs" / "a4_summary.json"))["results"]
 
 def get(scan, case, cond):
     for r in a3:
@@ -74,6 +81,6 @@ axes[2].set_axisbelow(True)
 for ax, letter in zip(axes, "ABC"):
     ax.text(-0.12, 1.05, letter, transform=ax.transAxes, fontsize=10, fontweight="bold")
 
-fig.savefig(f"{root}/paper/figs/fig6_causality.pdf")
-fig.savefig(f"{root}/paper/figs/fig6_causality.png", dpi=200)
+fig.savefig(OUT_DIR / "fig6_causality.pdf")
+fig.savefig(OUT_DIR / "fig6_causality.png", dpi=200)
 print("saved fig6")

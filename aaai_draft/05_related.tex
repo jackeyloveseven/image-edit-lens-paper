@@ -30,28 +30,48 @@ new editing mechanism, but a reading of the one it already has.
 
 \paragraph{Thinking with images, and diffusion interpretability.} A
 growing line has multimodal models reason \emph{with} explicit
-intermediate images -- sketching, annotating, or otherwise externalizing
-a visual scratchpad as part of the reasoning
-trace~\citep{su2025thinkingsurvey,hu2024sketchpad,wu2024vot,menon2024whiteboard,li2025mvot},
-with production systems now shipping the idea
-too~\citep{openai2025thinking}. We supply the mechanistic complement: an
+intermediate images by externalizing a visual scratchpad
+\citep{hu2024sketchpad,wu2024vot,li2025mvot}. We supply the mechanistic complement: an
 image that exists \emph{latently} inside a generative editor before any
-pixel is committed, with no explicit scratchpad or tool call involved.
+output pixel is produced, with no explicit scratchpad or tool call involved.
 The Diffusion Lens~\citep{toker2024diffusionlens} decodes a
-text-to-image model's \emph{text encoder}; we instead decode the editing
-DiT's own denoising stack mid-generation, building on the flow-matching
+text-to-image model's \emph{text encoder}; DiffLens and
+ICM~\citep{shi2025difflens,zaleska2026icm} probe and steer internal
+features, including choices absent from an underspecified prompt; DreamReader
+unifies extraction, patching, steering, and stitching for text-to-image
+U-Nets~\citep{sykora2026dreamreader}; and sparse autoencoders expose causal
+generation features~\citep{surkov2025sae}. Breaking the Lock-in finds early
+cross-seed convergence in text-to-image sampling and intervenes to increase
+diversity~\citep{zhu2026lockin}. Probe-Select~\citep{guo2026probeselect} predicts final
+quality from early activations; ELECT~\citep{kim2025elect} scores early latent
+background consistency; and ADE-CoT~\citep{qu2026adecot} adds adaptive budgets
+and stopping at scale. We instead predict \emph{which outcome} a fixed
+underspecified edit realizes and use selection only as a held-out behavioral
+test, while mapping how an image-editing DiT's realized outcome changes code
+across depth; we do not infer irreversible lock-in. We decode an
+editing DiT's own denoising
+stack as an image across both layer and time, building on the flow-matching
 and rectified-flow formulation~\citep{lipman2023flowmatching,liu2023rectifiedflow}
 and classifier-free guidance~\citep{ho2022cfg} that
 \model{}~\citep{qwen2025image,peebles2023dit} uses.
 
-\paragraph{Causal interpretability.} Causal tracing / ROME~\citep{meng2022rome}
+\paragraph{Causal interpretability and editing.} Causal tracing / ROME~\citep{meng2022rome}
 patches activations between runs, the move behind our transplant;
-\citet{heimersheim2024activation} catalogue the patching pitfalls that
-motivate reporting ``readable'' and ``necessary'' separately, and
+\citet{heimersheim2024activation} catalogue patching pitfalls that
+motivate our cautious interpretation of ablation. Recent analyses further show
+that detector-friendly diffusion features can produce artifacts when steered
+off distribution~\citep{pegoraro2026look}, and that patching with multiple
+mediators cannot by itself isolate a unique causal pathway
+\citep{zhang2026curse}. Accordingly, transplant is used only as a sufficiency
+test and steering as a bounded write test. Finally,
 activation addition~\citep{turner2023actadd} is the steering primitive we
 instantiate with a probe direction. All three were built for language
 models with a token vocabulary at every patched site; we port them to a
 continuous, spatial image stream, where sufficiency must be checked
-against a rendered image rather than a next-token distribution. Our
+against a rendered image rather than a next-token distribution. Concept
+Lancet~\citep{luo2025colan} already uses compositional representation
+transplant for diffusion editing; our transplant is therefore an
+interventional sufficiency check within a layer--time map, not a standalone
+editing-method claim. Our
 semantic readout uses CLIP~\citep{radford2021clip} for lack of a better
 zero-shot alternative.

@@ -5,8 +5,12 @@ the crossover. Panel B: cosine similarity of the intermediate pseudo-
 velocity to the terminal v_59, same layers/steps. Panel C: dense cross-seed
 probe accuracy by layer -- flat through L58, drops only at L59."""
 import json
+import os
+from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 
 RED = "#C2402A"
@@ -14,8 +18,12 @@ TEAL = "#0F8FA0"
 GRAY_D = "#444444"
 GRAY_M = "#999999"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-b = json.load(open(f"{ROOT}/runs/g2_boundary/boundary_summary.json"))
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+b = json.load(open(ROOT / "runs" / "g2_boundary" / "boundary_summary.json"))
 layers = b["layers"]
 steps = ["4", "16"]
 colors = {"4": TEAL, "16": RED}
@@ -75,7 +83,7 @@ for ax, letter in zip(axes, "ABC"):
     ax.text(-0.15, 1.05, letter, transform=ax.transAxes, fontsize=10, fontweight="bold")
 
 fig.tight_layout()
-fig.savefig(f"{ROOT}/paper/figs/fig10_boundary.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig10_boundary.pdf", bbox_inches="tight")
 print("wrote fig10_boundary.pdf")
 print("midpoints:", {t: b["per_step"][t]["crossover_midpoint_layer"] for t in steps})
 print("shift:", b["midpoint_shift_t4_to_t16"])

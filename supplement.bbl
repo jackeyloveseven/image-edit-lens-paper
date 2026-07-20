@@ -1,4 +1,4 @@
-\begin{thebibliography}{24}
+\begin{thebibliography}{35}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -124,6 +124,49 @@ Jonathan Ho and Tim Salimans.
 \newblock Classifier-free diffusion guidance.
 \newblock \emph{arXiv preprint arXiv:2207.12598}, 2022.
 
+\bibitem[Zaleska et~al.(2026)Zaleska, Popek, Wysocza{\'n}ska, and
+  Deja]{zaleska2026icm}
+Katarzyna Zaleska, {\L}ukasz Popek, Monika Wysocza{\'n}ska, and Kamil Deja.
+\newblock Attention, may i have your decision? localizing generative choices in
+  diffusion models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, pages 9818--9828, 2026.
+
+\bibitem[Guo et~al.(2026)Guo, Wei, and Jing]{guo2026probeselect}
+Huanlei Guo, Hongxin Wei, and Bingyi Jing.
+\newblock Toward early quality assessment of text-to-image diffusion models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, pages 13186--13195, 2026.
+
+\bibitem[Kim et~al.(2025)Kim, Lee, Kim, and Lee]{kim2025elect}
+Jaehyun Kim, Sangryul Lee, Namil Kim, and Sanghoon Lee.
+\newblock {ELECT}: Early latent consistency for zero-shot candidate selection
+  in instruction-guided image editing.
+\newblock In \emph{IEEE/CVF International Conference on Computer Vision
+  (ICCV)}, pages 8209--8218, 2025.
+
+\bibitem[Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Yu, Sun, Bai, Chu, Gou,
+  Xiong, and Cai]{qu2026adecot}
+Xiangyan Qu, Zhenlong Yuan, Jing Tang, Rui Chen, Datao Tang, Meng Yu, Lei Sun,
+  Yancheng Bai, Xiangxiang Chu, Gaopeng Gou, Gang Xiong, and Yujun Cai.
+\newblock From scale to speed: Adaptive test-time scaling for image editing.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, pages 23272--23282, 2026.
+
+\bibitem[Zhu et~al.(2026)Zhu, Chen, Lin, Zhang, and Qi]{zhu2026lockin}
+Yilun Zhu, Rongchang Chen, Wang Lin, Junwu Zhang, and Yuan Qi.
+\newblock Breaking the lock-in: Diversifying text-to-image generation via
+  representation modulation.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2026.
+
+\bibitem[Sykora et~al.(2026)Sykora, Williams, Hu, Duan, Zhou, Wetzstein, and
+  Aigerman]{sykora2026dreamreader}
+Quinlan Sykora, Francis Williams, Yushi Hu, Peiqi Duan, Bolei Zhou, Gordon
+  Wetzstein, and Noam Aigerman.
+\newblock {DreamReader}: Interpreting and editing diffusion models via
+  representation extraction.
+\newblock \emph{arXiv preprint arXiv:2603.13299}, 2026.
+
 \bibitem[Meng et~al.(2022)Meng, Bau, Andonian, and Belinkov]{meng2022rome}
 Kevin Meng, David Bau, Alex Andonian, and Yonatan Belinkov.
 \newblock Locating and editing factual associations in {GPT}.
@@ -134,6 +177,17 @@ Kevin Meng, David Bau, Alex Andonian, and Yonatan Belinkov.
 Stefan Heimersheim and Neel Nanda.
 \newblock How to use and interpret activation patching.
 \newblock \emph{arXiv preprint arXiv:2404.15255}, 2024.
+
+\bibitem[Pegoraro et~al.(2026)Pegoraro, Johnson, and Nixon]{pegoraro2026look}
+Anna Pegoraro, Daniel~D. Johnson, and Jeremy Nixon.
+\newblock Look but don't touch: Visual features in diffusion models are easy to
+  detect but hard to steer.
+\newblock \emph{arXiv preprint arXiv:2606.31699}, 2026.
+
+\bibitem[Zhang et~al.(2026)Zhang, Hegde, and Zhang]{zhang2026curse}
+Jingling Zhang, Chinmay Hegde, and Yao Zhang.
+\newblock The curse of multiple mediators in activation patching.
+\newblock \emph{arXiv preprint arXiv:2606.20945}, 2026.
 
 \bibitem[Turner et~al.(2023)Turner, Thiergart, Leech, Udell, Vazquez, Mini, and
   MacDiarmid]{turner2023actadd}
@@ -166,5 +220,27 @@ Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
   supervision.
 \newblock In \emph{International Conference on Machine Learning (ICML)}, pages
   8748--8763, 2021.
+
+\bibitem[Ohib et~al.(2026)Ohib, Hahn, and Malek]{ohib2026conceptspaces}
+Riyasat Ohib, Meera Hahn, and Mani Malek.
+\newblock Concept spaces in the residual stream of diffusion transformers.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition Workshops (CVPRW)}, pages 4158--4163, 2026.
+
+\bibitem[Cho et~al.(2026)Cho, Baek, Kim, and Ham]{cho2026restore}
+Hyeonwoo Cho, Donghyeon Baek, Yewon Kim, and Bumsub Ham.
+\newblock Improving visual token reduction via rectifying distortions for
+  efficient multimodal {LLM} inference.
+\newblock \emph{arXiv preprint arXiv:2606.01711}, 2026.
+\newblock Accepted at ICML 2026.
+
+\bibitem[Gan et~al.(2026)Gan, Zhao, Tu, Chen, Qin, Chen, Harandi, and
+  Lin]{gan2026massive}
+Chaofan Gan, Zicheng Zhao, Yuanpeng Tu, Xi~Chen, Ziran Qin, Tieyuan Chen,
+  Mehrtash Harandi, and Weiyao Lin.
+\newblock Massive activations are the key to local detail synthesis in
+  diffusion transformers.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2026.
 
 \end{thebibliography}

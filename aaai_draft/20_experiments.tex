@@ -6,29 +6,29 @@
 We evaluate on \model{}, a 60-block DiT editor, on edit batteries
 spanning five categories -- color, background, style, removal, and
 addition -- over natural photographs and one flat-art source (10 cases
-for the time-lens commit sweep and the preview lever, 20 for the
+for the time-lens saturation sweep and the preview lever, 20 for the
 IoU-based onset and CFG-truncation checks); every quantitative number
 is paired with a per-image visual verdict recorded before the
 aggregate is read, per the predict-look-gate protocol above. Three
 readouts do the reporting: the frozen output head's decode, scored
-zero-shot with CLIP against a small label bank; a cross-seed linear
-probe, fit on one seed's hidden states and evaluated on a held-out
-seed; and, for the tuned lens, held-out $R^2$ against the true
+zero-shot with CLIP against a small label bank; cross-seed probes,
+including a 48-seed fixed-prompt outcome probe whose independent unit
+is one generation; and, for the tuned lens, held-out $R^2$ against the true
 conditional-pass velocity. Two further checkpoints sharing \model{}'s
 transformer classes -- FireRed-Image-Edit-1.1, an independent
 fine-tune, and Rapid-AIO, a 4-step distilled merge -- let us ask
-whether a finding belongs to the architecture or to one training run
+whether a finding persists beyond one training run
 (tested below).
 
-\subsection{The Edit Is Decided Early}\label{sec:early}
+\subsection{The Realized Edit Is Predictable Early}\label{sec:early}
 
-\paragraph{In time.} If the edit surfaced progressively, the commit step
-would be late and roughly uniform. Running the time lens over a battery of
+\paragraph{In time.} If the edit surfaced progressively, the readout would
+saturate late and at roughly the same rate. Running the time lens over a battery of
 10 cases across 5 edit categories, the step at which $P(\text{target})$
 first reaches within $0.05$ of its final value is instead
 \emph{edit-dependent} and mostly \emph{immediate}: color, background, and
-style edits commit at step 0--2, and only a wholesale new-object
-insertion (\emph{add\_boat}) commits as late as step 7. A finer
+style edits reach the criterion at step 0--2, and only a wholesale
+new-object insertion (\emph{add\_boat}) does so as late as step 7. A finer
 IoU-mask-based onset measurement over 20 cases shows the split is
 categorical, not continuous: 18 of 20 -- spanning final-edit-area
 fraction $0.003$ to $0.99$ -- onset at step 0 regardless of how large or
@@ -44,26 +44,50 @@ layers through the model's own head, the edit becomes head-readable only
 in a sharp snap between layers 48 and 54 of 60 -- exactly the familiar
 mid-stack ``nothing happens yet'' appearance of an LLM logit lens.
 
-\paragraph{But a probe reads it 40 layers earlier.} That appearance is
-misleading. A 3-way cross-seed linear probe (which of three colors was
-requested), fit on hidden states from one seed and evaluated on a
-held-out seed, is already at $0.883$ accuracy at \textbf{layer 6}, step 4
--- five blocks into a 60-block network -- where the frozen head at the
-identical cell reads only $P(\text{red car}){=}0.111$
-(Figure~\ref{fig:mechanism}). The earliest cell to cross $0.9$ is L36/step 0.
-The decision is present far earlier than the head can read it, held in
-a basis the head cannot parse until the last few blocks. Decided early,
-read out late.
+\paragraph{But the realized outcome is predictable 40 layers earlier.}
+An explicit-prompt probe first reveals the basis mismatch: predicting
+which of three colors was requested reaches $0.883$ accuracy at
+\textbf{layer 6}, step 4, where the frozen head reads only
+$P(\text{red car}){=}0.111$ (Figure~\ref{fig:mechanism}). To separate
+outcome prediction from reading a color word, we hold both source and
+the underspecified prompt ``change the car to a different color'' fixed
+across 48 new seeds and label each final image post hoc. One mean-pooled
+vector per generation predicts the realized color at L6/step 4 with
+$0.667$ balanced accuracy (chance $0.333$; 500-permutation $p{=}0.002$).
+A continuous decoder at L6/step 2 reduces final-hue error from
+$22.3^\circ$ to $8.3^\circ$ ($R^2{=}0.815$). Thus the outcome, not merely
+the instruction, is linearly predictable early; this does not claim
+irreversible commitment.
+A pre-registered real-photo follow-up failed its discrete gates (mug class
+collapse; heterochromatic eyes), but mug continuous hue replicated
+($17.0^\circ{\to}10.7^\circ$, $p{=}0.005$; L59 $16.7^\circ$), while eyes
+were null ($p{=}0.796$). A separate tree replication passed 48/48:
+$55.9^\circ{\to}11.4^\circ$ ($p{=}0.005$), with L59 at $51.1^\circ$.
+On the independent 40-block Boogu architecture, L4/step 2 similarly gives
+$39.9^\circ{\to}6.9^\circ$ ($p{=}0.005$), though L39 is stronger and 35/48
+retain source blue. Turning prediction into held-out selection, a Boogu
+selector chooses a recolor in 8/12 new five-seed groups versus 20\% random
+($p{=}4.1{\times}10^{-5}$), all eight solvable; L4/step 0 gives 4/12
+($p{=}0.188$). Two separately pre-registered Qwen target tasks pass. On
+12 tree groups, L6/step 2 cuts error from $95.2^\circ$ (random) to
+$46.5^\circ$ (oracle $43.2^\circ$; mean rank $1.17$,
+$p{=}3.7{\times}10^{-7}$), while step 0 is null ($p{=}0.381$). A
+current-environment car replication cuts $25.7^\circ$ to $11.1^\circ$
+(oracle $8.7^\circ$; mean rank $2.00$, $p{=}0.0086$); its step-0 control
+retains partial signal but misses the frozen rank and $p$ gates. Actual
+interrupted captures and winner reruns save about 68\% versus full
+best-of-five. This selects the closest candidate; some groups contain no target-like hue.
+Early prediction transfers, but the Qwen terminal drop and translation do not.
 
 \paragraph{Where the instruction enters.} A complementary text-stream
 ablation locates where the prompt is \emph{consumed}: zeroing the model's
 text tokens in only the first 11 blocks garbles the whole scene, while
 zeroing them after layer 36 barely dents the edit ($P(\text{red}){=}0.993$).
-The instruction is fused into the image stream early and is functionally
-complete by layer 36 -- the ``injection'' stage of the circuit in
+The instruction is fused into the image stream early; for this color edit,
+later text tokens are dispensable by layer 36 -- the ``injection'' stage of the circuit in
 Figure~\ref{fig:teaser}, whose full text-band table is in the supplement.
 Together with the probe, this gives the paper's five-stage picture:
-injection ($\le$L36), decision ($\le$L6), a target-image code, translation
+injection ($\le$L36), early outcome prediction, a target-image code, translation
 (L52--54), and the output head.
 
 \begin{figure}[t]
@@ -81,9 +105,23 @@ injection ($\le$L36), decision ($\le$L6), a target-image code, translation
   \label{fig:mechanism}
 \end{figure}
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
+  \caption{A tuned lens renders the internal image the frozen head
+  cannot read. Top: per-(layer, timestep) ridge translators, fit on
+  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
+  zero-shot on the held-out \emph{car\_red} color edit, decode a
+  coherent scene at every depth at $t{=}0$ -- the edit enters the
+  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
+  head renders the identical L36 hidden state as a color-inverted
+  ghost, while the tuned lens at the same cell is already coherent.}
+  \label{fig:tunedlens}
+\end{figure*}
+
 \subsection{The Edit Is Translated Late: Two Codes}\label{sec:translate}
 
-If the decision is present by layer 6 but the frozen head cannot read it
+If the realized outcome is predictable early but the frozen head cannot read it
 until layer 52, the mid-stack must hold the edit in a \emph{different
 code}. Three measurements show what that code is and where it is
 converted.
@@ -158,49 +196,23 @@ image-like quantity. The tuned lens at the same cell is already coherent.
   \label{fig:boundary}
 \end{figure*}
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.85\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
-  \caption{A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
-  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
-  zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$ -- the edit enters the
-  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
-  head renders the identical L36 hidden state as a color-inverted
-  ghost, while the tuned lens at the same cell is already coherent.}
-  \label{fig:tunedlens}
-\end{figure*}
-
-\subsection{Readable, Necessary, Writable: Three Dissociations}\label{sec:dissoc}
+\subsection{Transplantable, Writable, and Carrier-Bound}\label{sec:dissoc}
 
 Reading a lens shows only that a representation is \emph{consistent with}
-an edit. Causal probes reveal that readability, causal necessity, and
-linear writability are three different properties, and a layer band can
-have any two without the third.
+an edit, not what it can install. Whole-token ablation across many layers
+drives the edited region off-manifold, so we use it only as a coarse stress
+test rather than evidence for fine-grained necessity.
 
-\paragraph{Readable $\neq$ necessary.} Ablating \emph{car\_red}'s early
-layers (L0--11) is catastrophic ($P(\text{red}){=}0.049$) while ablating
-the late band L48--59 is nearly harmless ($0.826$, vs.\ an unablated
-baseline near $0.93$) -- even though that late band is exactly where the
-frozen head finally reads the edit. \emph{beach\_background} mirrors this
-(L0--11 ablation only partial at $0.193$, L48--59 catastrophic at
-$0.040$), and the split tracks commit time: the early-committing edit
-needs early layers, the late-committing edit needs late ones
-(Figure~\ref{fig:causal}).
+\paragraph{Transplant establishes sufficiency.} Transplanting a
+\emph{car\_red} donor's car-region hidden states into a \emph{car\_green}
+recipient (which alone scores $P(\text{red}){=}0.011$) flips the output to
+red from \emph{any} of four donor bands, including \textbf{L48--59}
+($0.940$). The donor representation is therefore sufficient to install
+the edit. A content control confirms specificity: splicing the same
+donor's \emph{background}-region tokens (right band, wrong content) yields
+a garbled ``blue car'' ($0.991$), not red.
 
-\paragraph{Sufficient $\neq$ necessary.} Transplanting a \emph{car\_red}
-donor's car-region hidden states into a \emph{car\_green} recipient (which
-alone scores $P(\text{red}){=}0.011$) flips the output to red from
-\emph{any} of four donor bands -- including \textbf{L48--59} ($0.940$),
-the very band ablation just showed is dispensable to the recipient. The
-donor's late representation is \emph{sufficient} to install the edit even
-where the recipient's own late computation is not \emph{necessary}. A
-content control confirms specificity: splicing the same donor's
-\emph{background}-region tokens (right band, wrong content) yields a
-garbled ``blue car'' ($0.991$), not red.
-
-\paragraph{Writable, but only onto a carrier.} A single stored
+\paragraph{Readability does not imply unconstrained writability.} A single stored
 \emph{direction} -- the probe's $d_{\text{red}}$, no donor pass -- added to
 the recipient's car rows gives a sharp sigmoidal dose-response ($0.024$ at
 $\alpha{=}0.5$, $0.977$ at $\alpha{=}1$, saturating to $\alpha{=}8$); a
@@ -216,24 +228,8 @@ identity probe direction is inert (the read and write subspaces
 differ), while a rank ladder over the donor$-$recipient difference
 resolves identity coarse-to-fine -- category at rank 1, a coherent
 instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
-dimension). Readability, necessity, and writability thus dissociate
-three distinct ways.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{figs/fig6_causality/fig6_causality.pdf}
-  \caption{Causal ablation and transplant, \emph{car\_red} vs.\
-  \emph{beach\_background}. \textbf{A}: ablating a band of layers shows
-  opposite profiles -- car needs its \emph{early} layers, beach needs
-  its \emph{late} ones. \textbf{B}: ablating a window of steps shows
-  car tolerates any single window, beach is destroyed by ablating the
-  earliest one. \textbf{C}: transplanting a donor \emph{car\_red} run's
-  hidden state into a \emph{car\_green} recipient, at any of four layer
-  bands, is \emph{sufficient} to flip the output back to red --
-  including the L48--59 band, which panel A shows is \emph{not
-  necessary} for the car edit at all.}
-  \label{fig:causal}
-\end{figure}
+dimension). The read and write subspaces differ, and a writable attribute
+still requires a spatial carrier.
 
 
 
@@ -246,7 +242,7 @@ $0.88$--$0.97$, matching the full-image value, so the tuned
 dictionaries carry the edit-specific signal itself, not incidental
 scene detail.
 
-\paragraph{Commitment is early; separation is gradual.} A pre-registered
+\paragraph{Content is early; separation is gradual.} A pre-registered
 prediction that $D$ would already localize tightly at every step is
 refuted, informatively. The edit \emph{content} is present at step 0 (the
 tuned lens already shows red eyes, a black trunk), but the
@@ -255,7 +251,7 @@ prompt perturbs the entire velocity relative to the no-op, not just the
 edited region -- and condenses onto the edit's footprint only gradually
 (localization of $D$'s top mass at L52 climbs monotonically across steps,
 e.g.\ $0.21{\to}0.47{\to}0.67{\to}0.83$ for a cat's-eyes recolor).
-\emph{Committed} (content in the internal image) and \emph{separated}
+\emph{Present} (content in the internal image) and \emph{separated}
 (the differential has found where it lives) are different quantities.
 The no-op control also caught one flat-art scene that \emph{cannot}
 ``do nothing'' (it renders a transparency checkerboard, and is
@@ -276,65 +272,59 @@ a tiny recolor glows at its exact site. Because the no-op control is
 image and cached; previewing a \emph{candidate} edit then costs three
 forward passes plus one frozen-dictionary decode, not a full 20-step run
 -- a training-free way to triage many prompts against one image before
-committing to any.
+running any to completion.
 
 \subsection{Generalization Across Checkpoints}\label{sec:generalize}
 
-Every finding so far concerns one checkpoint. We re-ran the depth-lens
-crossover, the cross-seed probe, and layer-band ablation on the two
+Most mechanistic findings so far concern one architecture. We re-ran the depth-lens
+crossover and cross-seed probe on the two
 further checkpoints from \emph{Setup} (FireRed-Image-Edit-1.1 and
-Rapid-AIO). \textbf{The translation boundary and the early decision
-replicate.}
+Rapid-AIO). \textbf{The translation boundary and explicit-prompt early
+readability replicate.}
 FireRed's A/C crossover lands at L53--56, Rapid-AIO's at L52--54 -- both on
 \model{}'s L52--54 band; FireRed's probe reads $0.852$ at L6 and dips to
-$0.69$ at L59, the same flat-then-dip shape. \textbf{The decision direction
+$0.69$ at L59, the same flat-then-dip shape. \textbf{The readable direction
 itself transfers across models}: a probe trained on one model and tested on
 the \emph{other} reaches $0.84$/$0.92$ accuracy, and the two models'
 L12 probe directions have cosine similarity $0.833$ -- the edit lives in
 nearly the same direction of the shared 3072-d space, not merely the same
 layer index. The full tuned-lens toolchain also ports to FireRed (deep-layer
-$R^2$ $0.97$--$0.999$, anti-image reproduced). \textbf{One honest
-divergence}, caught by the check doing its job: ablating L48--59 leaves
-\model{}'s edit intact ($0.826$) but is catastrophic for FireRed ($0.035$)
--- late-stack redundancy is a property of \emph{training}, not the
-architecture, so the readable$\neq$necessary result above holds
-architecture-generally only in its early half.
+$R^2$ $0.97$--$0.999$, anti-image reproduced).
 
 \subsection{A Training-Free Lever: Truncating Classifier-Free Guidance}\label{sec:lever}
 
-Because the decision is linearly present by layer 6 and translated by
-layer 53, classifier-free guidance has no architectural reason to need
-both of its forward passes at all 20 steps. Running the unconditional pass
+The layer--time map suggests a simple existence proof: classifier-free
+guidance may not need both forward passes at all 20 steps. Running the unconditional pass
 only for the first two steps and the conditional pass alone thereafter
-leaves all four edit families visually intact at a \textbf{45\% reduction
+leaves all four tested edit families visually intact at a \textbf{45\% reduction
 in forward passes} (a 20-case battery confirms it, mean $1.77\times$
-speedup). Dropping CFG entirely isolates its real job: recolor, removal,
+speedup). Dropping CFG entirely suggests where its non-redundant role lies in these cases: recolor, removal,
 and addition still land from the conditional pass alone, but background
 swap composites the new scene \emph{around} un-erased source structure
 ($P(\text{beach}){=}0.45$ vs.\ ${\ge}0.996$) -- CFG's non-redundant
-contribution is resolving \emph{scope}, not committing the edit. The same
-decision structure survives $7.7\times$ step distillation (20/20 cases
+contribution here is consistent with resolving \emph{scope}, not selecting edit content. The same
+layer--time structure survives $7.7\times$ step distillation (20/20 cases
 land), so distillation compresses the sampling trajectory but not the
-decision structure the lens exposes.
+structure the lens exposes.
+
+\paragraph{Routing conservation explains coherent transplant.}
+A RESTORE-inspired five-seed audit~\citep{cho2026restore} finds destructive
+replacement more routing-distorting than transplant/red steering in 5/5 seeds
+(contrast $0.0356$, exact $p{=}0.03125$). Matched-donor TV is $0.0031$ with
+geometry 5/5; background-donor TV is $0.0677$ with geometry 0/5. Red steering
+writes red 5/5 but preserves geometry 0/5, matching the detection--intervention
+gap~\citep{pegoraro2026look}; this supports tested coherence only.
 
 \subsection{Limitations}\label{sec:limits}
 
-This tool is exploratory. Every number comes primarily from one model,
-one or two seeds, and a double-digit count of hand-chosen images; the
-cross-model checks above cover two checkpoints of the same lineage on
-a subset of measurements; and we claim nothing about ``intent'' or
-about recovering the network's ``true'' reasoning. The semantic
-readout inherits CLIP's failure modes in identifiable ways -- pure
-sampling noise can score as beach at $0.795$, while an obviously-red
-recolored car \emph{under}-scores ($0.09$--$0.16$) against a
-\emph{failed} flat patch ($0.70$--$0.84$) -- which is why every
-quantitative claim is paired with a pre-registered visual verdict, and
-the image wins ties. Four of our own initial misreadings are retained
-as data in the supplement (a thumbnail ``revision'' erased by
-quantification, a continuous novelty law that did not survive, a
-steering ``clean flip'' that was really a flat patch, and the
-over-strong conclusion drawn from it, which a silhouette mask
-refuted). We claim only that, on \model{}, the
-readable/necessary/writable dissociations we report are real and
-repeatable for the seeds and prompts used, because we checked them
-against causal interventions rather than passive readouts alone.
+Translation/intervention evidence uses Qwen plus two same-lineage checkpoints;
+Boogu supports only outcome prediction/selection. The fixed-prompt probe has
+one synthetic source; natural-image follow-ups give two replications and one
+unsuitable eye case. Selection has 12 groups per task and cannot create absent
+targets. One-way L6 hue transfer (mug$\to$tree $p{=}0.002$; reverse
+$p{=}0.968$) precludes an object-invariant subspace. Because CLIP can prefer a
+flat patch to a true recolor, quantitative claims carry pre-registered visual
+verdicts. We claim tested outcome predictability, transplant sufficiency, and
+carrier-bounded writability, not irreversible commitment or necessity.
+In summary, the lens predicts outcomes and Qwen's late translation; selection
+spans two architectures and routing explains coherent transplant.

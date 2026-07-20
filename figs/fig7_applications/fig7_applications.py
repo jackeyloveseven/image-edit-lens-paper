@@ -3,9 +3,13 @@ probe saliency) fraction of top-10% patches inside car bbox. Panel B: step-budge
 prediction (target score vs #steps run, 3 cases). Panel C: mid-stack transplant
 rescue vs global CFG bump."""
 import json
+import os
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 from PIL import Image
 
@@ -15,12 +19,16 @@ GRAY_D = "#444444"
 GRAY_M = "#888888"
 GRAY_L = "#BBBBBB"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
 
 fig, axes = plt.subplots(1, 3, figsize=(6.9, 2.55))
 
 # ---- Panel A: saliency before/after (crop out baked-in title banner) ----
-img = Image.open(f"{ROOT}/runs/e1_saliency/before_after_L12_t4.png")
+img = Image.open(ROOT / "runs" / "e1_saliency" / "before_after_L12_t4.png")
 w, h = img.size
 crop = img.crop((0, int(h * 0.135), w, h))
 axes[0].imshow(crop)
@@ -37,7 +45,7 @@ axes[0].text(cw * 0.75, ch * 0.06, "99% in car", fontsize=8, color="white", ha="
 axes[0].set_title("decision saliency", fontsize=9, color=GRAY_D)
 
 # ---- Panel B: step-budget prediction ----
-e3 = json.load(open(f"{ROOT}/runs/e3_earlyexit/summary.json"))
+e3 = json.load(open(ROOT / "runs" / "e3_earlyexit" / "summary.json"))
 cases = ["color_car", "style_watercolor", "add_boat"]
 clabels = {"color_car": "car (color)", "style_watercolor": "watercolor", "add_boat": "add boat"}
 colors = {"color_car": TEAL, "style_watercolor": GRAY_D, "add_boat": RED}
@@ -58,7 +66,7 @@ for spine in ["top", "right"]:
 axes[1].tick_params(labelsize=8)
 
 # ---- Panel C: rescue ----
-e3r = json.load(open(f"{ROOT}/runs/e3_rescue/summary.json"))
+e3r = json.load(open(ROOT / "runs" / "e3_rescue" / "summary.json"))
 labels = ["original", "transplant", "global CFG"]
 vals = [e3r["original_cropped_P_black_cup"], e3r["R2"]["P_black_cup_cropped"], e3r["R1"]["P_black_cup_cropped"]]
 bar_colors = [GRAY_M, RED, TEAL]
@@ -76,6 +84,6 @@ for spine in ["top", "right"]:
 axes[2].tick_params(labelsize=8)
 
 fig.tight_layout()
-fig.savefig(f"{ROOT}/paper/figs/fig7_applications.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig7_applications.pdf", bbox_inches="tight")
 print("wrote fig7_applications.pdf")
 print("rescue vals", vals)

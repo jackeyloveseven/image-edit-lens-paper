@@ -1,7 +1,7 @@
-\documentclass[10pt,twocolumn]{article}
+\documentclass[10pt,twocolumn,letterpaper]{article}
 
 % ---- arXiv-preprint style, pdflatex ----
-\usepackage[a4paper,top=2.2cm,bottom=2.4cm,left=1.8cm,right=1.8cm,columnsep=0.65cm]{geometry}
+\usepackage[letterpaper,top=2.2cm,bottom=2.4cm,left=1.8cm,right=1.8cm,columnsep=0.65cm]{geometry}
 \usepackage{mathptmx}            % Times text+math
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -25,7 +25,7 @@
 \newcommand{\ie}{\emph{i.e.}}
 
 \title{\LARGE\bf Supplementary Material\\[4pt]
-\Large When Is the Edit Decided? A Layer--Time Lens on How a Diffusion Editor Thinks with an Internal Image}
+\Large When Does an Image Edit Become Predictable? A Layer--Time Lens for Diffusion Editors}
 
 \author{Anonymous Submission}
 \date{}
@@ -34,91 +34,46 @@
 \raggedbottom
 \twocolumn[
   \maketitle
-  \vspace{-2.2em}
   \begin{center}\begin{minipage}{0.92\textwidth}
   \small
   \textbf{Abstract.}
-  How does an instruction-following image editor arrive at its edit?
-  The intuitive picture -- the edit developing gradually, sharpening
-  layer by layer and step by step like a photograph in developer fluid
-  -- turns out to be wrong in a specific, measurable way. We build the
-  first logit-lens analogue for a diffusion-transformer (DiT) editor,
-  \model{} (60 blocks), by decoding intermediate residual streams
-  through the model's own frozen output head, and pair every passive
-  reading with linear probes and causal interventions (ablation,
-  transplant, steering). What emerges is an editor that \emph{thinks
-  with an internal image}: the edit is \emph{decided early},
-  \emph{bound to a spatial carrier} that determines whether it can be
-  rendered cleanly, and \emph{translated late} into the flow field that
-  actually paints it. A per-(layer, timestep) tuned lens renders this
-  internal image directly at every depth, letting us watch the edit
-  enter it layer by layer at the very first denoising step. Decided
-  early: the edit is linearly readable by
-  layer 6 (cross-seed probe 0.883 where the frozen head reads only
-  0.005--0.14), the instruction is load-bearing in the first 11 blocks
-  and functionally complete by block 36, and across a 20-case battery
-  onset is delayed only for the 2 edits that insert genuinely novel
-  structure -- no continuous novelty proxy predicts it ($\rho=0.24$,
-  $p=0.30$). Translated late: most of the stack carries a
-  linearly-readable \emph{target-image code} that a sharp,
-  timestep-invariant band (layers 52--54, transition width as narrow
-  as 1 layer, confirmed by a four-variant decoding test) converts into
-  a \emph{velocity code}. This boundary is edit-family universal and
-  survives both an independently fine-tuned checkpoint and a 4-step
-  distilled merge (cross-model probe accuracy 0.84--0.92, direction
-  cosine 0.83, and -- on the fine-tune -- the full tuned/differential
-  lens toolchain itself, deep-layer $R^2$ 0.97--0.999). Decision
-  \emph{depth}, however, is not universal: appearance edits are
-  readable by layers 6--12, while structure edits crystallize only
-  around layer 36. Bound to a carrier: a probe
-  direction carries geometry-free semantics -- a hue, a style,
-  ``nothing here'' -- but not \emph{where to stop}. Steered into a
-  bounding box it overwrites geometry; confined to the edited object's
-  own silhouette, the same direction turns every previously-failing
-  dose into a perfect in-place recolor. Conjuring an object outruns any
-  single direction: a rank ladder over the donor$-$recipient difference
-  instead resolves object identity into coarse-to-fine linear shells --
-  category at rank 1, a coherent instance by rank 4, material by 16,
-  donor-faithful by 64 ($2\%$ of the model dimension) -- with the probe
-  direction itself inert. The read and write subspaces, in other words,
-  are not the same. Readability, causal necessity, and linear
-  writability thus dissociate three different ways, and we map exactly
-  where. Because these
-  readings are causal, they convert into training-free levers:
-  direction-plus-mask gives donor-free, prompt-free in-place attribute
-  editing with a dose dial; truncating classifier-free guidance after
-  step 2 saves 45\% of forward passes with all four edit families
-  visually intact (CFG's real role is scope resolution, not deciding
-  the edit); the decision structure survives step distillation at
-  $7.7\times$ speed (20/20 cases); and a probe-derived saliency map
-  (99\% vs.\ 38\% in-region mass) predicts step budgets and rescues an
-  under-strength edit by mid-stack transplant (0.619$\to$0.819). A
-  differential form of the same tuned lens (edit run minus a matched
-  ``keep it unchanged'' run) turns the internal edit plan into a
-  directly measurable quantity -- content commits to it early while the
-  differential itself separates into the edit region only gradually --
-  and, because the no-op run does not depend on the edit prompt, the
-  same differential already previews where a candidate edit will land
-  after just 15\% of the denoising trajectory. Every
-  intervention was pre-registered and every verdict made on the images
-  themselves; four of our own initial misreadings are retained in the
-  text as data. This is exploratory, single-model-family work, and we
-  are explicit throughout about where the lens is unreliable.
+  We build a layer--time and tuned lens for a 60-block
+  diffusion-transformer image editor, decoding intermediate residual
+  streams through its frozen output head and pairing passive readings
+  with generation-level probes and interventions. Under a fixed source
+  and underspecified recoloring prompt, early states predict the final
+  seed-conditioned outcome: the original car probe reaches 0.667
+  balanced accuracy against 0.333 chance, and a pre-registered
+  natural-photo tree replication reduces hue error from
+  $55.9^\circ$ to $11.4^\circ$. As a held-out behavioral test, early
+  best-of-five selection works on both Qwen and an independent 40-block editor, reducing
+  measured compute by about 68\%. In Qwen, the target-image code remains
+  poorly matched to the frozen head until a sharp band near layers
+  52--54 translates it into the velocity convention used by the sampler.
+  Transplant establishes sufficiency; steering shows that a writable
+  attribute requires a spatial carrier, while object identity needs a
+  higher-rank donor difference. A differential lens separates early
+  edit content from its gradually localizing footprint, and truncating
+  classifier-free guidance after step 2 preserves the tested battery
+  while saving 45\% of forward passes. We report failed preregistered
+  predictions, null replications, metric failures, and out-of-distribution
+  ablation behavior explicitly. The evidence supports early outcome
+  predictability and late code translation in the tested settings, not
+  irreversible commitment, fine-grained causal necessity, or
+  architecture-universal behavior.
   \vspace{1.0em}
   \end{minipage}\end{center}
   \begin{center}\begin{minipage}{0.92\textwidth}
   \small
   \textbf{Preface.} This document is the extended version accompanying
-  our anonymous 7-page AAAI submission of the same title, and is
-  provided as supplementary material for review. The main paper
-  establishes the spine of the argument: the edit is decided early and
-  translated late into the flow field in a sharp, timestep-invariant
-  band at layers 52--54; readability, causal necessity, and linear
-  writability dissociate in three distinct ways that we localize
-  precisely; the decision structure generalizes across an independently
-  fine-tuned checkpoint and a distilled merge; and a mechanism-derived
-  classifier-free-guidance truncation lever falls out as a practical
-  consequence. This supplement additionally provides, in full: the
+  our anonymous AAAI submission and is provided as supplementary
+  material for review. The main paper establishes the conservative
+  spine: realized outcomes under fixed underspecified prompts are
+  predictable early; Qwen translates a target-image code into a
+  velocity code near layers 52--54; transplant proves sufficiency;
+  steering is bounded by its spatial carrier; and the lens yields
+  held-out seed selection and a classifier-free-guidance truncation
+  existence proof. This supplement additionally provides, in full: the
   instruction-injection localization from a text-stream ablation, the
   differential lens, the 15\%-NFE preview lever, the edit-family
   two-axis law, the mask-recomposition carrier law and the
@@ -140,35 +95,31 @@
   frozen output head at intermediate layers of \emph{car\_red} gives a
   $P(\text{red car})$ grid across layer and denoising step (center); a
   sharp "snap" between layers 48 and 54 (\S\ref{sec:depth}) is where the
-  head-readable signal first appears, but a linear probe shows the edit
-  is already linearly decodable from layer 6 (\S\ref{sec:mechanism}). A
+  head-readable signal first appears, but a linear probe shows the
+  instruction is already linearly decodable from layer 6
+  (\S\ref{sec:mechanism}), while fixed-prompt generation-level probes
+  later establish early prediction of the realized outcome. A
   denser sweep (\S\ref{sec:mechanism}) resolves this snap to a sharp,
   timestep-invariant crossover centered at layer $\approx$53. We read
-  this as a five-stage \emph{editing circuit} (right): the instruction
-  is injected early (load-bearing by layer 11, complete by layer 36),
-  the edit decision is linearly readable by layer 6, most of the stack
-  then carries a target-image code, a narrow band (L52--54) translates
-  it into the velocity code, and layer 59's frozen head reads it out.
-  In the terms that organize this paper: the edit is decided early and
-  translated late -- not developed gradually.}
+  this as five measured stages (right): the instruction
+  is injected early, the realized outcome becomes predictable, most of
+  the stack carries a target-image code, a narrow band (L52--54)
+  translates it into the velocity code, and layer 59's frozen head reads
+  it out. Predictability and frozen-head readability are distinct.}
   \label{fig:teaser}
 \end{figure*}
 
 \section{Introduction}\label{sec:intro}
 
-Between reading ``turn the car red'' and painting it, what does an
-image editor actually do? The mechanics of diffusion suggest a
-gradual-development story: sixty transformer blocks times twenty
-denoising steps, each contributing its small share, the edit surfacing
-progressively like a photograph in developer fluid. This paper is
-about measuring that story and finding it wrong. In the model we
-study, an edit is not developed -- it is \emph{decided early}
-(linearly present within the first handful of blocks), \emph{bound to
-a spatial carrier} that determines whether it can be rendered cleanly,
-and only \emph{translated late}, in the last few blocks, from an
-internal goal-image code into the flow field that does the painting.
-Nearly everything else we report follows from taking this one sentence
-seriously and testing each of its clauses causally.
+Between reading ``turn the car red'' and painting it, what does an image
+editor represent? We measure this question across layer and denoising
+time. In Qwen, the realized edit is predictable from early hidden states
+under a fixed underspecified prompt, yet the frozen output head does not
+read the target correctly until a narrow late band translates an
+image-like internal code into the velocity convention used by the
+sampler. Predictability, frozen-head readability, transplantability, and
+writability are therefore measured separately rather than collapsed into
+a claim that the output is irreversibly fixed at an early layer.
 
 Watching this happen requires an instrument that did not exist. The
 logit lens~\citep{nostalgebraist2020logitlens} and its learned
@@ -183,17 +134,13 @@ onto, so "what is this layer currently drawing" has, to date, only been
 answerable by running the whole model to the end and looking at the
 output.
 
-We build a layer--time lens for a production DiT image editor,
-\model{}, and use it to ask three concrete questions about how an
-instruction-following edit (\eg{} "turn the car red") is actually carried
-out inside the network. \textbf{When} in the 20-step denoising trajectory
-does the edit commit -- immediately, or does the model visibly keep
-"thinking"? \textbf{Where} in the 60-block depth does the edit become
-legible, and is legibility the same thing as causal importance?  And,
-once we have candidate answers from passively reading activations,
-\textbf{does intervening on those activations confirm them} -- does
-ablating or transplanting the hidden states the lens points to actually
-change the output the way the lens predicts?
+We ask three concrete questions. \textbf{When} does a semantic readout
+reach its final value along the 20-step trajectory? \textbf{Where} in the
+60-block depth can a frozen head, a fitted probe, or a tuned lens read the
+eventual edit? \textbf{What can intervention establish?} We use
+transplant to test sufficiency and steering to test writable content.
+Whole-token ablation is retained only as a coarse stress test because it
+can drive the edited region off-manifold.
 
 Naively porting the logit-lens recipe -- decode every intermediate layer
 through the frozen final head and read off a semantic score -- turns out
@@ -202,11 +149,11 @@ to be necessary but not sufficient. It reproduces the standard mid-layer
 closer look shows this is itself misleading: a linear probe trained on
 the very same activations the frozen head cannot decode reaches near-perfect
 cross-seed accuracy 40+ layers earlier. The frozen head is reading the
-network's \emph{output-space} code; the decision is present, just
-represented in a different basis until the last few blocks translate it.
-Causal probes (ablation, hidden-state transplant across runs) are needed
-to tell whether "readable" activations are also "necessary" ones -- in
-one of our two running examples they are, and in the other they are not.
+network's \emph{output-space} code. A generation-level fixed-prompt probe
+then shows that the seed-conditioned outcome is predictable in another
+basis before the final blocks translate it. Transplant asks a narrower
+causal question: whether a donor representation is sufficient to install
+that edit in a recipient.
 
 The finding places this work in the ``thinking with
 images'' agenda~\citep{su2025thinkingsurvey}, but at the mechanistic
@@ -214,10 +161,10 @@ rather than the interface level. That line of work improves multimodal
 reasoning by handing a model \emph{explicit} intermediate images to
 think with -- sketches, renders, visualization
 traces~\citep{hu2024sketchpad,menon2024whiteboard,wu2024vot,li2025mvot,openai2025thinking}.
-We find the intermediate image already present \emph{latently} inside a
-generative editor: a target-image code formed within the first few
-blocks, readable by a linear probe, steerable, transplantable across
-runs -- and translated into pixels only at the end. The lens also
+We find an intermediate target image represented \emph{latently} inside
+a generative editor, readable with a layer-specific change of basis,
+steerable, transplantable across runs, and translated into the sampler's
+velocity convention only near the top. The lens also
 exposes this thought mid-struggle: genuinely novel structure starts
 late and grows in place while everything else prints immediately, and a
 direction pushed without a spatial carrier recruits surrounding tokens
@@ -226,8 +173,7 @@ is not merely a tool a multimodal reasoner calls; it natively thinks
 with an image before it makes one, and that thought can be watched and
 manipulated mid-flight.
 
-\paragraph{Contributions.} Three, in increasing order of practical
-consequence. \textbf{(1) An instrument, with a discipline.} The first
+\paragraph{Contributions.} \textbf{(1) An instrument, with a discipline.} The first
 training-free, frozen-head layer--time lens for a DiT image editor --
 including an honest treatment of why the raw, non-rescaled frozen head
 is the correct readout despite $>$$10\times$ activation-norm growth
@@ -236,14 +182,13 @@ primitives (ablate, transplant, steer) whose write semantics are stated
 exactly, all governed by a falsification-first protocol: pre-registered
 predictions, per-image visual verdicts, and standing bit-exactness
 gates (\S\ref{sec:method}, \S\ref{sec:protocol}). \textbf{(2) A
-mechanism: the editor thinks with an internal image.} The edit is
-decided early -- linearly readable by layer 6, the instruction
-load-bearing in the first 11 blocks and complete by 36 -- and carried
-as a target-image code for most of the depth. It is translated into
+mechanism: the editor carries an internal target image.} Under fixed
+underspecified prompts, the realized outcome is predictable early across
+synthetic and natural images and one independent architecture. In Qwen,
+the code is translated into
 the velocity code only in a sharp, timestep-invariant band (L52--54)
-that is edit-family universal and survives fine-tuning and 4-step
-distillation, while decision depth splits by family (appearance
-shallow, structure mid-stack). A per-(layer, timestep) tuned lens
+that is consistent across the tested edit families and survives a
+fine-tune and 4-step distillation. A per-(layer, timestep) tuned lens
 renders that target-image code directly into a coherent scene at every
 depth, confirming there is no hard readability boundary -- only a
 change of basis -- and mechanizing the mid-stack's complementary-color
@@ -254,15 +199,15 @@ spatial mask supplies the ``where to stop''; object identity yields
 not to its probe direction -- read and write subspaces differ -- but to
 a graded rank ladder: category at rank 1, coherent instance by rank 4,
 material by 16, donor-faithful by rank 64 ($2\%$ of the model
-dimension). Readability, causal necessity, and linear writability
-dissociate three different ways, and we map where
-(\S\ref{sec:mechanism}--\S\ref{sec:recompose}). \textbf{(3) Levers:
-mechanism converts to practice.} Because the readings are causal, they
-become training-free tools: probe direction $+$ silhouette mask gives
+dimension). Transplant establishes sufficiency; steering and the rank
+ladder show carrier-bounded writability
+(\S\ref{sec:mechanism}--\S\ref{sec:recompose}). \textbf{(3) Validation and levers.}
+Held-out early best-of-five selection validates the readout on two architectures with
+about 68\% measured compute reduction. Probe direction $+$ silhouette mask gives
 donor-free, prompt-free in-place attribute editing with a dose dial
 (\S\ref{sec:recompose}); truncating CFG after step 2 saves $45\%$ of
 forward passes with all four edit families intact, isolating CFG's real
-job as scope resolution (\S\ref{sec:cfgfreelunch}); the decision
+job as scope resolution (\S\ref{sec:cfgfreelunch}); the layer--time
 structure survives step distillation at $7.7\times$ speed, licensing
 lens-based analysis of fast variants (\S\ref{sec:generalize},
 \S\ref{sec:cfgfreelunch}); and probe-derived saliency, step-budget
@@ -270,7 +215,7 @@ prediction, and mid-stack rescue of an under-strength edit close the
 loop from reading to optimizing (\S\ref{sec:applications}). A
 differential form of the tuned lens (edit run minus a matched no-op
 run) turns the internal edit plan into a directly measurable and
-previewable quantity -- content commits to it early but the
+previewable quantity -- content is present early but the
 differential separates into the edit region only gradually, and
 because the no-op run is edit-prompt-independent the same lens forecasts
 where a candidate edit will land after just 15\% of the denoising
@@ -294,7 +239,7 @@ own head can already read out, not in the best possible projection.
 The linear representation hypothesis~\citep{park2024linear} is the
 premise that lets a frozen-head lens and a linear probe disagree
 informatively -- if human-interpretable directions are linear, a probe
-can find one before the network's own head is willing to commit to it.
+can find one before the network's own head can read it.
 
 \paragraph{Thinking with images.} A growing line of work has multimodal
 models reason \emph{with} images rather than only about them: sketching
@@ -309,7 +254,7 @@ the area. In all of these the intermediate image is \emph{explicit} --
 produced in pixels as a reasoning step at the model's interface. Our
 results supply the complementary, mechanistic half of this agenda:
 inside a DiT editor the intermediate image exists \emph{latently}, as a
-mid-stack target-image code formed long before any pixel is committed,
+mid-stack target-image code represented before the final output is rendered,
 and it can be read (probe), evaluated (lens), and manipulated (steer,
 transplant) without ever being rendered. The editor's characteristic
 struggles -- delayed onset when structure is genuinely novel
@@ -331,6 +276,34 @@ formulation~\citep{lipman2023flowmatching,liu2023rectifiedflow} that
 guidance~\citep{ho2022cfg} which the true-CFG sampling loop in
 \S\ref{sec:prelim} implements as two sequential passes.
 
+ICM~\citep{zaleska2026icm} supplies the key control for separating an
+explicit prompt from a realized generative choice: hold the prompt fixed,
+vary the seed, and label the final choice post hoc. Probe-Select
+\citep{guo2026probeselect} learns from early denoiser activations to predict
+final image quality, while ELECT~\citep{kim2025elect} uses zero-shot early
+latent background consistency for candidate selection in instruction editing.
+We adopt the fixed-prompt outcome protocol and held-out selection structure,
+but predict which outcome a fixed underspecified edit realizes, select relative
+to a requested outcome rather than overall quality or preservation, and study
+how its code changes across depth. ADE-CoT~\citep{qu2026adecot} goes further as
+an efficiency method, combining edit-specific intermediate previews, adaptive
+budgets, and opportunistic stopping across multiple editors and benchmarks. Our
+five-seed selector is not positioned as a competing test-time-scaling system;
+it is a held-out behavioral validation that the measured hidden state carries
+the realized attribute.
+
+Breaking the Lock-in~\citep{zhu2026lockin} is the closest temporal neighbor:
+it finds early cross-seed convergence in text-to-image sampling and modulates
+representations to restore diversity. Our fixed-prompt result concerns which
+outcome an image-editing DiT realizes, and our additional axis is transformer
+depth -- including the late conversion into the velocity basis -- so we do not
+interpret early predictability as irreversible lock-in. DreamReader
+\citep{sykora2026dreamreader} is the closest tooling neighbor, unifying
+representation extraction, patching, steering, and stitching for text-to-image
+U-Nets. Our scope is narrower: a frozen-head/tuned layer--time lens for a joint
+text--image DiT editor, with held-out outcome prediction and rendered failure
+audits rather than a general-purpose editing toolkit.
+
 \paragraph{Causal interpretability and activation patching.} Causal
 tracing / ROME~\citep{meng2022rome} localizes factual associations in
 language models by patching activations from a clean run into a
@@ -338,9 +311,13 @@ corrupted one and measuring the effect on the output, the same basic
 move we use for hidden-state transplant in \S\ref{sec:swap}.
 \citet{heimersheim2024activation} catalogue the methodological pitfalls
 of activation patching (choice of corruption, direction of the patch,
-confounded metrics) that motivate our paired ablate/transplant design
-and our insistence on reporting both "readable" and "necessary" as
-separate, possibly conflicting, measurements. Activation
+confounded metrics) that motivate our later rejection of whole-token
+ablation as a fine-grained necessity test. Transplant is interpreted
+only as sufficiency. This boundary is reinforced by recent work showing that
+features can be easy to detect yet produce visual artifacts under
+off-distribution steering~\citep{pegoraro2026look}, and that activation
+patching with multiple mediators does not identify a unique causal pathway
+without stronger assumptions~\citep{zhang2026curse}. Activation
 addition~\citep{turner2023actadd} steers language-model generations by
 adding a hand- or data-derived direction to the residual stream at
 inference time without any gradient step; \S\ref{sec:interventions} and
@@ -354,9 +331,10 @@ dominant recipes for instruction- and attention-based image editing that
 a model like \model{} generalizes and productionizes; CLIP's
 image--text embedding space~\citep{radford2021clip} is what we use, for
 lack of a better zero-shot alternative, to turn a decoded preview image
-into a semantic score in \S\ref{sec:readout}. Our lens is architecture-
-and scale-agnostic in principle but has only been validated on one
-model, \model{}~\citep{qwen2025image}, whose transformer backbone follows
+into a semantic score in \S\ref{sec:readout}. Most lens mechanics are
+validated on \model{}~\citep{qwen2025image}; an independent architecture
+is used only for the early outcome-prediction and selection checks. Its
+transformer backbone follows
 the DiT design~\citep{peebles2023dit}.
 
 \section{Anatomy of a DiT Image Editor}\label{sec:prelim}
@@ -445,8 +423,8 @@ estimate $\hat{x}_0 = x_t - \sigma_t v_\theta(x_t,t)$ (already
 introduced in \S\ref{sec:prelim}) through the VAE to get a preview image
 of what the model currently believes the final output looks like. This
 requires no modification to the model and is cheap (one extra VAE decode
-per requested step); it is the axis along which we ask \emph{when} an
-edit commits (\S\ref{sec:when}).
+per requested step); it is the axis along which we ask \emph{when} a
+semantic readout saturates (\S\ref{sec:when}).
 
 \subsection{Depth lens: the frozen output head}\label{sec:depthlens}
 The time lens tells us what the model would output if sampling stopped
@@ -502,22 +480,24 @@ consequentially, a very-early-layer, very-early-step decode of
 "noise" is mis-scored as "a beach background" at $P{=}0.795$; see
 \S\ref{sec:limits}).
 
-\subsection{Causal probes: ablation and transplant}\label{sec:interventions}
+\subsection{Interventions: stress tests, transplant, and steering}\label{sec:interventions}
 Reading a lens value tells us the network's representation is
 \emph{consistent with} a hypothesis, not that the hypothesis is
 causally correct. We use two interventions, both implemented as the same
 kind of forward hook as capture, but \emph{overwriting} the block's
 output before it is returned:
 
-\textbf{Ablate.} Zero (or mean-replace, using the mean of the
+\textbf{Whole-token stress test.} Zero (or mean-replace, using the mean of the
 non-ablated target tokens in that same forward call) selected target
 rows of the image hidden state at selected layers. Because this is a
 post-block \emph{residual overwrite}, it destroys that token position's
 entire representation for \emph{every subsequent block} in the same
 forward pass -- there is no mechanism for a later block to "see through"
-the ablation. An empty ablation spec is verified to reproduce the
-baseline output bit-for-bit, which we use as a sanity check that the
-intervention machinery introduces no side effects of its own.
+the overwrite. An empty intervention spec is verified to reproduce the
+baseline bit-for-bit. A non-empty overwrite is intentionally blunt:
+destroying an entire residual token across many layers can move the
+edited region off-manifold, so the result diagnoses failure and recovery
+rather than the causal role of a specific readable direction.
 
 \textbf{Transplant (cross-run swap).} Overwrite selected target rows of
 a "recipient" run's hidden state, at selected layers and timesteps, with
@@ -526,9 +506,8 @@ seed, same source image, different edit prompt or a stronger sampling
 setting), matched by timestep, layer, and patch coordinate. This tests
 \emph{sufficiency}: if the donor's representation, spliced in, is enough
 to flip the recipient's decoded output toward the donor's edit, the
-donor layer band is causally sufficient for that edit, independent of
-whether ablating the same band in the donor's own run would have been
-\emph{necessary}.
+donor layer band is causally sufficient for that edit. We do not infer
+necessity from the separate whole-token stress test.
 
 \textbf{Steer.} Add a fixed direction to selected target rows at
 selected layers, scaled by a strength $\alpha$ (in units of the
@@ -541,7 +520,7 @@ $\alpha\,d_{\text{red}}$ to the recipient's car-region rows at layers
 6--23, all steps, on both CFG passes. Unlike transplant, this requires
 no donor forward pass at all, only a single stored direction vector.
 
-Both interventions are applied identically and independently to the
+All interventions are applied identically and independently to the
 conditional and unconditional CFG pass at every affected step, for the
 reason given in \S\ref{sec:prelim} -- doing otherwise would compare a
 lopsided, extrapolated CFG combination against a clean one rather than
@@ -577,7 +556,7 @@ regression checks re-run per experiment, not one-time validations.
 Porting the whole method to another DiT editor therefore needs only
 (a) a post-block residual hook in the model's native dtype
 (\S\ref{sec:capture}), (b) the frozen-head gate to license the depth
-lens, and (c) region-restricted 3-class probes to obtain decision
+ lens, and (c) region-restricted 3-class probes to obtain semantic
 directions; the cross-model replication in \S\ref{sec:generalize} is
 this recipe executed unchanged on two further checkpoints.
 
@@ -590,16 +569,13 @@ flat-vector car scene) and \emph{beach\_background} ("change the
 background to a beach" on a real photo), chosen because they represent
 opposite ends of the "how much does the source image constrain the
 edit" spectrum -- a local, preserving color edit vs.\ a global,
-non-preserving background replacement. The subsections establish the
-opening sentence clause by clause: \emph{decided early}
-(\S\ref{sec:when}, \S\ref{sec:mechanism}--\S\ref{sec:injection}),
-\emph{translated late} (\S\ref{sec:depth}, \S\ref{sec:mechanism},
-\S\ref{sec:families}), \emph{bound to a spatial carrier}
-(\S\ref{sec:causal}--\S\ref{sec:steer}, \S\ref{sec:recompose}), and
-what the mechanism buys in practice (\S\ref{sec:applications},
-\S\ref{sec:cfgfreelunch}).
+non-preserving background replacement. Later generation-level studies
+use 48 independent seeds per training set and 12 held-out five-seed
+groups per selector. The subsections separate early outcome
+predictability, late code translation, transplant sufficiency,
+carrier-bounded writability, and practical levers.
 
-\subsection{When: edit commit time is edit-dependent}\label{sec:when}
+\subsection{When: semantic saturation is edit-dependent}\label{sec:when}
 
 \begin{figure}[t]
   \centering
@@ -618,15 +594,15 @@ what the mechanism buys in practice (\S\ref{sec:applications},
 \end{figure}
 
 The gradual-development picture makes its first testable claim in
-time: if the edit surfaces progressively, the commit step should be
-late and roughly uniform across edits. It is neither.
+time: if the semantic readout surfaced progressively, its saturation
+step should be late and roughly uniform across edits. It is neither.
 Running the time lens (\S\ref{sec:timelens}) over a battery of 10 cases
 spanning 5 edit categories (color-change, background-replacement,
 object-addition, object-removal, style-transfer; 2 cases each) shows the
-commit step is not a fixed property of the sampler -- it depends on what
-the edit asks for. Table~\ref{tab:battery} reports, for
+saturation step is not fixed across the tested edits. Table~\ref{tab:battery} reports, for
 each case, the step at which the time-lens $P(\text{target})$ first
-reaches within 0.05 of its step-19 value (\texttt{commit\_step}) and the
+reaches within 0.05 of its step-19 value (the legacy run key is
+\texttt{commit\_step}) and the
 first depth-lens layer at which the same threshold is first crossed at
 step 0 (\texttt{first\_layer}).
 
@@ -635,7 +611,7 @@ step 0 (\texttt{first\_layer}).
 \small
 \begin{tabular}{lccc}
 \toprule
-case & category & commit & first \\
+case & category & saturation & first \\
  & & step & layer \\
 \midrule
 color\_car        & color         & 0 & 54 \\
@@ -650,9 +626,9 @@ remove\_cup$^\dagger$      & removal & 0 & 0 \\
 remove\_laptop$^\dagger$   & removal & 0 & 0 \\
 \bottomrule
 \end{tabular}
-\caption{Commit step and earliest head-readable layer, all 10 battery
+\caption{Semantic saturation step and earliest head-readable layer, all 10 battery
 cases (data: \texttt{runs/a5\_aggregate.json}). $^\dagger$Object-removal
-CLIP readouts are unreliable (\S\ref{sec:limits}); the commit/first-layer
+CLIP readouts are unreliable (\S\ref{sec:limits}); the saturation/first-layer
 values shown for these two are not meaningful and are listed only for
 completeness.}
 \label{tab:battery}
@@ -661,7 +637,7 @@ completeness.}
 At the resolution of Table~\ref{tab:battery} -- a coarse, three-value
 CLIP-threshold discretization (steps 0, 2, or 7) -- it is tempting to read
 a graded \emph{layout-novelty} gradient into these numbers: color and
-texture edits commit at step 0, edits that introduce a new region of
+texture edits saturate at step 0, edits that introduce a new region of
 content one or two steps later, and the one wholesale new-object
 insertion (add\_boat) latest of all. A follow-up study puts this reading
 to a direct, quantitative test rather than leaving it as a plausible
@@ -687,7 +663,7 @@ inserts a genuinely novel structure with no existing pixels to build on,
 and we explicitly do not claim a continuous novelty law beyond that
 (\texttt{runs/g5\_onset\_law}, Appendix~\ref{app:repro}). This categorical
 split is unaffected by the softening above: in Table~\ref{tab:battery},
-the same edits that commit late in time also require the deepest
+the same edits whose readout saturates late in time also require the deepest
 first-readable layer.
 \subsection{Where in depth: late materialization, inverted mid-stack}\label{sec:depth}
 
@@ -757,8 +733,8 @@ The depth lens's blind spot is not the same thing as the network's.
   \label{fig:mechanism}
 \end{figure}
 
-Here the opening sentence earns its \emph{decided early} and
-\emph{translated late} clauses at once. The depth-lens snap in
+Here we separate early predictability from late frozen-head readability.
+The depth-lens snap in
 \S\ref{sec:depth} is consistent with two very
 different underlying stories: either the target-image content simply
 does not exist yet in the mid-stack representation, or it exists but is
@@ -800,28 +776,48 @@ useful coarse diagnostic (which global combination formula decodes
 better), not a mechanistic claim about one direction in activation
 space.
 
-\textbf{Cross-seed linear probe.} A frozen head is one specific,
-non-trainable projection; a linear probe fit directly on the captured
-hidden states is a different, more permissive question -- is the
-decision linearly present at all, in \emph{some} basis, whether or not
-the network's own head can read it. We fit a 3-way probe (predicting
-which of three colors was requested) on hidden states from one seed and
-evaluate on a held-out seed, at every layer/step cell of an
-$11\times5$ grid (Figure~\ref{fig:mechanism}, right; chance $=0.333$).
-The result is the paper's sharpest readable/necessary dissociation
-signal: at L6, $t{=}4$ -- five blocks into the network, at an early
-denoising step -- cross-seed probe accuracy is already $0.883$, while
-the frozen-head lens at the identical cell reads
-$P(\text{red car}) = 0.111$ (\texttt{a1\_p\_red\_same\_cells},
-\S\ref{sec:depthlens}). The earliest layer/step cell to cross 0.9
-accuracy is L36/$t$0 ($0.906$); by contrast, accuracy at the terminal
-layer L59 is consistently \emph{lower} than at L48--L54 (\eg{}
-$0.70$--$0.75$ across steps, vs.\ $0.80$--$0.89$ one to two "layer rows"
-earlier) -- the same last-block translation that resolves the frozen
-head's sign convention appears to cost the representation some of its
-linear separability, plausibly because the terminal layer is now encoding
-a velocity optimized for the sampler's next step, not for a
-color-classification probe.
+\textbf{Explicit-prompt basis diagnostic.} A frozen head is one specific,
+non-trainable projection; a fitted linear probe asks whether a variable is
+linearly present in some other basis. We first fit a 3-way probe predicting
+which of three colors was explicitly requested, training on one seed and
+testing on another over an $11\times5$ layer--step grid
+(Figure~\ref{fig:mechanism}, right; chance $=0.333$). At L6, $t{=}4$ its
+accuracy is $0.883$, while the frozen-head lens at the same cell reads
+$P(\text{red car})=0.111$. This establishes a basis mismatch, but because
+the color word differs across prompts it does \emph{not} by itself show
+that a seed-conditioned realized outcome is predictable. The terminal L59
+probe is lower than L48--L54 ($0.70$--$0.75$ vs.\ $0.80$--$0.89$), a
+color-specific loss of linear separability after the translation.
+
+\textbf{Fixed-prompt generation-level outcome probes.} To remove the
+instruction-label confound, we hold both source and prompt fixed
+(``change the car to a different color''), vary only the seed, and label
+each final image post hoc. Each generation contributes one mean-pooled
+vector. On 48 new seeds, the L6/$t$4 probe reaches 0.667 balanced accuracy
+against 0.333 chance (500-permutation $p=0.002$); a circular decoder at
+L6/$t$2 reduces final-hue MAE from $22.3^\circ$ to $8.3^\circ$
+($R^2=0.815$). A pre-registered real-photo follow-up preserves one
+continuous mug replication ($17.0^\circ\to10.7^\circ$, $p=0.005$) and one
+eye null ($p=0.796$); a separate natural-photo tree replication gives
+$55.9^\circ\to11.4^\circ$ ($p=0.005$). On the independent 40-block Boogu
+editor, L4/$t$2 gives $39.9^\circ\to6.9^\circ$ ($p=0.005$), though its
+terminal layer is stronger rather than weaker.
+
+\textbf{Held-out early selection.} The probes also support a practical
+test on unseen seeds. On Boogu, an L4/$t$2 selector chooses a successful
+recolor in 8/12 new five-seed groups versus 20\% random expectation
+($p=4.1\times10^{-5}$); the L4/$t$0 control is null ($p=0.188$). On 12
+Qwen, two separately pre-registered target tasks pass. On 12 tree groups,
+an L6/$t$2 selector reduces mean target error from $95.2^\circ$ under
+random selection to $46.5^\circ$ (oracle $43.2^\circ$), with mean rank
+1.17 and exact $p=3.7\times10^{-7}$; L6/$t$0 is null ($p=0.381$). A
+current-environment car replication reduces $25.7^\circ$ to $11.1^\circ$
+(oracle $8.7^\circ$), with mean rank 2.00 and $p=0.0086$. Its L6/$t$0
+control retains partial signal (mean rank 2.17, $p=0.0256$) but misses the
+frozen rank and $p$ gates. All selection runs use actual interrupted
+captures and winner reruns, reducing measured best-of-five compute by
+about 68\%. This is closest-candidate selection: some groups contain no
+candidate near the requested target hue.
 
 \begin{figure*}[t]
   \centering
@@ -911,7 +907,7 @@ gate used throughout this paper (\S\ref{sec:depthlens}).
 
 \textbf{No hard affine readability boundary exists.} A pre-registered
 prediction that tuned-lens readability would itself have a boundary,
-between the shallow layer where a probe first reads the decision and
+between the shallow layer where a probe first predicts the outcome and
 the L52 layer where the frozen head does, is refuted -- in the
 interesting direction. Every depth we tried, down to L6, decodes a
 coherent scene once given its own per-(layer, timestep) dictionary, and
@@ -930,9 +926,9 @@ noise, so $\hat x_0$ is determined entirely by the decoded velocity --
 nothing here is contaminated by an already-informative latent.
 Figure~\ref{fig:tunedlens} (top) shows the source's blue car persisting
 through L24, turning orange-red by L36, the whole scene composing by
-L44, and the car fully red by L52: the ``decided early'' clause of
-\S\ref{sec:intro}, rendered directly rather than inferred from a probe
-score.
+L44, and the car fully red by L52. This renders how target-image content
+changes through depth rather than inferring an irreversible transition
+from a probe score.
 
 \textbf{The anti-image, mechanized.} The mid-stack frozen-head decode
 does not merely fail to show red (\S\ref{sec:depth}); at $t{\ge}8$ it
@@ -962,7 +958,7 @@ same depth trend as \emph{car\_red} across all six cases -- low points
 $0.65$--$0.84$ at L12/L24, $t{=}0$, rising to $0.978$--$0.994$ by L52.
 The decisive case is \emph{add\_runner} (Figure~\ref{fig:k1btransfer}):
 at L52, $t{=}0$ -- the same depth and step at which \emph{car\_red}'s
-color was already fully committed -- the internal image shows an
+final color was already visible -- the internal image shows an
 empty path, no runner; a blurred figure appears mid-path by $t{=}2$;
 a clear blue-shirted runner is rendered by $t{=}4$. The already-known
 invention-class delayed onset (\S\ref{sec:when}) is here watched
@@ -999,7 +995,7 @@ reconstruction variance rather than edit-region-specific signal;
 \S\ref{sec:difflens} closes this gap with a differential form of the
 same lens that isolates the edit-specific signal directly.
 
-\subsection{Differential lens: commitment is early, separation is
+\subsection{Differential lens: content is early, separation is
 gradual}\label{sec:difflens}
 
 \S\ref{sec:tunedlens}'s held-out $R^2$ conflates two things: how well
@@ -1036,7 +1032,7 @@ L36/L44 across the four cases below, spans $0.88$--$0.97$, matching
 same cells. The frozen dictionaries carry the edit-specific signal
 itself, not only easy-to-reconstruct background.
 
-\textbf{Commitment is early; separation of the differential is
+\textbf{Content is early; separation of the differential is
 gradual, not a step.} We pre-registered that $D$ would already
 localize tightly ($\mathrm{loc}\ge0.6$) at every captured step. It does
 not: on two natural-photo color edits (\emph{color\_eyes}: ``change the
@@ -1048,15 +1044,15 @@ $0.21\to0.47\to0.67\to0.83$, tree $0.24\to0.57\to0.89\to0.92$, runner
 $0.10\to0.34\to0.58\to0.69$ -- runner's $t{=}0$ value is exactly the
 chance floor. The refutation is itself the finding. Looking at the
 internal image directly (\S\ref{sec:tunedlens}) shows the edit content
--- red eyes, a black trunk -- is already present at $t{=}0$: commitment
-is early, exactly as \S\ref{sec:when}--\S\ref{sec:tunedlens} report.
+-- red eyes, a black trunk -- is already present at $t{=}0$ in these
+decoded cases.
 But the \emph{differential} at $t{=}0$ is not localized: it is a
 diffuse field spread over the whole frame, because the edit prompt
 perturbs the entire velocity prediction relative to the no-op control,
 not only the edited region. That global perturbation field decays over
 steps while the edit-region divergence persists, so $D$ condenses into
-the edit's spatial footprint only gradually. Commitment (is the content
-in the internal image yet) and separation (has the differential
+the edit's spatial footprint only gradually. Content presence (is the
+attribute visible in the internal image yet) and separation (has the differential
 localized to where that content lives) are two different quantities,
 and conflating them is exactly the mistake the pre-registered
 prediction made.
@@ -1068,14 +1064,14 @@ prediction made.
   the cat's green eyes to red eyes''), decoded at L52 through the
   frozen K1 dictionaries of Figure~\ref{fig:tunedlens}. Top: the edit
   run's internal image already shows red eyes at $t{=}0$ and stays red
-  throughout -- commitment is early. Middle: the ``keep the image
+  throughout -- content is present early. Middle: the ``keep the image
   unchanged'' control's internal image keeps the source's green eyes at
   every step -- a faithful no-op. Bottom: the differential
   $D=|\text{edit}-\text{unchanged}|$ is a diffuse gray field over the
   whole face at $t{=}0$ ($\mathrm{sig}=0.70$, at the chance floor), and
   condenses monotonically into two glowing eyes in the dark by $t{=}8$
   ($\mathrm{sig}=7.76$, the sharpest concentration measured anywhere in
-  this paper) -- commitment and separation are two different
+  this paper) -- content presence and separation are two different
   quantities.}
   \label{fig:difflens}
 \end{figure*}
@@ -1083,7 +1079,7 @@ prediction made.
 Figure~\ref{fig:difflens} shows this directly for \emph{color\_eyes}.
 The onset curve at L52 (top row: edit; middle row: control; bottom row:
 $D$) makes both halves of the claim visible in the same figure: the
-top row is already committed at $t{=}0$, and the bottom row is not yet
+top row already contains the edit at $t{=}0$, and the bottom row is not yet
 localized at $t{=}0$ but sharpens every step after.
 
 \textbf{A family signature: how fast the plan concentrates.} The onset
@@ -1230,8 +1226,8 @@ Fidelity in/out are mean absolute pixel difference vs.\ the unablated
 \label{tab:injection}
 \end{table}
 
-The depth lens and the cross-seed probe both locate a color \emph{decision}
-by layer 6; neither tells us when the text-conditioned \emph{instruction}
+The depth lens and explicit-prompt probe show color information is
+linearly available by layer 6; neither tells us when the text-conditioned \emph{instruction}
 itself is actually consumed by the image stream, as opposed to being
 available but unused. We test this directly by zeroing only the
 \emph{text}-stream tokens (\texttt{encoder\_hidden\_states}, never the
@@ -1249,7 +1245,7 @@ unablated baseline \emph{and} the cleanest of any band we tested
 Both results say the same thing: whatever the network needs from the text
 stream to execute "turn the car red," it has already extracted by layer
 36, so removing text access afterward changes almost nothing. This lines
-up with \S\ref{sec:mechanism}'s probe result -- if the color decision is
+up with \S\ref{sec:mechanism}'s probe result: if requested color is
 already linearly readable by layer 6, the instruction cannot still be
 waiting to be injected forty layers later.
 
@@ -1266,9 +1262,9 @@ forward; they are doing fusion work the rest of the network depends on to
 render \emph{anything} coherent, edited or not. L12--23 is intermediate
 (fidelity outside $34.9$): a cleaner, if still somewhat degraded, "ignore"
 result. This is consistent with, and sharpens, \S\ref{sec:mechanism}'s
-finding that the decision is linearly readable by layer 6: the instruction
+finding that requested color is linearly readable by layer 6: the instruction
 must already be fused into the image stream within the first 11 blocks
-for a linear color decision to exist that early, and Table~\ref{tab:injection}
+for that linear signal to exist, and Table~\ref{tab:injection}
 shows exactly why L0--11 cannot be spared.
 
 \textbf{Cutting text access everywhere gives the cleanest possible
@@ -1286,70 +1282,65 @@ and the L12--23-only cut land on the same "wrong" color, blue, rather
 than a generic corruption -- an echo of the same sign-convention
 structure this paper keeps finding, now produced by denying the network
 its instruction rather than by mis-decoding an intermediate layer.
-\subsection{Causal localization: necessity}\label{sec:causal}
+\subsection{Whole-token ablation as a failed localization test}\label{sec:causal}
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.98\textwidth]{figs/fig6_causality/fig6_causality.pdf}
-  \caption{Causal ablation and transplant, \emph{car\_red} vs.\
-  \emph{beach\_background}. \textbf{A}: ablating a band of layers (all
-  20 steps) shows opposite profiles -- car needs its \emph{early} layers,
-  beach needs its \emph{late} ones. \textbf{B}: ablating a window of
-  steps (4 mid layers, [12,24,36,48]) shows car tolerates any single
-  window, beach is destroyed by ablating the earliest one. \textbf{C}:
-  transplanting a donor \emph{car\_red} run's hidden state into a
-  \emph{car\_green} recipient, at any of four layer bands, is
-  \emph{sufficient} to flip the output back to red -- including the
-  L48--59 band, which panel A shows is \emph{not necessary} for the
-  car edit at all.}
+  \caption{Historical whole-token stress tests and transplant.
+  \textbf{A--B}: zero-overwrite scores are retained as a methodological
+  negative; exact-region re-audit shows the edited tokens are driven
+  off-manifold, so these panels cannot localize fine-grained necessity.
+  \textbf{C}: transplanting a donor \emph{car\_red} state into a
+  \emph{car\_green} recipient at any tested band is sufficient to move
+  the output toward red.}
   \label{fig:causal}
 \end{figure*}
 
-The depth lens (\S\ref{sec:depth}) and the cross-seed probe
-(\S\ref{sec:mechanism}) both point to early-to-mid layers as where the
-edit decision is linearly present. We now ask whether those layers are
-also causally \emph{necessary}, using layer-band and step-window
-ablation (\S\ref{sec:interventions}; zeroing is applied to target-grid
-tokens, both CFG passes, all 20 steps unless a step window is also
-specified) on our two running examples.
+This experiment was originally designed to ask whether readable layers
+were causally necessary, using layer-band and step-window zero-overwrite
+on target-grid tokens. The intended interpretation failed a later audit.
+The intervention removes the entire residual token across many layers,
+not a specific readable direction, and drives the edited region
+off-manifold.
 
-\textbf{Layer bands.} For \emph{car\_red}, ablating layers 0--11 is
-catastrophic ($P(\text{red car})$ collapses to $0.049$) while ablating
-layers 48--59 is nearly harmless ($0.826$, close to the unablated
-baseline). For \emph{beach\_background} the profile is a near-mirror
-image: ablating 0--11 only partially hurts ($0.193$) while ablating
-48--59 is now the catastrophic band ($0.040$; Figure~\ref{fig:causal}A).
-The edit that commits early in time (\S\ref{sec:when}) also depends on
-early layers; the edit that commits late in time depends on late layers.
+\textbf{Why the apparent layer profile is invalid.} The original margin
+crop scored \emph{car\_red} at $0.049$ after L0--11 overwrite and $0.826$
+after L48--59 overwrite. Exact-region crops reveal that both overwritten
+regions are noise; the high late-band score comes from unablated red-car
+pixels included by the expanded scoring margin. Mean replacement removes
+that leakage-based contrast and collapses both bands. The analogous
+\emph{beach\_background} comparisons are also dominated by destructive
+whole-region effects. We therefore retain the numbers and images as a
+failed localization attempt, not evidence that one layer band is
+necessary or dispensable.
 
-\textbf{Step windows.} Ablating a 4--6 step window at 4 mid layers
+\textbf{Step windows.} Zeroing a 4--6 step window at 4 mid layers
 ($\ell\in\{12,24,36,48\}$) barely dents \emph{car\_red} regardless of
 \emph{which} window is chosen ($0.92$--$0.96$ across all four
-non-overlapping windows) -- consistent with the color decision being
-redundantly reconstructible from the always-clean condition tokens at
-whichever steps remain unablated. \emph{beach\_background} again
+non-overlapping windows). \emph{beach\_background}
 inverts this: ablating the earliest window (steps 0--3) is destructive
 ($0.014$) and the damage decreases roughly monotonically the later the
 ablated window is (steps 16--19: $0.394$); ablating the same 4 layers
 across \emph{all} 20 steps is worse still for both cases than any single
-window ($0.627$ car, $0.134$ beach), showing the redundancy is
-partial, not absolute (Figure~\ref{fig:causal}B).
+window ($0.627$ car, $0.134$ beach; Figure~\ref{fig:causal}B). These are
+descriptive recovery profiles under a severe perturbation, not a
+fine-grained causal map.
 
 \textbf{Condition-token access.} Zeroing only the condition-image
 tokens (never the target tokens) isolates how much the model needs to
 keep re-consulting the source image, as opposed to having already
 copied what it needs into the target stream. Table~\ref{tab:condtok}
 shows that for \emph{car\_red}, even zeroing condition tokens at
-\emph{every} layer barely dents the color decision ($P(\text{red
+\emph{every} layer barely dents the color score ($P(\text{red
 car})=0.97$) -- but wrecks everything outside the car region
 (\texttt{fidelity\_outside}, mean-squared pixel error against the
 unablated baseline, jumps by more than an order of magnitude vs.\ the
 layer-band ablations above). Cutting condition access only in the
 \emph{early} half of the stack (layers 0--29) is worse for scene
-fidelity than cutting only the late half (layers 30--59): the source
-image's grounding of everything the edit does \emph{not} touch is an
-early-layer phenomenon, even though (per the layer-band result above)
-the edit \emph{itself} is also decided early.
+fidelity than cutting only the late half (layers 30--59). This shows
+that the stress test disrupts source-scene grounding; it does not isolate
+the necessity of a particular edit representation.
 
 \begin{table}[t]
 \centering
@@ -1370,10 +1361,9 @@ bounding box (data: \texttt{runs/a3\_summary.json}, \texttt{condtokens}
 scan).}
 \label{tab:condtok}
 \end{table}
-\subsection{Transplant: sufficiency without necessity}\label{sec:swap}
+\subsection{Transplant establishes sufficiency}\label{sec:swap}
 
-Necessity (\S\ref{sec:causal}) is only half the causal story. We take a
-\emph{car\_green} recipient run and, at each of four candidate donor
+We take a \emph{car\_green} recipient run and, at each of four candidate donor
 layer bands (L0--11, L12--23, L0--23, L48--59), overwrite its target
 tokens in the car region with the corresponding tokens captured from a
 \emph{car\_red} donor run of the same seed and source image (transplant,
@@ -1381,15 +1371,10 @@ tokens in the car region with the corresponding tokens captured from a
 scores $P(\text{red car})=0.011$ (it is, correctly, a green car). Every
 one of the four transplants flips the output back toward red:
 $0.954$ (L0--11), $0.959$ (L12--23), $0.938$ (L0--23), and, notably,
-$0.940$ for \textbf{L48--59} (Figure~\ref{fig:causal}C) -- the exact
-band that \S\ref{sec:causal} showed is causally \emph{dispensable} for
-this same edit ($0.826$ success survives ablating it entirely). The
-donor's late-layer representation is sufficient to install the edit
-when it is present, even though the recipient's own late-layer
-computation is not necessary for the recipient to arrive at the edit on
-its own. This is the paper's central dissociation, stated plainly:
-\emph{readable, sufficient, and necessary are three different
-properties, and a layer band can have any two without the third.} A
+$0.940$ for \textbf{L48--59} (Figure~\ref{fig:causal}C). The donor
+representation is therefore sufficient to install the edit from every
+tested band. This conclusion does not depend on, or combine with, the
+failed necessity interpretation above. A
 content-specificity control confirms the red-flip is not just a generic
 effect of overwriting L0--23 with \emph{any} donor activity: substituting
 the recipient's car-region tokens with the \emph{same} red-car donor
@@ -1450,6 +1435,11 @@ direction identified in \S\ref{sec:mechanism} is a third, cheaper way
 to move an edit, with the same necessity-independent sufficiency
 property transplant showed, and the same practical fidelity/strength
 tradeoff Figure~\ref{fig:apps} (right) showed for the global-CFG lever.
+Layer- and timestep-specific steerability has also been observed for
+contrastive concept directions in text-to-image DiTs
+\citep{ohib2026conceptspaces}; our question here is narrower and
+image-edit-specific: whether the direction preserves the spatial carrier on
+which the attribute is written.
 
 \paragraph{Self-correction: what ``flipped'' actually looks like.} The
 numbers above were recorded from the dose curve and a three-way
@@ -1469,6 +1459,46 @@ general rule, and a second instance (after the thumbnail episode of
 \S\ref{sec:limits}) of a metric quietly standing in for looking at the
 image.
 
+\subsection{Attention-routing conservation audit}\label{sec:attentionaudit}
+
+RESTORE diagnoses visual-token reduction by measuring the attention distortion
+introduced by pruning and merging before proposing a matched correction
+\citep{cho2026restore}. We borrow that experimental pattern, not its reduction
+or calibration mechanism. On the fixed car case, we preregistered five seeds,
+five layers, five denoising steps, three query groups, and four key groups. A
+side recorder recomputes conditional-pass joint attention after Q/K
+normalization and RoPE while delegating the actual attention output unchanged;
+all interventions remain symmetric across both CFG passes. Across 1,000
+recorded cells, the four key-group masses sum to one within
+$1.97\times10^{-6}$, and six historical seed-0 renders reproduce pixel-exactly.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.98\textwidth]{figs/fig20_attention_conservation/fig20_attention_conservation.pdf}
+  \caption{T11 attention-routing conservation audit. \textbf{A}: the
+  preregistered reference-matched total-variation distortion for each of five
+  seeds; bars mark condition means, teal marks geometry-coherent renders, and
+  red marks incoherent renders. The destructive-minus-on-manifold contrast is
+  positive in 5/5 seeds (mean $0.0356$, exact one-sided sign-flip
+  $p{=}0.03125$). \textbf{B--C}: post-hoc decompositions by query group and
+  layer; they do not alter the registered gate.}
+  \label{fig:attentionaudit}
+\end{figure*}
+
+The content-matched car donor nearly reproduces the natural red-reference
+routing (mean TV $0.0031$) and preserves a coherent car in 5/5 seeds. The
+equal-size background donor is as distorted as zero/mean replacement (TV
+$0.0677$) and destroys the region in 5/5, so transplant coherence is
+content-specific rather than a generic overwrite effect. Red-direction
+steering is the boundary case: it writes red in 5/5 but has high routing
+distortion (TV $0.0546$) and produces a flat patch in 5/5. Thus the audit
+supports attention-routing conservation as an explanation for the tested
+coherent transplant and strengthens the carrier-bounded writability reading of
+steering, consistent with the broader detection--intervention gap reported by
+\citet{pegoraro2026look}. It does not make whole-token replacement a valid necessity test, nor
+does it establish token reduction, speedup, architecture-general conservation,
+or transfer of RESTORE's positional calibration.
+
 \subsection{Applications}\label{sec:applications}
 
 \begin{figure*}[t]
@@ -1479,7 +1509,7 @@ image.
   its top-decile mass inside the car region, vs.\ $38\%$ for a raw
   magnitude heatmap at the same cell (chance level $19\%$). Center: three
   cases run at genuinely reduced step budgets (4, 8, 20 steps); the two
-  early-committing cases are already near their 20-step target score at
+  early-saturating cases are already near their 20-step target score at
   4 steps, the delayed-onset case needs slightly more. Right: transplanting
   L6--23 hidden states from a stronger (CFG 7) run into a weaker (CFG 4)
   recipient rescues an under-strength edit about as well as simply
@@ -1487,7 +1517,7 @@ image.
   \label{fig:apps}
 \end{figure*}
 
-\textbf{Decision saliency.} A linear probe trained on the captured
+\textbf{Probe saliency.} A linear probe trained on the captured
 hidden states (\S\ref{sec:mechanism}'s probe methodology, here trained
 directly rather than cross-seed) gives us a per-patch importance score
 "for free," by taking the magnitude of its gradient/weight contribution
@@ -1501,17 +1531,17 @@ same box. A probe-derived saliency map is a substantially better "where
 is the model actually deciding this" visualization than a magnitude
 heatmap, at negligible extra cost once the probe exists.
 
-\textbf{Step-budget prediction.} \S\ref{sec:when} showed edits commit at
+\textbf{Step-budget prediction.} \S\ref{sec:when} showed semantic readouts saturate at
 different steps depending on content. This suggests a practical
 question: for a given edit, how few denoising steps can we actually
 afford? We re-ran three cases (\emph{color\_car}, \emph{style\_watercolor},
 \emph{add\_boat}) with genuinely reduced step budgets (4 and 8 steps,
 each with its own noise schedule, not a truncation of the 20-step
 trajectory) and compared the target CLIP score to the 20-step
-reference. The two early-committing cases are already within $0.02$ of
+reference. The two early-saturating cases are already within $0.02$ of
 their reference score at 4 steps (color\_car: $0.938$ vs.\ $0.929$;
 style\_watercolor: $0.994$ vs.\ $0.997$); \emph{add\_boat}, whose
-commit step is latest in our battery, is slightly behind at 4 steps
+saturation step is latest in our battery, is slightly behind at 4 steps
 ($0.995$) but closes the gap by 8 ($0.999$ vs.\ $0.998$). We flag one
 important caveat here: matching CLIP scores does not mean matching
 images -- \emph{color\_car} at 4 steps still differs from the 20-step
@@ -1559,8 +1589,15 @@ comparison point in Figure~\ref{fig:apps} (left). The lesson we take
 from this is narrow but important: a semantic readout (frozen-head
 decode, or a trained probe as in \S\ref{sec:applications}) is not
 optional plumbing on top of a magnitude heatmap -- at the layers where
-the edit decision is actually legible, magnitude alone is actively
+edit semantics are legible, magnitude alone is actively
 misleading.
+
+This observation is not a novelty claim about the existence of massive
+activations. \citet{gan2026massive} independently study them across multiple
+DiTs and show that disrupting them primarily affects local-detail synthesis
+rather than global semantics. Our narrower caution is measurement-specific:
+in this editor, raw magnitude is therefore a poor proxy for the semantic edit
+signal that the lens is intended to read.
 
 \subsection{Does this generalize? A cross-model replication}\label{sec:generalize}
 
@@ -1572,23 +1609,20 @@ misleading.
   \model{} (reference), an independently fine-tuned checkpoint
   (FireRed-Image-Edit-1.1), and a 4-step distilled merge (Rapid-AIO), all
   clustered within L52--56. \textbf{B}: layer-band zero-ablation edit
-  success for \emph{car\_red}, \model{} vs.\ FireRed -- the two replicate
-  at L0--11 and diverge sharply at L48--59, the one genuine
-  training-specific finding in this section.}
+  scores for \emph{car\_red}, \model{} vs.\ FireRed. Their divergence is
+  retained as evidence that this off-manifold stress test is not a
+  transferable necessity measure.}
   \label{fig:replication}
 \end{figure*}
 
-Every finding so far concerns one checkpoint, \model{}. We ask whether the
-circuit of \S\ref{sec:mechanism}--\S\ref{sec:injection} and its causal
-structure (\S\ref{sec:causal}) are wired into the shared transformer
-architecture -- and would be expected on any checkpoint built on it -- or
-are specific to this one model's training, by re-running the depth-lens
-crossover, the cross-seed probe, and layer-band ablation on two further
+Most mechanistic findings so far concern one checkpoint, \model{}. We
+test which measurements persist within its model lineage by re-running
+the depth-lens crossover, explicit-prompt probe, and stress test on two further
 checkpoints that share \model{}'s transformer classes: FireRed-Image-Edit-1.1,
 an independently fine-tuned checkpoint, and a 4-step distilled merge
 (Rapid-AIO) built on the same shell.
 
-\textbf{The boundary and the readable-decision layer replicate.} FireRed's
+\textbf{The boundary and explicit-prompt readability replicate.} FireRed's
 A/C decode crossover (\S\ref{sec:mechanism}) lands at L53--56 across steps
 0, 4, 10, 16, 19 (L54, 53, 53, 54, 56); the 4-step Rapid-AIO merge's
 crossover across its own steps 0--3 is L52--54 (L54, 53, 54, 52) -- both
@@ -1596,38 +1630,30 @@ tightly clustered around the same L52--54 band \S\ref{sec:mechanism}
 measured for \model{}. FireRed's cross-seed probe accuracy at L6, $t{=}4$
 is $0.852$ (vs.\ \model{}'s $0.883$) and dips to $0.69$--$0.70$ at L59
 across steps (vs.\ \model{}'s $0.68$--$0.70$) -- the same flat-then-dip
-shape, from an independent fine-tune. Rapid-AIO's color edit commits
+shape, from an independent fine-tune. Rapid-AIO's color readout saturates
 immediately in its compressed 4-step schedule ($P(\text{red})@\text{L59}
 = 0.955$ at $t{=}0$, staying flat and high through $t{=}3$), the same
-immediate-commit pattern \S\ref{sec:when} found for \model{}'s 20-step
+early-saturation pattern \S\ref{sec:when} found for \model{}'s 20-step
 color edits.
 
-\textbf{The decision direction itself transfers.} A probe trained on one
+\textbf{The requested-color direction transfers within the lineage.} A probe trained on one
 model's activations and evaluated on the other's -- held out by
 \emph{model}, not merely by seed -- reaches $0.840$ (train \model{}, test
 FireRed) and $0.917$ (train FireRed, test \model{}) accuracy, both close
 to each model's own within-model, cross-seed accuracy ($0.877$ \model{},
 $0.816$ FireRed). The two models' L12/$t$4 probe directions, moreover,
-have cosine similarity $0.833$. The color-edit decision appears to live in
+have cosine similarity $0.833$. Requested color is represented in
 nearly the same direction of the shared 3072-dimensional hidden space
 across an independent fine-tune, not merely at the same layer index.
 
-\textbf{One genuine divergence.} Layer-band ablation of \emph{car\_red}
-replicates the early-layer necessity of \S\ref{sec:causal} almost exactly
--- L0--11 is near-catastrophic for both ($0.049$ \model{}, $0.082$
-FireRed) -- but diverges sharply in the late band: ablating L48--59 leaves
-\model{}'s edit essentially intact ($0.826$, \S\ref{sec:causal}) while the
-identical band is catastrophic for FireRed ($0.035$, visually confirmed as
-unrecoverable pixel noise in the car region, unlike \model{}'s coherent
-survival). The readable/necessary dissociation of \S\ref{sec:swap} -- that
-a layer band can be head-readable without being causally necessary -- is
-therefore architecture-general only in its early half; whether the late
-stack is safely redundant turns out to be a property of \emph{training},
-not of the transformer block design. We read this as the cross-model
-check doing exactly its job: catching a claim
-(\S\ref{sec:causal}'s "L48--59 is dispensable for \emph{car\_red}") that,
-stated without qualification, over-generalized past the one checkpoint it
-was measured on.
+\textbf{The stress test diverges.} Zero-overwriting L0--11 is destructive
+for both models ($0.049$ \model{}, $0.082$ FireRed), while L48--59 gives
+$0.826$ on \model{} and $0.035$ on FireRed. Exact-region inspection shows
+off-manifold corruption, and \S\ref{sec:causal} already invalidates the
+high \model{} score as margin-crop leakage. The cross-model divergence
+therefore reinforces the methodological conclusion: whole-token
+zero-overwrite is not a stable necessity measure and supports no
+architecture-level causal claim.
 
 \begin{figure*}[t]
   \centering
@@ -1728,7 +1754,7 @@ rate correction.} Re-running the differential lens
 \emph{color\_tree} ("turn the tree trunk black") and \emph{add\_runner}
 ("add a man running in sportswear on the road") -- after both pass the
 control-fidelity gate ($r=0.933$ and $r=0.990$, both above the $0.85$
-bar) reproduces commitment-early: both cases' internal image already
+bar) reproduces early content visibility: both cases' internal image already
 shows the edit at $t{=}0$, and localization (loc, at L52) rises
 monotonically with step in both ($0.90\to0.97$ for \emph{color\_tree},
 $0.29\to0.84$ for \emph{add\_runner}). The invention-family
@@ -1757,19 +1783,18 @@ paper insists on throughout: the L59 self-consistency gate is exact
 temb path decodes bit-identically), and the "keep the image unchanged"
 control passes fidelity ($r=0.933$/$0.990$) on both differential cases.
 
-\S\ref{sec:tunedlens}--\S\ref{sec:previewlever}'s three laws -- no hard
-affine boundary, commitment-early-but-separation-gradual, and a usable
-15\%-NFE preview -- are therefore properties of the shared transformer
-architecture, not artifacts of one checkpoint's training, exactly like
-the boundary and probe direction replicated above. The practical
+\S\ref{sec:tunedlens}--\S\ref{sec:previewlever}'s observations -- no hard
+affine readability boundary, early content with gradual differential
+separation, and a usable 15\%-NFE preview -- also reproduce on this one
+fine-tuned checkpoint. The practical
 recipe this buys: deploying the lens on a new checkpoint in the same
 family does not require refitting the translator dictionary $W$ from
 scratch -- freezing it and only recalibrating (or, at deep layers, not
 even that) already gets most of the way there. As with the replication
 above, this remains a single-held-out-case ladder on one independently
-fine-tuned checkpoint that shares \model{}'s transformer classes; a
-from-scratch, architecturally distinct DiT is the stronger test of
-external validity still owed.
+fine-tuned checkpoint that shares \model{}'s transformer classes. A
+from-scratch, architecturally distinct DiT has only been tested for early
+outcome prediction and selection, not the full lens toolchain.
 
 \textbf{A larger shift still -- distillation, merging, and a different
 sampler -- shows what the velocity-code dictionary is actually keyed
@@ -1982,27 +2007,26 @@ keep), and object addition (add a boat vs.\ a swan vs.\ keep) -- with
 the identical 3-prompt~$\times$~2-seed protocol on region-appropriate
 token rows.
 
-\textbf{The translation boundary is family-universal; decision depth is
-not.} Wherever the A/C crossover is cleanly measurable it lands in the
+\textbf{The measured translation boundary is stable across tested
+families; explicit-prompt readability is not.} Wherever the A/C crossover is cleanly measurable it lands in the
 same terminal band as color's L52.7--53.6: style at L53.0/53.1
 ($t{=}4$/$t{=}16$), background at L52.1 ($t{=}16$; at $t{=}4$ the
-standard decode already wins from L48 on -- the swap has fully committed
-by then). For removal and addition the between-variant CLIP margins are
+standard decode already wins from L48 on). For removal and addition the between-variant CLIP margins are
 too small to localize a crossover sharply (the removal-label weakness of
 \S\ref{sec:limits} again); their sign patterns are consistent with the
 same band (nominal crossings L53.4--55.9), and no family puts a boundary
-anywhere else in the stack. Decision \emph{readability}, by contrast,
+anywhere else in the stack. Explicit prompt-label readability, by contrast,
 splits the families in two (Figure~\ref{fig:families}): the appearance
 families are readable shallow -- style $0.80$ at L6/$t$4 and $0.94$ at
 L12/$t$4, background $0.93$ and $0.96$ at the same cells, right where
 color's $0.883$ sits. The structure families lag well behind: removal
 is barely above chance there ($0.67$--$0.69$) and crosses $0.88$ only
 at L36, and addition never exceeds $0.81$ anywhere at $t\ge4$.
-Combined with \S\ref{sec:when}'s
-onset finding -- insertion edits are also the ones with delayed onset in
-\emph{time} -- this is a two-axis regularity: appearance edits are
-decided early in depth and early in time; structure edits crystallize
-late in depth and, for insertion, late in time. One honest footnote: the
+Combined with \S\ref{sec:when}'s onset finding -- insertion edits are
+also the ones with delayed visible onset -- this gives a descriptive
+two-axis pattern: appearance prompt labels are shallow-readable, while
+structure prompt labels require deeper features and insertions can onset
+later in time. This is not evidence of irreversible choice. One honest footnote: the
 L59 probe dip \S\ref{sec:mechanism} reported is itself family-dependent
 -- pronounced for color ($0.68$--$0.75$), mild for background, absent
 for style ($0.97$--$0.99$) -- so ``the last block costs linear
@@ -2034,7 +2058,7 @@ the spectrum reads as one rule: a stored direction carries
 here'' -- but cannot carry shape. It can suppress or reweight content
 that is already present, and it can do so cleanly exactly when the
 target state requires no geometry to be specified: erasure steers
-cleanly (at the depth where its decision has crystallized), a global
+cleanly (at the depth where its prompt label becomes readable), a global
 style wash steers partially, a recolor-in-place installs the hue but
 loses the object (\S\ref{sec:recompose} revisits this case), a
 background swap executes only its erasure half, and insertion -- pure
@@ -2170,7 +2194,7 @@ whole story, a mask should also rescue addition's steering failure
 (\S\ref{sec:families}). It does not. Steering the same 61-patch hull
 mask on the empty lake with the family's own boat/swan probe direction
 -- shallow L6--23, every semantics and dose tried, and again re-trained
-at L36 and applied at the deep L24--47 band where addition's decision
+at L36 and applied at the deep L24--47 band where addition semantics
 actually crystallizes -- is visually indistinguishable from doing
 nothing (diff $2.4$--$7.5$ at both depths, including the $\alpha{=}16$
 dose that fully recolors the car). A same-norm random direction in the
@@ -2180,7 +2204,7 @@ boat/swan directions are specifically computed away downstream, not
 merely too weak. Only transplanting a donor's actual (nonlinear,
 high-rank) hidden state into the same 61 tokens -- not its linear probe
 projection -- grows a real boat, and only from the deep band (L24--47
-clean; L0--23 only a faint, uncommitted ghost) -- a third confirmation,
+clean; L0--23 only a faint ghost) -- a third confirmation,
 after probe accuracy and steering depth (\S\ref{sec:families}), of the
 same depth split, now at the level of what a swap can carry.
 Table~\ref{tab:taxonomy}/Figure~\ref{fig:taxonomy} summarize the
@@ -2269,10 +2293,9 @@ guidance}\label{sec:cfgfreelunch}
 
 Everything above intervenes on the image-stream residual. True CFG
 (\S\ref{sec:prelim}) already runs two full forward passes -- conditional
-and unconditional -- at every one of the 20 steps; if the edit decision
-is linearly present by layer 6 and translated by layer $\approx$53
-(\S\ref{sec:mechanism}), there is no architectural reason CFG needs both
-passes for all 20 steps. We test this by running the unconditional pass
+and unconditional -- at every one of the 20 steps. The layer--time map
+motivates a direct existence test of whether both passes are needed for
+the full trajectory. We run the unconditional pass
 only for the first \texttt{cfg\_until} steps and the conditional pass
 alone thereafter, on four cases spanning our edit families (recolor,
 removal, background swap, addition), against each case's own full-CFG
@@ -2290,27 +2313,26 @@ edit but drifts in invented-object identity (a longer, flatter barge
 instead of the reference's small rowboat) -- late CFG's one visible job
 here is stabilizing \emph{what} gets invented, not \emph{whether}.
 
-\textbf{Dropping CFG to zero isolates its real job: scope, not
-commitment.} At \texttt{cfg\_until=0} (zero unconditional forwards, a
+\textbf{Dropping CFG to zero isolates a tested role in scope.} At \texttt{cfg\_until=0} (zero unconditional forwards, a
 measured $2.0\times$ speedup: $9.7$s vs.\ $19.3$s) recolor, removal, and
-addition all still land -- the conditional pass alone commits and
-renders these three, addition coming out smaller but present. Background
+addition all still land -- the conditional pass alone renders these
+three, addition coming out smaller but present. Background
 swap half-fails: the beach synthesizes behind the scene, but the
 original wire fence and gate are not erased, so the model composites a
 new background \emph{around} old structure instead of replacing it
 ($P(\text{beach})=0.45$, down from $\ge0.996$ at \texttt{cfg\_until}
 $\ge2$) -- the mirror image of \S\ref{sec:families}'s steering result on
 the same edit (a probe direction erases without synthesizing; a
-CFG-free pass synthesizes without erasing). CFG's non-redundant
-contribution is thus not committing the edit -- the conditional pass
-already does that -- but resolving \emph{scope}: deciding which
+CFG-free pass synthesizes without erasing). In these cases, CFG's
+non-redundant contribution is consistent with resolving \emph{scope}:
+deciding which
 un-mentioned source content belongs to ``the background'' and must be
-suppressed. A twenty-case battery (the full commit-time battery of
+suppressed. A twenty-case battery (the full saturation-time battery of
 Table~\ref{tab:battery} plus its ten-case extension, spanning color,
 removal, background, style, and addition) confirms the recipe: at \texttt{cfg\_until=2}
 all 20 edits remain visually intact (mean measured speedup
-$1.77\times$), with per-family pixel deviation ordered exactly as the
-commit-time law predicts (style 7.8--18.0, background 6.0--13.9,
+$1.77\times$), with per-family pixel deviation ordered as the
+saturation-time diagnostic predicts (style 7.8--18.0, background 6.0--13.9,
 addition $\le$5.4, removal $\le$3.5, color $\le$1.6 mean absolute
 pixel difference vs.\ full CFG); the worst visible cost is a mild
 softening of one stylization case.
@@ -2325,23 +2347,26 @@ the favorable direction: all twenty edits, including every addition
 case, land under visual inspection, with only object-identity and
 color-grading drift. Together with the boundary-preservation result of
 the cross-model section, this suggests step distillation compresses the
-sampling \emph{trajectory} but not the decision \emph{structure}: the
-commit/onset machinery survives the $20\!\to\!4$ step compression.
+sampling \emph{trajectory} while preserving successful edits in this
+battery; it does not establish that the same internal computation is
+preserved by the $20\!\to\!4$ compression.
 (Data: \texttt{runs/x2\_distill\_battery}, single seed, vendor
 ancestral-beta sampler with per-case seeding.)
 
 \section{Limitations and Honest Interpretation}\label{sec:limits}
 
-This tool is exploratory. It is not a validated, peer-reviewed
-interpretability method, it makes no claim about "intent" or
-"understanding" in \model{} in any human sense, and every number in this
-paper comes primarily from one model, mostly one or two seeds, and a
-double-digit count of hand-chosen source images and prompts.
+This tool is exploratory and makes no claim about "intent" or
+"understanding" in any human sense. Most mechanistic grids use one
+model, one or two seeds, and a double-digit count of hand-chosen images.
+The fixed-prompt outcome studies are larger but narrow: 48 training
+generations per source/model and 12 held-out five-seed groups per
+selector. Qwen has two source/prompt selection tasks; Boogu has one.
 \S\ref{sec:generalize}'s cross-model replication checks two further
 checkpoints on a handful of the paper's headline measurements, not the
 full battery, and both are built on \model{}'s own transformer classes --
 a fine-tune and a distillation of the same lineage, not an independent
-architecture. The edit-family sweep (\S\ref{sec:families}) likewise
+architecture for the full mechanism; Boogu is independent but tests only
+early hue prediction and selection. The edit-family sweep (\S\ref{sec:families}) likewise
 covers five families but with a single hand-chosen source image per
 family. The mask-recomposition study and direction taxonomy
 (\S\ref{sec:recompose}) narrow this further still: they run on two
@@ -2390,15 +2415,15 @@ failure (iv) on the same underlying task, sometimes in the same run --
 another reason every quantitative claim in this paper is paired with a
 visual verdict.
 
-\paragraph{Ablation semantics are blunt.} Our zero-ablation
+\paragraph{Whole-token ablation failed as a necessity test.} Our zero-ablation
 (\S\ref{sec:interventions}) is a post-block residual overwrite that
 propagates forward through every later block in the same pass; it
-answers "does the model recover if this specific position's information
-is destroyed from this point on," not "does the model use a specific,
-surgical direction within that representation." A layer band scoring
-high edit-success under ablation means the network can route around the
-loss of that information using what remains elsewhere at that
-timestep -- it does not mean that layer band does nothing.
+answers only how the model behaves after a severe residual overwrite.
+Exact-region re-audit shows both early and late car-region overwrites
+become noise; the earlier high late-band score came from unablated red
+pixels in an expanded crop, and mean replacement removes the apparent
+contrast. We therefore make no fine-grained causal necessity claim from
+these runs.
 
 \paragraph{Self-correction: the revision-event story we initially got
 wrong.} Our earliest look at \emph{when} individual edits appear
@@ -2456,106 +2481,55 @@ probe readout alongside them should be read skeptically.
 frozen-head lens or the linear probe recovers the network's "true"
 internal reasoning process, or that the two-code picture in
 \S\ref{sec:mechanism} is the complete mechanistic story of how flow
-matching's velocity target is computed. \S\ref{sec:generalize} shows the
-boundary location, the readable-decision layer, and the decision
-direction replicate across two further checkpoints in \model{}'s own
-lineage, but we do not claim this beyond that lineage, and
-\S\ref{sec:generalize}'s own late-band divergence is a direct
-counterexample to assuming any single causal finding transfers by
-default. We do claim that, on \model{}, the specific
-readable/necessary/sufficient dissociations we report are real and
-repeatable given the seeds and prompts we used, because we checked them
-against causal interventions rather than resting on passive readouts
-alone.
+matching's velocity target is computed. Within the Qwen lineage, the
+boundary and explicit-prompt readable direction replicate; Boogu
+replicates early realized-hue prediction but not Qwen's terminal drop.
+We do not claim object-invariant transfer, architecture-universal
+translation, irreversible early commitment, or fine-grained causal
+necessity. Transplant establishes sufficiency in the tested runs, and
+steering establishes carrier-bounded writability; neither entails
+necessity.
 
 \section{Conclusion}\label{sec:conclusion}
 
-We built a layer--time lens for a 60-block DiT image editor by decoding
-intermediate residual streams through the model's own frozen output
-head, and paired it with linear probes and causal interventions
-(ablation, hidden-state transplant) so that every passive reading has a
-corresponding active check. The picture that emerges is a two-code
-process: for most of the network's depth, the residual stream carries a
-target-image code that a linear probe can already read out (as early as
-layer 6) well before the network's own output head is willing to commit
-to it, and only in the final $\sim$6 of 60 blocks is this translated
-into the velocity code the sampler actually consumes. A denser sweep
-pins this translation to a sharp, timestep-invariant band centered at
-layer 53, and a parallel text-stream ablation locates the instruction's
-\emph{injection} itself -- load-bearing in the first 11 blocks,
-functionally complete by block 36 -- turning the two-code split into a
-five-stage circuit: injection, decision, target-image code, translation,
-output head. Reading and verifying are different operations with
-different answers -- the layers where an edit is most easily \emph{read}
-are not always the layers it causally \emph{depends on}, and the layers
-sufficient to transplant an edit into a different run are not always the
-layers necessary to produce it in the first place. Replicating the core
-measurements on an independently fine-tuned checkpoint and a 4-step
-distilled merge shows the boundary, the readable-decision layer, and the
-decision direction itself transfer nearly unchanged, and a further
-replication shows the entire tuned/differential lens toolchain transfers
-the same way -- frozen-basis zero-shot, then closed by recalibration
-rather than by refitting. Only one finding --
-that the late stack is causally redundant -- turned out to be specific to
-this checkpoint's training rather than to the architecture, which is
-itself the kind of thing a cross-model check exists to catch. Extending
-the same measurements across four further edit families kept the
-boundary fixed but split the families along depth -- appearance edits
-decided shallow, structure edits crystallizing only mid-stack -- and
-steering each family's probe direction resolved what such a direction
-actually carries: geometry-free semantics but, we thought, no shape --
-while our own earlier reading of the color ``flip'' as a clean recolor
-turned out to be a forced-choice metric hiding a flat patch. A follow-up
-mask study forced a fourth correction: confining the identical direction
-to the edited object's own silhouette turns every earlier flat-patch
-failure into a perfect in-place recolor at any dose -- a direction
-cannot carry \emph{where to stop}, not shape itself. Conjuring
-an object, though, outruns any single direction: a rank ladder over the
-donor$-$recipient difference resolves object identity into
-coarse-to-fine linear shells (category at rank 1, a coherent instance
-by rank 4, material by 16, donor-faithful by 64), with the probe
-direction itself staying inert because the subspace a variable is read
-from and the subspace that changes it are not the same. Linear
-readability and linear writability thus dissociate the same way linear
-readability and causal necessity do, depending on whether a variable is
-an attribute of something already there or the identity of something
-not yet there. A
-third, donor-free candidate for that write basis -- the local Jacobian
-toward a donor target -- turns out to overlap with neither: it writes
-large but non-semantic content, the adversarial-gradient lesson
-replayed inside a generative model's own latent space. A
-parallel study found classifier-free guidance itself is largely
-redundant after the first two steps, a training-free $45\%$ saving whose
-real job is scope resolution rather than committing the edit -- a second
-practical lever alongside \S\ref{sec:applications}'s three. Likewise,
-extending our onset-timing measurement from one case to twenty replaced a
-tidy continuous story we were initially tempted to tell with a narrower
-but honest categorical one. If there is one sentence to take from this
-paper, it is the one that organized our own thinking while writing it:
-\emph{the lens shows the translation, not the decision -- reading the
-decision requires changing basis, and verifying it requires
-intervention.} Behind that methodological sentence stands the picture
-it uncovered, the one this paper opened with and has now earned clause
-by clause: an edit is not developed gradually -- it is \emph{decided
-early}, \emph{bound to a spatial carrier} that determines whether it
-can be rendered cleanly, and \emph{translated late} into the strokes
-that paint it. That internal image is not only inferred from probes
-and interventions -- a tuned lens renders it directly at every depth
-(\S\ref{sec:tunedlens}), letting us watch the edit enter it layer by
-layer at the very first step and exposing the mid-stack anti-image as
-the same code, read through the wrong basis. A generative editor, in
-other words, natively thinks
-with an internal image before it makes one. The lens turns that thought
--- including its struggles, the late start of genuinely novel structure
-and the recruitment of surrounding tokens when a direction lacks a
-carrier -- into something that can be watched, steered, and budgeted
-for. Differencing that same lens against a matched no-op run turns the
-internal edit plan into a directly measurable quantity -- commitment is
-early but separation into the edit region is gradual, not a step --
-and, because the no-op run does not depend on which edit is asked for,
-the same differential previews where a candidate edit will land after
-only 15\% of the denoising trajectory
-(\S\ref{sec:difflens}--\S\ref{sec:previewlever}).
+We built a layer--time and tuned lens for a 60-block DiT image editor.
+Under fixed underspecified prompts, generation-level probes predict the
+seed-conditioned realized outcome from early states across synthetic and
+natural images; the result also replicates on an independent 40-block
+editor. Held-out early best-of-five selection provides a behavioral
+validation on both architectures with about 68\% measured compute reduction,
+while preserving the limitation that a candidate set may not
+contain the requested target.
+
+In Qwen, a target-image code is translated into the sampler's velocity
+convention near layers 52--54. A tuned lens renders the internal image
+through depth, and a differential lens separates early content from a
+footprint that localizes gradually over denoising time. The boundary and
+explicit-prompt direction replicate within the Qwen lineage; Boogu does
+not reproduce Qwen's terminal predictability drop, so the translation
+mechanism is not claimed across architectures.
+
+Interventions establish narrower claims than the first version of this
+document made. Transplant shows that donor states are sufficient to
+install an edit. Steering shows that writable attributes need a spatial
+carrier, while object identity requires a higher-rank donor difference.
+Whole-token zero-overwrite failed as a necessity test because it drove
+the edited region off-manifold and an apparent late-band survival score
+was margin-crop leakage. We retain that failure as evidence for the
+paper's falsification-first protocol rather than converting it into a
+causal claim. A preregistered attention audit further shows that the
+content-matched transplant stays close to natural-reference routing, while
+destructive or content-mismatched replacement and geometry-breaking steering
+do not (\S\ref{sec:attentionaudit}).
+
+Finally, the lens yields one behavioral selection test and one efficiency
+lever, classifier-free-guidance truncation. The latter saves 45\%
+of forward passes on the tested battery and is consistent with a role for
+CFG in scope resolution. Together these results support early outcome
+predictability, late code translation, transplant sufficiency, and
+carrier-bounded writability in the tested settings. They do not establish
+irreversible commitment, fine-grained causal necessity, object-invariant
+transfer, or architecture-universal mechanism.
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
@@ -2587,6 +2561,13 @@ Peak VRAM across our experiment scripts ranged 57.9--59.6 GiB
 $\sim$58GB single-run baseline (anonymized) plus modest
 overhead for held activations. No experiment in this paper required
 more than one resident $\sim$60GB model at a time.
+
+The final audit environment used Ubuntu 24.04 (Linux 6.8), Python 3.13.11,
+PyTorch 2.9.1 with CUDA 12.8, \texttt{diffusers} 0.38.0.dev0,
+\texttt{transformers} 5.6.2, NumPy 2.4.6, scikit-learn 1.8.0, SciPy
+1.16.3, Pillow 12.2.0, and safetensors 0.6.2; the NVIDIA driver was
+590.48.01. Model locations are configurable through environment variables,
+with public checkpoint identifiers as defaults.
 
 \paragraph{Capture protocol.} We register a forward hook per requested
 transformer block; each hook checks the currently-executing (step,
@@ -2661,5 +2642,48 @@ family. The train/test split is by \emph{seed}, not token or image: fit
 on hidden states from a run at seed $0$, evaluated on an independently
 sampled run at seed $1$, same source image and prompt throughout -- so
 a probe cannot simply memorize a seed-specific noise pattern.
+
+These patch-token probes are basis diagnostics for the \emph{requested}
+prompt label; patches within one generation are not independent
+experimental units, so their accuracy is not used as generation-level
+inference. The fixed-prompt outcome studies instead mean-pool the frozen
+edit-region rows so each generation contributes exactly one vector.
+T3 uses car seeds 100--147; the pre-registered real-photo follow-up uses
+mug seeds 200--247 and eye seeds 300--347; the tree replication uses
+seeds 400--447; and the independent Boogu replication uses seeds
+500--547. Circular hue targets are represented as
+$(\cos 2\pi h,\sin 2\pi h)$ and fit with ridge regression under frozen
+or nested regularization as specified in each preregistration. Matched
+permutation tests use the same outer folds and fitting procedure for the
+observed and permuted labels.
+
+For held-out selection, T7 trains only on Boogu seeds 500--547 and tests
+12 consecutive five-seed groups, seeds 700--759. T8 trains only on Qwen
+tree seeds 400--447 and tests 12 groups, seeds 800--859, with target hues
+$[0,90,180,270]$ degrees repeated three times. T10 regenerates Qwen car
+training seeds 100--147 in the current environment and tests 12 groups,
+seeds 900--959; its four targets are frozen training-hue quantiles before
+any test artifact exists. Every candidate feature is captured by an
+actual interrupted run; the chosen winner is then rerun to completion.
+T7 uses exact Poisson-binomial inference for selected edit success. T8
+and T10 use the exact lower tail of the sum of within-group ranks. Their
+rank sums are respectively 14 and 24 over 12 groups, giving
+$91/5^{12}=3.72736\times10^{-7}$ and
+$2{,}105{,}506/5^{12}=0.00862415$.
+Preregistrations, scripts, analyses, and montages are in
+\texttt{experiments/t3\_implicit\_choice\_prereg.md},
+\texttt{t4\_real\_photo\_replication\_prereg.md},
+\texttt{t6\_boogu\_outcome\_prereg.md},
+\texttt{t7\_boogu\_seed\_selection\_prereg.md},
+\texttt{t8\_tree\_target\_selection\_prereg.md},
+\texttt{t10\_car\_target\_selection\_prereg.md}, and the corresponding
+\texttt{runs/t3--t10} directories in the artifact repository.
+
+The anonymous code/data supplement contains the maintained lens and
+intervention implementation, paper experiment scripts, preregistrations,
+source images, compact JSON result records, and the pooled early features for
+T7--T10. It omits third-party model checkpoints, multi-gigabyte completed
+generations, and full per-token hidden-state captures; those can be regenerated
+from the supplied scripts and public checkpoints.
 
 \end{document}

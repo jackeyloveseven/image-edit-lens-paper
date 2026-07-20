@@ -3,9 +3,13 @@ the sign of v only matters in the last ~6 blocks. Panel B: D2 cross-seed probe
 accuracy heatmap (layer x step), rebuilt from raw numbers, headline L6/t4 cell
 highlighted."""
 import json
+import os
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.patches import Rectangle
@@ -16,10 +20,14 @@ TEAL = "#0F8FA0"
 GRAY_D = "#444444"
 GRAY_M = "#888888"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-D1 = f"{ROOT}/runs/d1_signflip"
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+D1 = ROOT / "runs" / "d1_signflip"
 
-d1 = json.load(open(f"{D1}/d1_results.json"))
+d1 = json.load(open(D1 / "d1_results.json"))
 cs = d1["clip_scores"]
 target = d1["target_label"]
 
@@ -36,7 +44,7 @@ gsA = gs[0, 0].subgridspec(len(rows), len(variants), wspace=0.06, hspace=0.16)
 for ridx, layer in enumerate(rows):
     for cidx, (v, vlab) in enumerate(zip(variants, vlabels)):
         ax = fig.add_subplot(gsA[ridx, cidx])
-        img = Image.open(f"{D1}/lens_l{layer}_t4_{v}.png")
+        img = Image.open(D1 / f"lens_l{layer}_t4_{v}.png")
         ax.imshow(img)
         ax.set_xticks([]); ax.set_yticks([])
         for s in ax.spines.values():
@@ -53,7 +61,7 @@ for ridx, layer in enumerate(rows):
 fig.text(0.235, 0.90, "sign flips near L59", fontsize=8.6, ha="center", color=GRAY_D)
 
 # ---- Panel B: D2 heatmap ----
-d2 = json.load(open(f"{ROOT}/runs/d2_probe/accuracy_grid.json"))
+d2 = json.load(open(ROOT / "runs" / "d2_probe" / "accuracy_grid.json"))
 layers = d2["layers"]
 steps = d2["steps"]
 acc = d2["accuracy_grid"]
@@ -84,6 +92,6 @@ cbar.ax.tick_params(labelsize=6.5)
 cbar.set_label("3-way probe acc.", fontsize=7)
 fig.text(0.735, 0.90, "decision readable early", fontsize=8.6, ha="center", color=GRAY_D)
 
-fig.savefig(f"{ROOT}/paper/figs/fig5_mechanism.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig5_mechanism.pdf", bbox_inches="tight")
 print("wrote fig5_mechanism.pdf")
 print("L6,t4 acc =", grid[li, sj])

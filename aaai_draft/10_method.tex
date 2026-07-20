@@ -1,5 +1,5 @@
 % ===== AAAI-27 spine draft: Method (~1.3 col-page target) =====
-\section{Proposed Method: A Layer--Time Lens and Causal Probes}\label{sec:method}
+\section{Proposed Method: A Layer--Time Lens and Intervention Probes}\label{sec:method}
 
 We study \model{}, a 60-block DiT editor whose image stream concatenates
 noisy target tokens with always-clean condition tokens
@@ -54,13 +54,15 @@ is a whole-crop judgment, not a per-patch one, and inherits CLIP's failure
 modes on out-of-distribution previews; we gate on decode coherence and
 flag every violation.
 
-\paragraph{Causal probes.} Reading a lens shows the representation is
+\paragraph{Intervention probes.} Reading a lens shows the representation is
 \emph{consistent with} a hypothesis, not that it is \emph{causal}. Three
 interventions, all forward-hook overwrites of the post-block residual,
-test causality. \textbf{Ablate}: zero or mean-replace selected target
-rows at selected layers (an empty spec reproduces the baseline
-bit-for-bit). \textbf{Transplant}: overwrite a recipient run's rows with a
-donor run's, matched by layer/step/patch -- testing \emph{sufficiency}.
+test distinct intervention-specific properties. \textbf{Ablate}: zero or
+mean-replace selected target rows at selected layers (an empty spec
+reproduces the baseline bit-for-bit); because repeated row replacement
+can be off-manifold, we use it only as a coarse stress test.
+\textbf{Transplant}: overwrite a recipient run's rows with a donor run's,
+matched by layer/step/patch -- testing \emph{sufficiency}.
 \textbf{Steer}: add a probe direction $\alpha\,d$ (in units of per-row RMS)
 without a donor pass -- testing \emph{linear writability}. All three are
 applied identically to both CFG passes to isolate the intervention rather

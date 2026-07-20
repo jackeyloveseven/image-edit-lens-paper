@@ -6,9 +6,13 @@ L52-56. Panel B: layer-band zero-ablation edit success, Qwen vs. FireRed,
 showing the one genuine divergence: FireRed's late band (L48-59) is
 catastrophic where Qwen's is harmless."""
 import json
+import os
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 
 RED = "#C2402A"
@@ -16,8 +20,12 @@ TEAL = "#0F8FA0"
 GRAY_D = "#444444"
 GRAY_M = "#999999"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
-g4 = json.load(open(f"{ROOT}/runs/g4_summary.json"))
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
+g4 = json.load(open(ROOT / "runs" / "g4_summary.json"))
 f1 = g4["findings"][0]
 f4 = g4["findings"][3]
 
@@ -72,6 +80,6 @@ for ax, letter in zip(axes, "AB"):
     ax.text(-0.14, 1.06, letter, transform=ax.transAxes, fontsize=10, fontweight="bold")
 
 fig.tight_layout()
-fig.savefig(f"{ROOT}/paper/figs/fig11_replication.pdf", bbox_inches="tight")
+fig.savefig(OUT_DIR / "fig11_replication.pdf", bbox_inches="tight")
 print("wrote fig11_replication.pdf")
 print("qwen L48_59:", f4["qwen"]["L48_59"]["edit_success"], "firered L48_59:", f4["firered"]["L48_59"]["edit_success"])

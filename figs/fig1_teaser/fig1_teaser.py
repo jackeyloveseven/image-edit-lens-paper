@@ -4,9 +4,12 @@ Fig 1: teaser. Source -> edited image, mini layer x time P(red) heatmap
 translation -> velocity code). Palette: red #C2402A, teal #0F8FA0, grays.
 """
 import json
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 from matplotlib.colors import LinearSegmentedColormap
@@ -18,18 +21,19 @@ GRAY_D = "#444444"
 GRAY_M = "#888888"
 GRAY_L = "#BBBBBB"
 
-ROOT = "/home/ubuntu/chengyanli/image-edit-lens"
+DATA_ROOT = Path("/home/ubuntu/chengyanli/image-edit-lens")
+OUT_DIR = Path(__file__).resolve().parent
 
 # ---- data ----
-d = json.load(open(f"{ROOT}/runs/a1_car_red/lens_grid.json"))
+d = json.load(open(DATA_ROOT / "runs/a1_car_red/lens_grid.json"))
 cs = d["clip_scores"]["raw"]
 layers = d["layers"]  # [0,6,12,18,24,30,36,42,48,54,59]
 steps = d["steps"]  # [0,4,10,16,19]
 target = "a red car"
 grid = np.array([[cs[f"l{l}_t{t}"][target] for t in steps] for l in layers])  # (layers, steps)
 
-src_img = Image.open(f"{ROOT}/runs/wp3_car_red/source.png")
-edit_img = Image.open(f"{ROOT}/runs/wp3_car_red/edited.png")
+src_img = Image.open(DATA_ROOT / "runs/wp3_car_red/source.png")
+edit_img = Image.open(DATA_ROOT / "runs/wp3_car_red/edited.png")
 
 # ---- figure ----
 fig = plt.figure(figsize=(7.05, 2.75))
@@ -89,7 +93,7 @@ cbar = fig.colorbar(im, ax=ax2, fraction=0.06, pad=0.04)
 cbar.ax.tick_params(labelsize=6)
 cbar.set_label("P(red car)", fontsize=6.5)
 
-# panel 4: five-stage editing circuit (Injection -> Decision -> Target-image
+# panel 4: five measured stages (Injection -> Outcome prediction -> Target-image
 # code -> Translation -> Output head), replacing the earlier two-box
 # schematic; the color language (teal = target-image code, red = translation
 # / velocity-code readout) is kept from the original two-code framing.
@@ -97,11 +101,11 @@ ax3 = fig.add_subplot(gs[0, 3])
 ax3.set_xlim(0, 10)
 ax3.set_ylim(0, 10)
 ax3.axis("off")
-ax3.set_title("editing circuit", fontsize=9, color=GRAY_D)
+ax3.set_title("measured stages", fontsize=9, color=GRAY_D)
 
 stages = [
-    ("Injection", "$\\leq$L36", "(load-bearing L0–11)", TEAL, 0.55),
-    ("Decision", "$\\leq$L6", None, TEAL, 0.72),
+    ("Injection", "$\\leq$L36", "(late text dispensable)", TEAL, 0.55),
+    ("Outcome prediction", "L6 / t2–4", None, TEAL, 0.72),
     ("Target-image code", "L6–51", None, TEAL, 0.9),
     ("Translation", "L52–54", None, RED, 0.85),
     ("Output head", "L59", None, RED, 1.0),
@@ -129,8 +133,8 @@ for (y0_prev, y1_prev), (y0_next, y1_next) in zip(centers[:-1], centers[1:]):
                  xytext=(x0 + box_w / 2, y0_prev - 0.02),
                  arrowprops=dict(arrowstyle="-|>", color=GRAY_D, linewidth=1.0))
 
-fig.savefig(f"{ROOT}/paper/figs/fig1_teaser.pdf")
-fig.savefig(f"{ROOT}/paper/figs/fig1_teaser.png", dpi=200)
+fig.savefig(OUT_DIR / "fig1_teaser.pdf")
+fig.savefig(OUT_DIR / "fig1_teaser.png", dpi=200)
 print("saved fig1_teaser.pdf/png")
 print("grid P(red) L0..L59 rows x t0..t19 cols:")
 print(grid)

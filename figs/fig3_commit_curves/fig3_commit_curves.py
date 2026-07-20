@@ -1,5 +1,8 @@
-import json, matplotlib
+import json, os, matplotlib
+from pathlib import Path
 matplotlib.use("Agg")
+matplotlib.rcParams["pdf.fonttype"] = 42
+matplotlib.rcParams["ps.fonttype"] = 42
 import matplotlib.pyplot as plt
 
 RED = "#C2402A"
@@ -18,7 +21,11 @@ CASES = [
     ("style_watercolor", "style-transfer", GRAY_MED, "--"),
 ]
 
-root = "/home/ubuntu/chengyanli/image-edit-lens"
+ROOT = Path(os.environ.get(
+    "IMAGE_EDIT_LENS_ROOT",
+    Path(__file__).resolve().parents[3] / "image-edit-lens",
+))
+OUT_DIR = Path(__file__).resolve().parent
 
 plt.rcParams.update({
     "font.size": 9,
@@ -31,7 +38,7 @@ fig, ax = plt.subplots(figsize=(3.35, 2.6), constrained_layout=True)
 
 seen_cat = set()
 for case, cat, color, ls in CASES:
-    d = json.load(open(f"{root}/runs/a5_{case}/lens_grid.json"))
+    d = json.load(open(ROOT / "runs" / f"a5_{case}" / "lens_grid.json"))
     cs = d["clip_scores"]
     if "raw" in cs:
         cs = cs["raw"]
@@ -56,6 +63,6 @@ leg = ax.legend(loc="lower right", fontsize=6.3, frameon=False, handlelength=1.6
 ax.text(0.03, 0.06, "removal: CLIP unreliable\n(excluded)", transform=ax.transAxes,
         fontsize=6.0, color="#666666", ha="left", va="bottom")
 
-fig.savefig(f"{root}/paper/figs/fig3_commit_curves.pdf")
-fig.savefig(f"{root}/paper/figs/fig3_commit_curves.png", dpi=200)
+fig.savefig(OUT_DIR / "fig3_commit_curves.pdf")
+fig.savefig(OUT_DIR / "fig3_commit_curves.png", dpi=200)
 print("saved fig3")

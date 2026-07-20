@@ -20,6 +20,45 @@ fine-tune, and Rapid-AIO, a 4-step distilled merge -- let us ask
 whether a finding persists beyond one training run
 (tested below).
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.93\textwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \caption{\textbf{Decode convention flips; the probe reads early.}
+  \textbf{A}: four decodes of \emph{car\_red} at $t{=}4$; the image-like
+  and standard conventions reverse between L24 and L59. \textbf{B}: 3-way
+  probe accuracy (chance $0.33$); the outlined L6/$t$4 cell reaches $0.883$
+  while the frozen head at the same state still reads noise. Red score
+  pills in \textbf{A} mark target probability above $0.5$.}
+  \label{fig:mechanism}
+\end{figure*}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\columnwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.pdf}
+  \caption{\textbf{Internal image vs.\ frozen-head ghost.} \textbf{A}: the
+  tuned lens (fit on non-color edits, zero-shot on \emph{car\_red}) shows
+  the edit entering a coherent internal image at $t{=}0$: L24 retains the
+  source-blue car, L36 turns it orange-red, and L52 resolves the edited
+  scene. Because the sampled pixels are pure noise at this step, the image
+  comes from the decoded internal code. \textbf{B}: on the identical
+  L36/$t{=}12$ state, the frozen head produces a cyan-car anti-image while
+  the tuned lens recovers the coherent red-car scene; the final output is
+  shown for reference.}
+  \label{fig:tunedlens}
+\end{figure}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
+  \emph{car\_red}. \textbf{A}: standard vs.\ direct-$v$ CLIP scores cross in
+  the same band at $t{=}4$ and $t{=}16$ (midpoints 52.7 and 53.6).
+  \textbf{B}: $\cos(v_\ell,v_{59})$ rises sharply in that neighborhood.
+  \textbf{C}: probe accuracy stays flat through L58 and drops at L59 only,
+  separating translation from the terminal loss of linear readability.}
+  \label{fig:boundary}
+\end{figure*}
+
 \subsection{The Realized Edit Is Predictable Early}\label{sec:early}
 
 \noindent\textbf{Question.} Does the edit unfold gradually, or is the
@@ -95,27 +134,6 @@ injection ($\le$L36), early outcome prediction, a target-image code, translation
 \noindent\textbf{Takeaway.} Time onset is mostly immediate; the frozen depth
 lens looks late, but generation-level probes read the realized outcome from L6.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.96\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
-  \caption{\textbf{Basis mismatch at L6.} Left: four decode conventions for
-  \emph{car\_red} at $t{=}4$ (A: $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B--D:
-  sign-flip / direct-$v$ variants)---standard vs.\ image-like reads swap
-  between L24 and L59. Right: 3-way probe accuracy (chance $0.33$); L6/$t$4
-  ($0.883$) exceeds the frozen-head score at the same cell.}
-  \label{fig:mechanism}
-\end{figure}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.92\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.png}
-  \caption{\textbf{Internal image vs.\ frozen-head ghost.} Top: tuned lens
-  (fit on non-color edits, zero-shot on \emph{car\_red}) decodes a coherent
-  scene at every depth at $t{=}0$. Bottom: at $t{=}12$, the frozen head on
-  the same L36 state is a color-inverted ghost; the tuned lens is coherent.}
-  \label{fig:tunedlens}
-\end{figure*}
-
 \subsection{The Edit Is Translated Late: Two Codes}\label{sec:translate}
 
 \noindent\textbf{Question.} If probes read the outcome early, what mid-stack
@@ -176,16 +194,6 @@ velocity, since $\hat x_0 = x_t - \sigma v$ flips the sign of an
 image-like quantity. The tuned lens at the same cell is already coherent.
 \noindent\textbf{Takeaway.} Mid-stack states are image-like; the L52--54 band
 reconciles them to the velocity convention the head consumes.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
-  \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
-  \emph{car\_red}. \textbf{A}: standard vs.\ direct-$v$ CLIP scores cross in
-  the band (both steps). \textbf{B}: $\cos(v_\ell,v_{59})$ rises sharply.
-  \textbf{C}: probe accuracy stays flat through L58 and drops at L59 only.}
-  \label{fig:boundary}
-\end{figure*}
 
 \subsection{Transplantable, Writable, and Carrier-Bound}\label{sec:dissoc}
 

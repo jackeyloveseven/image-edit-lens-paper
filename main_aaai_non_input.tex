@@ -38,30 +38,24 @@
 \maketitle
 
 \begin{abstract}
-Between reading ``turn the car red'' and painting it, what does a
-diffusion image editor represent? We build a tuned layer--time lens for a
-diffusion-transformer (DiT) image editor, decoding intermediate residual
-streams through the model's frozen output head and pair readings with
-controlled interventions. Under fixed underspecified recoloring prompts,
-early states predict realized outcomes while the frozen head still reads
-noise (car: $0.667$ balanced accuracy vs.\ $0.333$, $p{=}0.002$;
-natural-photo tree: hue MAE $55.9^\circ{\to}11.4^\circ$, $p{=}0.005$).
-As a held-out behavioral test, early best-of-five selection works on both
-architectures: recolor success rises from 20\%
-to 67\% on an independent 40-block editor ($p{=}4{\times}10^{-5}$), while
-on the natural-photo tree target error falls from $95.2^\circ$ to
-$46.5^\circ$ (mean rank $1.17$, $p{=}3.7{\times}10^{-7}$). This code is
-\emph{translated late}, in a sharp,
-timestep-invariant band (layers 52--54 of 60, width as narrow as one
-layer), into the velocity field that paints it. The boundary persists
+Between reading an edit instruction and painting pixels, what does a
+diffusion-transformer (DiT) image editor represent? We build a layer--time
+lens that decodes intermediate residuals through the model's frozen output
+head and pairs readouts with linear probes and activation interventions
+(ablation, transplant, steering). On fixed underspecified recoloring
+prompts, the \emph{realized} outcome is predictable from early layers
+while the frozen head still reads noise (car color: $0.667$ balanced
+accuracy vs.\ chance $0.333$, $p{=}0.002$). That target-image code is
+\emph{translated late} into the velocity field in a sharp,
+timestep-invariant band (layers 52--54 of 60). The boundary persists
 across tested edit families, an independent fine-tune, and a four-step
-distilled model. Transplant establishes sufficiency; steering shows that
-linear writability requires a spatial carrier. The lens also yields
-training-free levers: truncating classifier-free guidance after step two
-saves 45\% of forward passes while preserving all tested edit families.
+distilled checkpoint; held-out early best-of-five selection validates the
+readout on a second architecture. Transplant establishes sufficiency;
+steering shows writable hue requires a spatial carrier. Truncating
+classifier-free guidance after step two saves 45\% of forward passes on
+tested edits.
 \end{abstract}
 
-% ===== begin inlined: aaai_draft/00_intro.tex =====
 % ===== AAAI-27 spine draft: Introduction (~0.9 col-page target) =====
 \section{Introduction}\label{sec:intro}
 
@@ -82,10 +76,10 @@ no analogous vocabulary: a patch hidden state is not an output
 distribution, so asking what a layer is drawing has required running the
 model to the end.
 
-We build a layer--time lens for a production DiT
-editor, \model{} (60 blocks), by decoding intermediate residual streams
-through the model's own frozen output head, and -- crucially -- pair
-passive readings with linear probes and controlled activation
+We build a layer--time lens for a production DiT editor,
+\model{} (60 blocks), by decoding intermediate residual streams through
+the model's own frozen output head, and -- crucially -- pair passive
+readings with linear probes and controlled activation
 interventions (ablation, transplant, steering) that test what those
 activations can install or write.
 
@@ -116,49 +110,38 @@ distillation. Transplant establishes sufficiency; steering and a
 rank ladder show that readable attributes require a spatial carrier and
 a variable-dependent write subspace.
 \item \textbf{Validation and a lever.} Held-out early best-of-five selection
-validates the readout on Qwen and an independent architecture, with about 68\%
-measured compute reduction. Separately, truncating classifier-free guidance after step 2 saves
-45\% of forward passes across all tested edit families, suggesting that
-CFG's non-redundant role here is scope resolution rather than outcome selection.
+validates the readout on Qwen and an independent architecture, with about
+68\% measured compute reduction. Separately, truncating classifier-free
+guidance after step 2 saves 45\% of forward passes across tested edit
+families, suggesting CFG's non-redundant role here is scope resolution
+rather than outcome selection.
 \end{itemize}
 This is exploratory, single-model-family work; every verdict was made
 on the images themselves, and we are explicit about where the lens is
 unreliable.
-% ===== end inlined: aaai_draft/00_intro.tex =====
-
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.94\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
-  \caption{A layer--time lens for a DiT image editor. Decoding the
-  frozen output head at intermediate layers of \emph{car\_red} gives a
-  $P(\text{red car})$ grid across layer and denoising step (center); a
-  sharp snap between layers 48 and 54 is where the head-readable
-  signal first appears, while fixed-prompt generation-level probes show
-  the realized outcome is already predictable from layer 6. We read this as five measured
-  stages (right): injection early, an outcome-predictive
-  target-image code through most of the stack,
-  translation to the velocity code in a narrow band (L52--54), and
-  readout at L59 -- predictable early, translated late, not developed
-  gradually.}
+  \includegraphics[width=0.95\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
+  \caption{\textbf{Predictable early, translated late.} \textbf{A}: source
+  and realized edit. \textbf{B}: frozen-head $P(\text{red car})$ across
+  layer and step; the outcome is probe-readable at L6, but translation
+  into the head-readable velocity convention occurs at L52--54.
+  \textbf{C}: the five measured stages used throughout the paper.}
   \label{fig:teaser}
 \end{figure*}
 
 \begin{figure*}[t]
 	\centering
-	\includegraphics[width=0.94\textwidth]{figs/fig2_method/fig2_method.pdf}
-	\caption{Pipeline. The image stream concatenates noisy target tokens
-		with always-clean condition tokens; each block's post-block residual
-		is tapped and read two ways -- the \emph{depth lens} pushes it through
-		the model's own frozen output head before decoding, the \emph{time
-			lens} instead reads the current step's head output combined with the
-		current latent ($\hat{x}_0{=}x_t{-}\sigma_t v$). Both routes end in a
-		decode-then-CLIP readout, computed identically for both true-CFG
-		passes.}
+	\includegraphics[width=0.95\textwidth]{figs/fig2_method/fig2_method.pdf}
+	\caption{\textbf{Layer--time instrument.} Post-block residuals are
+		hooked on the concatenated image stream. \emph{Depth lens}: intermediate
+		state $\to$ frozen head $\to$ decode. \emph{Time lens}: step-$t$ head
+		output with $\hat{x}_0{=}x_t{-}\sigma_t v$. Both use decode-then-CLIP
+		readout on conditional and unconditional CFG passes alike.}
 	\label{fig:method}
 \end{figure*}
 
-% ===== begin inlined: aaai_draft/05_related.tex =====
 % ===== AAAI-27 spine draft: Related Work (~0.9 col, expanded) =====
 \section{Related Work}\label{sec:related}
 
@@ -192,8 +175,8 @@ new editing mechanism, but a reading of the one it already has.
 \paragraph{Thinking with images, and diffusion interpretability.} A
 growing line has multimodal models reason \emph{with} explicit
 intermediate images by externalizing a visual scratchpad
-\citep{hu2024sketchpad,wu2024vot,li2025mvot}. We supply the mechanistic complement: an
-image that exists \emph{latently} inside a generative editor before any
+\citep{hu2024sketchpad,wu2024vot,li2025mvot}. We supply the mechanistic
+complement: an image that exists \emph{latently} inside a generative editor before any
 output pixel is produced, with no explicit scratchpad or tool call involved.
 The Diffusion Lens~\citep{toker2024diffusionlens} decodes a
 text-to-image model's \emph{text encoder}; DiffLens and
@@ -203,9 +186,10 @@ unifies extraction, patching, steering, and stitching for text-to-image
 U-Nets~\citep{sykora2026dreamreader}; and sparse autoencoders expose causal
 generation features~\citep{surkov2025sae}. Breaking the Lock-in finds early
 cross-seed convergence in text-to-image sampling and intervenes to increase
-diversity~\citep{zhu2026lockin}. Probe-Select~\citep{guo2026probeselect} predicts final
-quality from early activations; ELECT~\citep{kim2025elect} scores early latent
-background consistency; and ADE-CoT~\citep{qu2026adecot} adds adaptive budgets
+diversity~\citep{zhu2026lockin}. Probe-Select~\citep{guo2026probeselect}
+predicts final quality from early activations;
+ELECT~\citep{kim2025elect} scores early latent background consistency;
+and ADE-CoT~\citep{qu2026adecot} adds adaptive budgets
 and stopping at scale. We instead predict \emph{which outcome} a fixed
 underspecified edit realizes and use selection only as a held-out behavioral
 test, while mapping how an image-editing DiT's realized outcome changes code
@@ -236,12 +220,9 @@ interventional sufficiency check within a layer--time map, not a standalone
 editing-method claim. Our
 semantic readout uses CLIP~\citep{radford2021clip} for lack of a better
 zero-shot alternative.
-% ===== end inlined: aaai_draft/05_related.tex =====
 
 
 
-
-% ===== begin inlined: aaai_draft/10_method.tex =====
 % ===== AAAI-27 spine draft: Method (~1.3 col-page target) =====
 \section{Proposed Method: A Layer--Time Lens and Intervention Probes}\label{sec:method}
 
@@ -325,10 +306,7 @@ per experiment. Porting the method to another editor needs only a
 native-dtype residual hook, the frozen-head gate, and region-restricted
 probes -- the recipe executed unchanged in the cross-model replication
 below.
-% ===== end inlined: aaai_draft/10_method.tex =====
 
-
-% ===== begin inlined: aaai_draft/20_experiments.tex =====
 % ===== AAAI-27 spine draft: Experiments (merged) =====
 \section{Experiments}\label{sec:experiments}
 
@@ -351,7 +329,49 @@ fine-tune, and Rapid-AIO, a 4-step distilled merge -- let us ask
 whether a finding persists beyond one training run
 (tested below).
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.93\textwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \caption{\textbf{Decode convention flips; the probe reads early.}
+  \textbf{A}: four decodes of \emph{car\_red} at $t{=}4$; the image-like
+  and standard conventions reverse between L24 and L59. \textbf{B}: 3-way
+  probe accuracy (chance $0.33$); the outlined L6/$t$4 cell reaches $0.883$
+  while the frozen head at the same state still reads noise. Red score
+  pills in \textbf{A} mark target probability above $0.5$.}
+  \label{fig:mechanism}
+\end{figure*}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.98\columnwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.pdf}
+  \caption{\textbf{Internal image vs.\ frozen-head ghost.} \textbf{A}: the
+  tuned lens (fit on non-color edits, zero-shot on \emph{car\_red}) shows
+  the edit entering a coherent internal image at $t{=}0$: L24 retains the
+  source-blue car, L36 turns it orange-red, and L52 resolves the edited
+  scene. Because the sampled pixels are pure noise at this step, the image
+  comes from the decoded internal code. \textbf{B}: on the identical
+  L36/$t{=}12$ state, the frozen head produces a cyan-car anti-image while
+  the tuned lens recovers the coherent red-car scene; the final output is
+  shown for reference.}
+  \label{fig:tunedlens}
+\end{figure}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
+  \emph{car\_red}. \textbf{A}: standard vs.\ direct-$v$ CLIP scores cross in
+  the same band at $t{=}4$ and $t{=}16$ (midpoints 52.7 and 53.6).
+  \textbf{B}: $\cos(v_\ell,v_{59})$ rises sharply in that neighborhood.
+  \textbf{C}: probe accuracy stays flat through L58 and drops at L59 only,
+  separating translation from the terminal loss of linear readability.}
+  \label{fig:boundary}
+\end{figure*}
+
 \subsection{The Realized Edit Is Predictable Early}\label{sec:early}
+
+\noindent\textbf{Question.} Does the edit unfold gradually, or is the
+final outcome readable before the frozen head agrees?
 
 \paragraph{In time.} If the edit surfaced progressively, the readout would
 saturate late and at roughly the same rate. Running the time lens over a battery of
@@ -420,44 +440,13 @@ Figure~\ref{fig:teaser}, whose full text-band table is in the supplement.
 Together with the probe, this gives the paper's five-stage picture:
 injection ($\le$L36), early outcome prediction, a target-image code, translation
 (L52--54), and the output head.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.92\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
-  \caption{Left: four ways of turning an intermediate layer's
-  frozen-head output into an image for \emph{car\_red} at $t{=}4$ (A:
-  standard $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped; C:
-  $v_\ell$ decoded directly; D: $-v_\ell$ decoded directly) -- at L24
-  the standard decode is wrong-colored while the sign-flipped/direct
-  decodes already look red, and at L59 this reverses. Right: cross-seed
-  3-way probe accuracy (chance $=0.33$) by layer/step; the headline
-  cell L6/$t$4 ($0.883$) is far above the frozen-head reading at the
-  same cell, and probe accuracy drops at L59 relative to L48--L54.}
-  \label{fig:mechanism}
-\end{figure}
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.85\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
-  \caption{A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
-  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
-  zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$ -- the edit enters the
-  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
-  head renders the identical L36 hidden state as a color-inverted
-  ghost, while the tuned lens at the same cell is already coherent.}
-  \label{fig:tunedlens}
-\end{figure*}
+\noindent\textbf{Takeaway.} Time onset is mostly immediate; the frozen depth
+lens looks late, but generation-level probes read the realized outcome from L6.
 
 \subsection{The Edit Is Translated Late: Two Codes}\label{sec:translate}
 
-If the realized outcome is predictable early but the frozen head cannot read it
-until layer 52, the mid-stack must hold the edit in a \emph{different
-code}. Three measurements show what that code is and where it is
-converted.
-
-\paragraph{Two decoding conventions cross over.} At an intermediate layer
+\noindent\textbf{Question.} If probes read the outcome early, what mid-stack
+code is converted at L52--54? Three measurements answer this: at an intermediate layer
 the frozen head yields a per-token vector $v_\ell$ we normally treat as a
 velocity, forming $\hat x_0 = x_t - \sigma_t v_\ell$ (variant A). Decoding
 $v_\ell$ instead \emph{directly}, as if it were already a clean latent
@@ -512,20 +501,8 @@ color-\emph{inverted} ghost (a cyan car under a red-brown sky) -- the
 image-like mid-stack code forced through a head built to consume a
 velocity, since $\hat x_0 = x_t - \sigma v$ flips the sign of an
 image-like quantity. The tuned lens at the same cell is already coherent.
-
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
-  \caption{A dense, every-layer sweep of \emph{car\_red} over L44--L59
-  sharpens the coarse L48/L54 snap to a precise boundary.
-  \textbf{A}: the standard decode and the direct-$v$ decode cross
-  between L52 and L54 at both steps shown. \textbf{B}: cosine
-  similarity of the intermediate pseudo-velocity to the terminal
-  $v_{59}$ rises sharply in the same band. \textbf{C}: cross-seed probe
-  accuracy is flat from L44 through L58 and drops only at the terminal
-  layer.}
-  \label{fig:boundary}
-\end{figure*}
+\noindent\textbf{Takeaway.} Mid-stack states are image-like; the L52--54 band
+reconciles them to the velocity convention the head consumes.
 
 \subsection{Transplantable, Writable, and Carrier-Bound}\label{sec:dissoc}
 
@@ -561,8 +538,6 @@ resolves identity coarse-to-fine -- category at rank 1, a coherent
 instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
 dimension). The read and write subspaces differ, and a writable attribute
 still requires a spatial carrier.
-
-
 
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
@@ -657,19 +632,239 @@ $p{=}0.968$) precludes an object-invariant subspace. Because CLIP can prefer a
 flat patch to a true recolor, quantitative claims carry pre-registered visual
 verdicts. We claim tested outcome predictability, transplant sufficiency, and
 carrier-bounded writability, not irreversible commitment or necessity.
-In summary, the lens predicts outcomes and Qwen's late translation; selection
-spans two architectures and routing explains coherent transplant.
-% ===== end inlined: aaai_draft/20_experiments.tex =====
 
+\section{Conclusion}\label{sec:conclusion}
 
-% ===== begin inlined: aaai_draft/60_conclusion.tex =====
-% Conclusion is folded into the final limitations paragraph to keep all
-% technical content within the seven-page AAAI body limit.
-% ===== end inlined: aaai_draft/60_conclusion.tex =====
-
+Across the tested editors, early probes predict realized edits; in the
+Qwen lineage, an image-like code is translated to velocity at L52--54.
+Lenses and interventions bound readability, sufficiency, and
+carrier-bounded writability, while held-out selection and CFG truncation
+demonstrate practical use. We do not claim irreversible commitment,
+necessity, or architecture-wide universality.
 
 \bibliography{references}
 
-\input{reproducibility_checklist}
+\makeatletter
+\@ifundefined{isChecklistMainFile}{
+  % We are compiling a standalone document
+  \newif\ifreproStandalone
+  \reproStandalonetrue
+}{
+  % We are being \input into the main paper
+  \newif\ifreproStandalone
+  \reproStandalonefalse
+}
+\makeatother
+
+\ifreproStandalone
+\documentclass[letterpaper]{article}
+\usepackage[submission]{aaai2027}
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\frenchspacing
+
+\begin{document}
+\fi
+\setlength{\leftmargini}{20pt}
+\makeatletter\def\@listi{\leftmargin\leftmargini \topsep .5em \parsep .5em \itemsep .5em}
+\def\@listii{\leftmargin\leftmarginii \labelwidth\leftmarginii \advance\labelwidth-\labelsep \topsep .4em \parsep .4em \itemsep .4em}
+\def\@listiii{\leftmargin\leftmarginiii \labelwidth\leftmarginiii \advance\labelwidth-\labelsep \topsep .4em \parsep .4em \itemsep .4em}\makeatother
+
+\setcounter{secnumdepth}{0}
+\renewcommand\thesubsection{\arabic{subsection}}
+\renewcommand\labelenumi{\thesubsection.\arabic{enumi}}
+
+\newcounter{checksubsection}
+\newcounter{checkitem}[checksubsection]
+
+\newcommand{\checksubsection}[1]{%
+  \refstepcounter{checksubsection}%
+  \paragraph{\arabic{checksubsection}. #1}%
+  \setcounter{checkitem}{0}%
+}
+
+\newcommand{\checkitem}{%
+  \refstepcounter{checkitem}%
+  \item[\arabic{checksubsection}.\arabic{checkitem}.]%
+}
+\newcommand{\question}[2]{\normalcolor\checkitem #1 #2 \color{blue}}
+\newcommand{\ifyespoints}[1]{\makebox[0pt][l]{\hspace{-15pt}\normalcolor #1}}
+
+\section*{Reproducibility Checklist}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\textbf{Instructions for Authors:}
+
+This document outlines key aspects for assessing reproducibility. Please provide your input by editing this \texttt{.tex} file directly.
+
+For each question (that applies), replace the ``Type your response here'' text with your answer.
+
+\vspace{1em}
+\noindent
+\textbf{Example:} If a question appears as
+%
+\begin{center}
+\noindent
+\begin{minipage}{.9\linewidth}
+\ttfamily\raggedright
+\string\question \{Proofs of all novel claims are included\} \{(yes/partial/no)\} \\
+Type your response here
+\end{minipage}
+\end{center}
+you would change it to:
+\begin{center}
+\noindent
+\begin{minipage}{.9\linewidth}
+\ttfamily\raggedright
+\string\question \{Proofs of all novel claims are included\} \{(yes/partial/no)\} \\
+yes
+\end{minipage}
+\end{center}
+%
+Please make sure to:
+\begin{itemize}\setlength{\itemsep}{.1em}
+\item Replace ONLY the ``Type your response here'' text and nothing else.
+\item Use one of the options listed for that question (e.g., \textbf{yes}, \textbf{no}, \textbf{partial}, or \textbf{NA}).
+\item \textbf{Not} modify any other part of the \texttt{\string\question} command or any other lines in this document.\\
+\end{itemize}
+
+You can \texttt{\string\input} this .tex file right before \texttt{\string\end\{document\}} of your main file or compile it as a stand-alone document. Check the instructions on your conference's website to see if you will be asked to provide this checklist with your paper or separately.
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+% The questions start here
+
+\checksubsection{General Paper Structure}
+\begin{itemize}
+
+\question{Includes a conceptual outline and/or pseudocode description of AI methods introduced}{(yes/partial/no/NA)}
+yes
+
+\question{Clearly delineates statements that are opinions, hypothesis, and speculation from objective facts and results}{(yes/no)}
+yes
+
+\question{Provides well-marked pedagogical references for less-familiar readers to gain background necessary to replicate the paper}{(yes/no)}
+yes
+
+\end{itemize}
+\checksubsection{Theoretical Contributions}
+\begin{itemize}
+
+\question{Does this paper make theoretical contributions?}{(yes/no)}
+no
+
+	\ifyespoints{\vspace{1.2em}If yes, please address the following points:}
+        \begin{itemize}
+
+	\question{All assumptions and restrictions are stated clearly and formally}{(yes/partial/no)}
+	NA
+
+	\question{All novel claims are stated formally (e.g., in theorem statements)}{(yes/partial/no)}
+	NA
+
+	\question{Proofs of all novel claims are included}{(yes/partial/no)}
+	NA
+
+	\question{Proof sketches or intuitions are given for complex and/or novel results}{(yes/partial/no)}
+	NA
+
+	\question{Appropriate citations to theoretical tools used are given}{(yes/partial/no)}
+	NA
+
+	\question{All theoretical claims are demonstrated empirically to hold}{(yes/partial/no/NA)}
+	NA
+
+	\question{All experimental code used to eliminate or disprove claims is included}{(yes/no/NA)}
+	NA
+
+	\end{itemize}
+\end{itemize}
+
+\checksubsection{Dataset Usage}
+\begin{itemize}
+
+\question{Does this paper rely on one or more datasets?}{(yes/no)}
+yes
+
+\ifyespoints{If yes, please address the following points:}
+\begin{itemize}
+
+	\question{A motivation is given for why the experiments are conducted on the selected datasets}{(yes/partial/no/NA)}
+	yes
+
+	\question{All novel datasets introduced in this paper are included in a data appendix}{(yes/partial/no/NA)}
+NA
+
+	\question{All novel datasets introduced in this paper will be made publicly available upon publication of the paper with a license that allows free usage for research purposes}{(yes/partial/no/NA)}
+NA
+
+	\question{All datasets drawn from the existing literature (potentially including authors' own previously published work) are accompanied by appropriate citations}{(yes/no/NA)}
+	yes
+
+	\question{All datasets drawn from the existing literature (potentially including authors' own previously published work) are publicly available}{(yes/partial/no/NA)}
+	yes
+
+	\question{All datasets that are not publicly available are described in detail, with explanation why publicly available alternatives are not scientifically satisficing}{(yes/partial/no/NA)}
+NA
+
+\end{itemize}
+\end{itemize}
+
+\checksubsection{Computational Experiments}
+\begin{itemize}
+
+\question{Does this paper include computational experiments?}{(yes/no)}
+yes
+
+\ifyespoints{If yes, please address the following points:}
+\begin{itemize}
+
+	\question{This paper states the number and range of values tried per (hyper-) parameter during development of the paper, along with the criterion used for selecting the final parameter setting}{(yes/partial/no/NA)}
+	partial
+
+	\question{Any code required for pre-processing data is included in the appendix}{(yes/partial/no)}
+	partial
+
+	\question{All source code required for conducting and analyzing the experiments is included in a code appendix}{(yes/partial/no)}
+	partial
+
+	\question{All source code required for conducting and analyzing the experiments will be made publicly available upon publication of the paper with a license that allows free usage for research purposes}{(yes/partial/no)}
+	yes
+
+	\question{All source code implementing new methods have comments detailing the implementation, with references to the paper where each step comes from}{(yes/partial/no)}
+	partial
+
+	\question{If an algorithm depends on randomness, then the method used for setting seeds is described in a way sufficient to allow replication of results}{(yes/partial/no/NA)}
+	yes
+
+	\question{This paper specifies the computing infrastructure used for running experiments (hardware and software), including GPU/CPU models; amount of memory; operating system; names and versions of relevant software libraries and frameworks}{(yes/partial/no)}
+yes
+
+	\question{This paper formally describes evaluation metrics used and explains the motivation for choosing these metrics}{(yes/partial/no)}
+	yes
+
+	\question{This paper states the number of algorithm runs used to compute each reported result}{(yes/no)}
+	yes
+
+	\question{Analysis of experiments goes beyond single-dimensional summaries of performance (e.g., average; median) to include measures of variation, confidence, or other distributional information}{(yes/no)}
+yes
+
+	\question{The significance of any improvement or decrease in performance is judged using appropriate statistical tests (e.g., Wilcoxon signed-rank)}{(yes/partial/no)}
+	partial
+
+	\question{This paper lists all final (hyper-)parameters used for each model/algorithm in the paper’s experiments}{(yes/partial/no/NA)}
+	partial
+
+
+\end{itemize}
+\end{itemize}
+\ifreproStandalone
+\end{document}
+\fi
 
 \end{document}

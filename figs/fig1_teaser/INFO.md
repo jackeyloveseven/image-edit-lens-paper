@@ -2,9 +2,9 @@
 
 ## Intent
 
-Teaser: layer x time P(red car) decode grid plus a five-stage measured
-layer--time schematic. It distinguishes early outcome prediction from late
-frozen-head translation.
+Three-panel teaser: edit example, layer x time P(red car) decode grid, and
+five measured stages. It distinguishes early outcome prediction from late
+frozen-head translation and marks both L6 and L52--54 geometrically.
 
 ## Used in
 
@@ -18,10 +18,10 @@ frozen-head translation.
 A layer--time lens for a DiT image editor. Decoding the
   frozen output head at intermediate layers of \emph{car\_red} gives a
   $P(\text{red car})$ grid across layer and denoising step (center); a
-  sharp snap between layers 48 and 54 is where the head-readable
+  L52--54 translation band is where the head-readable
   signal first appears, but a linear probe shows the edit is already
   linearly decodable from layer 6. We read this as a five-stage
-  five-stage picture (right): the instruction is injected early,
+  picture (right): the instruction is injected early,
   the realized outcome is predictable from layer 6, most of the stack
   then carries a target-image code, a narrow band (L52--54) translates
   it into the velocity code, and layer 59's frozen head reads it out.
@@ -31,10 +31,10 @@ A layer--time lens for a DiT image editor. Decoding the
 A layer--time lens for a DiT image editor. Decoding the
   frozen output head at intermediate layers of \emph{car\_red} gives a
   $P(\text{red car})$ grid across layer and denoising step (center); a
-  sharp "snap" between layers 48 and 54 (\S\ref{sec:depth}) is where the
+  L52--54 translation band (\S\ref{sec:depth}) is where the
   head-readable signal first appears, but a linear probe shows the edit
   is already linearly decodable from layer 6 (\S\ref{sec:mechanism}). A
-  denser sweep (\S\ref{sec:mechanism}) resolves this snap to a sharp,
+  denser sweep (\S\ref{sec:mechanism}) resolves this to a sharp,
   timestep-invariant crossover centered at layer $\approx$53. We read
   this as five measured stages (right): the instruction is injected
   early, the realized outcome is predictable from layer 6, most of the stack

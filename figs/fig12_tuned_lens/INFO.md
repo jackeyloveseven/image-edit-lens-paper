@@ -42,15 +42,19 @@ A tuned lens renders the internal image the frozen head
 
 ## Generation
 
-- No plotting/compositing script is preserved in this repo -- see the note below for how to regenerate.
+- Script: `fig12_tuned_lens.py` (recomposes the preserved 512px cells into
+  the symmetric 2x3 main-paper layout; no model rerun is required).
 
 - Data sources:
 
   - runs/k1_tuned_lens/{tuned_grid.png,tuned_pooled_grid.png,raw_grid.png,cells/*.png}
 
-- Note: No plotting/compositing script preserved in this repo (same convention as fig13/14/16 -- raw PNG from the runs/ folder was used directly, per provenance.md's fig12-fig16/K1-K6 note). See project memory 'K1 tuned lens (2026-07-11, C21)' / 'K1b transfer battery' for the full experimental narrative behind this figure. To regenerate or re-derive: re-run the K1 tuned-lens fit and re-render `runs/k1_tuned_lens/tuned_grid.png` (or `tuned_pooled_grid.png`), then re-crop/relabel to match the current caption.
+- Layout: top row uses tuned L24/L36/L52 at t0; bottom row compares raw
+  L36/t12, tuned L36/t12, and the final output.
 
 ## Files in this folder
 
 - `fig12_tuned_lens.jpg`
 - `fig12_tuned_lens.png`
+- `fig12_tuned_lens.pdf`
+- `fig12_tuned_lens.py`

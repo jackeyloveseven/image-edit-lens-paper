@@ -2,7 +2,8 @@
 
 ## Intent
 
-Dense every-layer L44-59 sweep of car_red sharpening the coarse L48/L54 snap to a precise crossover boundary (A: decode crossover, B: cosine similarity to terminal v, C: probe accuracy).
+Dense every-layer L44-59 sweep of car_red locating the L52--54 translation
+band (A: decode crossover, B: cosine similarity to terminal v, C: probe accuracy).
 
 ## Used in
 

@@ -52,8 +52,8 @@ across tested edit families, an independent fine-tune, and a four-step
 distilled checkpoint; held-out early best-of-five selection validates the
 readout on a second architecture. Transplant establishes sufficiency;
 steering shows writable hue requires a spatial carrier. Truncating
-classifier-free guidance after step two saves 45\% of forward passes in
-the tested edit batteries.
+classifier-free guidance after step two saves 45\% of forward passes on
+tested edits.
 \end{abstract}
 
 \input{aaai_draft/00_intro}
@@ -61,12 +61,11 @@ the tested edit batteries.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
-  \caption{\textbf{Predictable early, translated late.} Center:
-  frozen-head $P(\text{red car})$ on \emph{car\_red} across layer and
-  step (snap L48--54). Right: five measured stages---injection,
-  early outcome prediction, target-image code, L52--54 translation, L59
-  readout. Probes (not shown) predict the realized color from L6 while
-  the head still reads noise.}
+  \caption{\textbf{Predictable early, translated late.} \textbf{A}: source
+  and realized edit. \textbf{B}: frozen-head $P(\text{red car})$ across
+  layer and step; the outcome is probe-readable at L6, but translation
+  into the head-readable velocity convention occurs at L52--54.
+  \textbf{C}: the five measured stages used throughout the paper.}
   \label{fig:teaser}
 \end{figure*}
 

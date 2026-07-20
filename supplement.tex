@@ -91,21 +91,13 @@
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.98\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
-  \caption{A layer--time lens for a DiT image editor. Decoding the
-  frozen output head at intermediate layers of \emph{car\_red} gives a
-  $P(\text{red car})$ grid across layer and denoising step (center); a
-  sharp "snap" between layers 48 and 54 (\S\ref{sec:depth}) is where the
-  head-readable signal first appears, but a linear probe shows the
-  instruction is already linearly decodable from layer 6
-  (\S\ref{sec:mechanism}), while fixed-prompt generation-level probes
-  later establish early prediction of the realized outcome. A
-  denser sweep (\S\ref{sec:mechanism}) resolves this snap to a sharp,
-  timestep-invariant crossover centered at layer $\approx$53. We read
-  this as five measured stages (right): the instruction
-  is injected early, the realized outcome becomes predictable, most of
-  the stack carries a target-image code, a narrow band (L52--54)
-  translates it into the velocity code, and layer 59's frozen head reads
-  it out. Predictability and frozen-head readability are distinct.}
+  \caption{\textbf{Predictable early, translated late.} \textbf{A}: source
+  and realized edit. \textbf{B}: frozen-head $P(\text{red car})$ across
+  layer and denoising step; a generation-level probe reads the realized
+  outcome at L6, whereas the L52--54 translation band makes it readable
+  to the frozen output head. \textbf{C}: the five measured stages and
+  their layer--time locations. Predictability and frozen-head readability
+  are distinct.}
   \label{fig:teaser}
 \end{figure*}
 
@@ -716,22 +708,22 @@ ones, well before the depth lens can read anything out of them at all.
 The depth lens's blind spot is not the same thing as the network's.
 \subsection{Mechanism: two codes}\label{sec:mechanism}
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
-  \caption{Left: four ways of turning an intermediate layer's frozen-head
+  \includegraphics[width=0.93\textwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \caption{\textbf{A}: four ways of turning an intermediate layer's frozen-head
   output into an image for \emph{car\_red} at $t{=}4$ (A: standard
   $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped
   $x_t{+}\sigma_t v_\ell$; C: $v_\ell$ decoded directly; D: $-v_\ell$
   decoded directly). At L24 the standard decode (A) is wrong-colored
   while the sign-flipped/direct-$v$ decodes (B, C) already look red; at
-  L59 this reverses. Right: cross-seed 3-way probe accuracy (chance
+  L59 this reverses. \textbf{B}: cross-seed 3-way probe accuracy (chance
   $=0.33$) by layer/step; the headline cell L6/$t$4 (red outline,
   $0.883$) is far above the frozen-head reading at the same cell
   (\S\ref{sec:depth}), and probe accuracy \emph{drops} at L59 relative
   to L48--L54.}
   \label{fig:mechanism}
-\end{figure}
+\end{figure*}
 
 Here we separate early predictability from late frozen-head readability.
 The depth-lens snap in
@@ -863,16 +855,16 @@ former happens across L52--54, the latter only at L59.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.98\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.jpg}
+  \includegraphics[width=0.52\textwidth]{figs/fig12_tuned_lens/fig12_tuned_lens.pdf}
   \caption{A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
+  cannot read. \textbf{A}: per-(layer, timestep) ridge translators, fit on
   \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
   zero-shot on the held-out \emph{car\_red} color edit, decode a
   coherent scene at every depth at $t{=}0$ -- pixels here are pure
   noise, so every pixel of the decode comes from the velocity code
   alone. The source's blue car (L12--L24) turns orange-red (L36), the
   scene composes fully (L44), and the car is fully red by L52: the
-  edit entering the internal image, watched layer by layer. Bottom: at
+  edit entering the internal image, watched layer by layer. \textbf{B}: at
   $t{=}12$ the raw frozen head (\S\ref{sec:depthlens}) renders the
   identical L36 hidden state as a color-inverted ghost -- a cyan car
   under a red-brown sky, the complement of the true scene -- while the

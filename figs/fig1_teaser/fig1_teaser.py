@@ -1,140 +1,191 @@
-"""
-Fig 1: teaser. Source -> edited image, mini layer x time P(red) heatmap
-(the "layer-time lens"), and a two-code schematic (target-image code ->
-translation -> velocity code). Palette: red #C2402A, teal #0F8FA0, grays.
-"""
+"""Figure 1: edit example, layer-time lens, and five measured stages."""
+
 import json
 from pathlib import Path
-import numpy as np
+
 import matplotlib
+from matplotlib import font_manager
+
 matplotlib.use("Agg")
-matplotlib.rcParams["pdf.fonttype"] = 42
-matplotlib.rcParams["ps.fonttype"] = 42
+for font_file in (
+    "/usr/share/fonts/truetype/croscore/Arimo-Regular.ttf",
+    "/usr/share/fonts/truetype/croscore/Arimo-Bold.ttf",
+    "/usr/share/fonts/truetype/croscore/Arimo-Italic.ttf",
+    "/usr/share/fonts/truetype/croscore/Arimo-BoldItalic.ttf",
+):
+    font_manager.fontManager.addfont(font_file)
+matplotlib.rcParams.update({
+    "font.family": "Arimo",
+    "font.size": 8,
+    "mathtext.fontset": "custom",
+    "mathtext.rm": "Arimo",
+    "mathtext.it": "Arimo:italic",
+    "mathtext.bf": "Arimo:bold",
+    "pdf.fonttype": 42,
+    "ps.fonttype": 42,
+    "axes.linewidth": 0.9,
+})
+
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
+import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 from PIL import Image
 
 RED = "#C2402A"
 TEAL = "#0F8FA0"
-GRAY_D = "#444444"
-GRAY_M = "#888888"
-GRAY_L = "#BBBBBB"
+INK = "#222222"
+MUTE = "#6B6B6B"
+GRID_BG = "#F5F5F5"
 
 DATA_ROOT = Path("/home/ubuntu/chengyanli/image-edit-lens")
 OUT_DIR = Path(__file__).resolve().parent
 
-# ---- data ----
-d = json.load(open(DATA_ROOT / "runs/a1_car_red/lens_grid.json"))
-cs = d["clip_scores"]["raw"]
-layers = d["layers"]  # [0,6,12,18,24,30,36,42,48,54,59]
-steps = d["steps"]  # [0,4,10,16,19]
+with open(DATA_ROOT / "runs/a1_car_red/lens_grid.json", encoding="utf-8") as f:
+    lens_data = json.load(f)
+scores = lens_data["clip_scores"]["raw"]
+layers = lens_data["layers"]
+steps = lens_data["steps"]
 target = "a red car"
-grid = np.array([[cs[f"l{l}_t{t}"][target] for t in steps] for l in layers])  # (layers, steps)
+grid = np.array([
+    [scores[f"l{layer}_t{step}"][target] for step in steps]
+    for layer in layers
+])
 
-src_img = Image.open(DATA_ROOT / "runs/wp3_car_red/source.png")
-edit_img = Image.open(DATA_ROOT / "runs/wp3_car_red/edited.png")
+source = Image.open(DATA_ROOT / "runs/wp3_car_red/source.png")
+edited = Image.open(DATA_ROOT / "runs/wp3_car_red/edited.png")
 
-# ---- figure ----
-fig = plt.figure(figsize=(7.05, 2.75))
-gs = fig.add_gridspec(1, 4, width_ratios=[1.0, 1.0, 1.35, 1.55], wspace=0.38,
-                       left=0.015, right=0.985, top=0.84, bottom=0.16)
 
-# panel 1: source
-ax0 = fig.add_subplot(gs[0, 0])
-ax0.imshow(src_img)
-ax0.set_xticks([]); ax0.set_yticks([])
-for s in ax0.spines.values():
-    s.set_visible(False)
-ax0.set_title("source", fontsize=9, color=GRAY_D)
+def panel_title(ax, letter, title):
+    ax.text(-0.06, 1.075, letter, transform=ax.transAxes, fontsize=10,
+            fontweight="bold", color=INK, ha="left", va="bottom")
+    ax.text(0.02, 1.075, title, transform=ax.transAxes, fontsize=10,
+            fontweight="bold", color=INK, ha="left", va="bottom")
 
-# arrow between panel 1 and 2 (drawn in figure coords later)
 
-# panel 2: edited
-ax1 = fig.add_subplot(gs[0, 1])
-ax1.imshow(edit_img)
-ax1.set_xticks([]); ax1.set_yticks([])
-for s in ax1.spines.values():
-    s.set_visible(False)
-ax1.set_title("edited", fontsize=9, color=RED)
+fig = plt.figure(figsize=(7.05, 2.72), facecolor="white")
+outer = fig.add_gridspec(
+    1, 3,
+    width_ratios=[0.28, 0.40, 0.32],
+    left=0.025, right=0.985, top=0.82, bottom=0.16, wspace=0.28,
+)
 
-# arrow from source to edited
+# A: source and edited example.
+panel_a = fig.add_subplot(outer[0, 0])
+panel_a.axis("off")
+panel_title(panel_a, "A", "Edit example")
+images = outer[0, 0].subgridspec(1, 2, wspace=0.30)
+image_axes = []
+for idx, (image, label) in enumerate(((source, "source"), (edited, "edited"))):
+    ax = fig.add_subplot(images[0, idx])
+    ax.imshow(image)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_title(label, fontsize=8, color=INK, pad=4)
+    for spine in ax.spines.values():
+        spine.set_color("#D0D0D0")
+        spine.set_linewidth(0.8)
+    image_axes.append(ax)
+
 fig.canvas.draw()
-p0 = ax0.get_position()
-p1 = ax1.get_position()
-arrow = FancyArrowPatch((p0.x1 + 0.002, (p0.y0 + p0.y1) / 2),
-                         (p1.x0 - 0.002, (p1.y0 + p1.y1) / 2),
-                         transform=fig.transFigure, arrowstyle="-|>",
-                         mutation_scale=10, color=GRAY_D, linewidth=1.2,
-                         clip_on=False)
-fig.patches.append(arrow)
-fig.text((p0.x1 + p1.x0) / 2, (p0.y0 + p0.y1) / 2 + 0.10, "edit", fontsize=7.5,
-          ha="center", color=GRAY_D)
+left_box = image_axes[0].get_position()
+right_box = image_axes[1].get_position()
+mid_y = (left_box.y0 + left_box.y1) / 2
+fig.patches.append(FancyArrowPatch(
+    (left_box.x1 + 0.003, mid_y),
+    (right_box.x0 - 0.003, mid_y),
+    transform=fig.transFigure,
+    arrowstyle="-|>", mutation_scale=8, linewidth=1.0, color=MUTE,
+    clip_on=False,
+))
+fig.text((left_box.x1 + right_box.x0) / 2, mid_y + 0.045, "edit",
+         fontsize=6.5, color=MUTE, ha="center", va="bottom")
+fig.text((left_box.x0 + right_box.x1) / 2, min(left_box.y0, right_box.y0) - 0.045,
+         "car_red", fontsize=7, color=MUTE, ha="center", va="top")
 
-# panel 3: layer x time P(red) heatmap
-cmap = LinearSegmentedColormap.from_list("lens", ["#F2F2F2", TEAL, RED], N=256)
-ax2 = fig.add_subplot(gs[0, 2])
-im = ax2.imshow(grid, aspect="auto", cmap=cmap, vmin=0.0, vmax=1.0, origin="upper")
-ax2.set_xticks(range(len(steps)))
-ax2.set_xticklabels([f"t{t}" for t in steps], fontsize=7)
-ax2.set_yticks(range(len(layers)))
-ax2.set_yticklabels([f"L{l}" for l in layers], fontsize=7)
-ax2.set_xlabel("denoise step", fontsize=7.5, labelpad=2)
-ax2.set_ylabel("layer", fontsize=8, labelpad=1)
-ax2.set_title("P(red) lens", fontsize=9, color=GRAY_D)
-# snap-zone bracket between L48 (idx 8) and L54 (idx 9)
-ax2.add_patch(Rectangle((-0.5, 7.5), len(steps) - 0.02, 2, fill=False,
-                         edgecolor=RED, linewidth=1.6, clip_on=False))
-ax2.text(0.5, 8.5, "snap", fontsize=7, color=RED, va="center",
-          ha="center", fontweight="bold",
-          bbox=dict(boxstyle="round,pad=0.15", facecolor="white",
-                     edgecolor="none", alpha=0.75))
-cbar = fig.colorbar(im, ax=ax2, fraction=0.06, pad=0.04)
-cbar.ax.tick_params(labelsize=6)
-cbar.set_label("P(red car)", fontsize=6.5)
+# B: frozen-head layer-time lens.
+panel_b = fig.add_subplot(outer[0, 1])
+panel_b.axis("off")
+panel_title(panel_b, "B", "Layer-time lens")
+bbox = panel_b.get_position()
+heat_ax = fig.add_axes([
+    bbox.x0 + 0.055 * bbox.width,
+    bbox.y0 + 0.02 * bbox.height,
+    0.72 * bbox.width,
+    0.94 * bbox.height,
+])
+cmap = LinearSegmentedColormap.from_list(
+    "lens", [GRID_BG, "#B8DDE0", TEAL, "#7F7770", RED], N=256
+)
+image = heat_ax.imshow(grid, aspect="auto", cmap=cmap, vmin=0, vmax=1,
+                       origin="upper", interpolation="nearest")
+heat_ax.set_xticks(range(len(steps)), [f"t{step}" for step in steps], fontsize=7.5)
+heat_ax.set_yticks(range(len(layers)), [f"L{layer}" for layer in layers], fontsize=7.5)
+heat_ax.set_xlabel("denoise step", fontsize=9, color=INK, labelpad=2)
+heat_ax.set_ylabel("layer", fontsize=9, color=INK, labelpad=2)
+heat_ax.tick_params(length=3, width=0.8, colors=INK)
 
-# panel 4: five measured stages (Injection -> Outcome prediction -> Target-image
-# code -> Translation -> Output head), replacing the earlier two-box
-# schematic; the color language (teal = target-image code, red = translation
-# / velocity-code readout) is kept from the original two-code framing.
-ax3 = fig.add_subplot(gs[0, 3])
-ax3.set_xlim(0, 10)
-ax3.set_ylim(0, 10)
-ax3.axis("off")
-ax3.set_title("measured stages", fontsize=9, color=GRAY_D)
+# The coarse grid samples L48 and L54; mark the dense-sweep L52--54 band at L54.
+translation_row = layers.index(54)
+heat_ax.add_patch(Rectangle(
+    (-0.5, translation_row - 0.46), len(steps), 0.92,
+    facecolor=RED, edgecolor=RED, alpha=0.14, linewidth=1.3,
+))
+heat_ax.text(len(steps) - 0.55, translation_row, "translation",
+             fontsize=7, color="white", fontweight="bold", ha="right", va="center",
+             bbox=dict(boxstyle="round,pad=0.16", facecolor=RED,
+                       edgecolor="none", alpha=0.92))
 
+probe_row = layers.index(6)
+heat_ax.scatter(-0.64, probe_row, marker=">", s=22, color=TEAL,
+                edgecolor="white", linewidth=0.45, clip_on=False, zorder=5)
+heat_ax.annotate(
+    "probe-readable",
+    xy=(-0.58, probe_row), xycoords="data",
+    xytext=(-4, 10), textcoords="offset points",
+    fontsize=7, color=TEAL, ha="right", va="bottom",
+    arrowprops=dict(arrowstyle="-", color=TEAL, linewidth=0.7),
+    annotation_clip=False,
+)
+
+cax = fig.add_axes([
+    bbox.x0 + 0.82 * bbox.width,
+    heat_ax.get_position().y0,
+    0.035 * bbox.width,
+    heat_ax.get_position().height,
+])
+colorbar = fig.colorbar(image, cax=cax)
+colorbar.ax.tick_params(labelsize=7.5, length=2.5, width=0.8)
+colorbar.set_label("P(red car)", fontsize=8, color=INK, labelpad=4)
+
+# C: measured stages, using equal geometry and the exact paper terminology.
+panel_c = fig.add_subplot(outer[0, 2])
+panel_c.set_xlim(0, 1)
+panel_c.set_ylim(0, 1)
+panel_c.axis("off")
+panel_title(panel_c, "C", "Measured stages")
 stages = [
-    ("Injection", "$\\leq$L36", "(late text dispensable)", TEAL, 0.55),
-    ("Outcome prediction", "L6 / t2–4", None, TEAL, 0.72),
-    ("Target-image code", "L6–51", None, TEAL, 0.9),
-    ("Translation", "L52–54", None, RED, 0.85),
-    ("Output head", "L59", None, RED, 1.0),
+    ("Injection", "≤ L36", "#7BC1C9", INK),
+    ("Outcome prediction", "L6 / t2–4", "#42AAB6", "white"),
+    ("Target-image code", "L6–51", TEAL, "white"),
+    ("Translation", "L52–54", "#D46A55", "white"),
+    ("Output head", "L59", RED, "white"),
 ]
-box_h, gap, top = 1.28, 0.34, 9.15
-box_w = 8.6
-x0 = (10 - box_w) / 2
-y = top
-centers = []
-for name, rng, sub, color, alpha in stages:
-    y0 = y - box_h
-    ax3.add_patch(FancyBboxPatch((x0, y0), box_w, box_h,
-                                  boxstyle="round,pad=0.02,rounding_size=0.12",
-                                  facecolor=color, alpha=alpha, edgecolor="none"))
-    ax3.text(x0 + box_w / 2, y0 + box_h * 0.62, name, fontsize=6.8, color="white",
-              ha="center", va="center", fontweight="bold")
-    sub_txt = rng if sub is None else f"{rng}  {sub}"
-    ax3.text(x0 + box_w / 2, y0 + box_h * 0.24, sub_txt, fontsize=5.6,
-              color="white", ha="center", va="center")
-    centers.append((y0, y))
-    y = y0 - gap
-# down-arrows between consecutive boxes
-for (y0_prev, y1_prev), (y0_next, y1_next) in zip(centers[:-1], centers[1:]):
-    ax3.annotate("", xy=(x0 + box_w / 2, y0_next + box_h + 0.02),
-                 xytext=(x0 + box_w / 2, y0_prev - 0.02),
-                 arrowprops=dict(arrowstyle="-|>", color=GRAY_D, linewidth=1.0))
+box_x, box_w, box_h, gap = 0.06, 0.88, 0.145, 0.035
+top = 0.93
+for idx, (name, location, color, text_color) in enumerate(stages):
+    y = top - (idx + 1) * box_h - idx * gap
+    panel_c.add_patch(FancyBboxPatch(
+        (box_x, y), box_w, box_h,
+        boxstyle="round,pad=0.008,rounding_size=0.018",
+        facecolor=color, edgecolor="none",
+    ))
+    panel_c.text(box_x + box_w / 2, y + box_h * 0.64, name,
+                 fontsize=8, fontweight="bold", color=text_color,
+                 ha="center", va="center")
+    panel_c.text(box_x + box_w / 2, y + box_h * 0.28, location,
+                 fontsize=7.2, color=text_color, ha="center", va="center")
 
-fig.savefig(OUT_DIR / "fig1_teaser.pdf")
-fig.savefig(OUT_DIR / "fig1_teaser.png", dpi=200)
+fig.savefig(OUT_DIR / "fig1_teaser.pdf", facecolor="white")
+fig.savefig(OUT_DIR / "fig1_teaser.png", dpi=300, facecolor="white")
 print("saved fig1_teaser.pdf/png")
-print("grid P(red) L0..L59 rows x t0..t19 cols:")
-print(grid)

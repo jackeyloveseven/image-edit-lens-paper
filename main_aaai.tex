@@ -72,11 +72,15 @@ tested edits.
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=0.95\textwidth]{figs/fig2_method/fig2_method.pdf}
-	\caption{\textbf{Layer--time instrument.} Post-block residuals are
-		hooked on the concatenated image stream. \emph{Depth lens}: intermediate
-		state $\to$ frozen head $\to$ decode. \emph{Time lens}: step-$t$ head
-		output with $\hat{x}_0{=}x_t{-}\sigma_t v$. Both use decode-then-CLIP
-		readout on conditional and unconditional CFG passes alike.}
+	\caption{\textbf{Framework overview.} Frozen \model{} on a concatenated
+		noisy-target / clean-condition image stream with post-block residual
+		hooks (\texttt{bfloat16}). \emph{Read}: depth, time, tuned, and
+		differential lenses decode previews, then crop-level CLIP scoring on
+		matched true-CFG passes. \emph{Test}: linear probes plus ablate,
+		transplant, and steer interventions under predict--look--gate protocol.
+		\emph{Mechanism} (schematic): early decision and target-image code,
+		late L52--L54 translation into the velocity field; bottom: held-out
+		validation and training-free levers discussed in text.}
 	\label{fig:method}
 \end{figure*}
 

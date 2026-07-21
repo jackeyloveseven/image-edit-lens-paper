@@ -382,14 +382,9 @@ lens} (\S\ref{sec:depthlens}).
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{figs/fig2_method/fig2_method.pdf}
-  \caption{Method overview. The image stream concatenates noisy target
-  tokens with always-clean condition tokens (\texttt{zero\_cond\_t});
-  each block's post-block residual can be tapped and read two ways: the
-  \emph{depth lens} pushes it through the frozen output head before
-  decoding, the \emph{time lens} instead reads the current step's own
-  head output and combines it with the current latent
-  ($\hat{x}_0{=}x_t{-}\sigma_t v$). Both routes end in a decode-then-CLIP
-  readout, computed identically for both true-CFG passes.}
+  \caption{Framework overview (same as main paper Figure~2). Frozen editor,
+  four lenses with decode-then-CLIP readout, intervention probes,
+  schematic mechanism, and levers; see main text for definitions.}
   \label{fig:method}
 \end{figure}
 

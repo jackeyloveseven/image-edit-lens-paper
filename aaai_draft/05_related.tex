@@ -8,10 +8,13 @@ lens~\citep{belrose2023tuned} fits a small per-layer affine map instead.
 Both were built for autoregressive text models, where the unembedding
 gives every layer a shared, well-defined target vocabulary; a DiT
 editor has no such vocabulary; a patch's hidden state is not a
-distribution over anything until the whole network has run. We port
-both lens families to this setting -- staying on the frozen-head side
-for honesty and crossing to the learned side only to render the
-internal image -- with the linear representation
+distribution over anything until the whole network has run. Recent
+Jacobian-style grids likewise relate internal activations to output
+units along depth; we transpose that idea to layer--time readout cells
+(\S\ref{sec:method}) with decode-then-CLIP and linear probes on a frozen
+editor. We port both lens families to this setting -- staying on the
+frozen-head side for honesty and crossing to the learned side only to
+render the internal image -- with the linear representation
 hypothesis~\citep{park2024linear} licensing the informative
 disagreement between a frozen head and a probe.
 

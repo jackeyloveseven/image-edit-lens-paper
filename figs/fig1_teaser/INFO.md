@@ -44,6 +44,7 @@ A layer--time lens for a DiT image editor. Decoding the
 ## Generation
 
 - Script: `fig1_teaser.py` (run from this folder; regenerates the image from the data sources below)
+- Font: resolved at runtime in the order Source Sans 3 -> Arimo -> Arial/Helvetica -> DejaVu Sans; current build uses Arimo.
 
 - Data sources:
 

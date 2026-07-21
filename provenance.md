@@ -437,3 +437,27 @@ remains supplementary. A 2026 nearest-neighbor pass additionally added direct
 positioning against Breaking the Lock-in, DreamReader, Look But Don't Touch,
 multiple-mediator patching, Concept Spaces, and the ICLR massive-activation
 study; no visual data were changed by that citation/claim audit.
+
+## Main-figure v2 and compact summary tables (2026-07-21)
+
+Applied `FIGURE_REDESIGN_v2.md` to the four main-paper figures. All panel or row
+titles are centered over their own content regions; Fig. 1 now maps the dense
+L52--54 translation interval into the coarse heatmap by interpolating physical
+layer values rather than highlighting the full L54 row; Fig. 5 leaves 0.05
+headroom above the maximum probe accuracy. All four scripts resolve fonts in
+the order Source Sans 3, Arimo, Arial/Helvetica, DejaVu Sans and print the
+selected family; the current build selected Arimo and embeds CID TrueType fonts.
+
+Added two booktabs tables to `aaai_draft/20_experiments.tex`: `tab:early`
+summarizes fixed-prompt prediction, continuous hue, and held-out selection;
+`tab:generalize` summarizes same-lineage translation bands, early-to-terminal
+probe behavior, and cross-checkpoint transfer. Every value was transcribed from
+the pre-existing main text, supplement, and `OUTLINE.md`; no experiment was
+rerun and no result was inferred. The mechanism, boundary, and tuned-lens floats
+were moved from the Setup block to the same or adjacent page as first use.
+
+Final build state for this pass: `main_aaai.pdf` 9 pages with technical content
+ending on page 7 and references continuing through page 9; `supplement.pdf` 32
+pages; standalone `reproducibility_checklist.pdf` 2 pages. Main and supplement
+have zero overfull boxes, undefined references, and Type 3 fonts. The checklist
+remains a separate upload and is no longer input into `main_aaai.tex`.

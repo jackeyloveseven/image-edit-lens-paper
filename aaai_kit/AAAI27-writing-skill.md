@@ -38,7 +38,7 @@
 
 - 版式：双栏（two-column），US Letter（8.5 × 11 inch），PDF，Type 1 / TrueType 字体。
 - **正文（技术内容）最多 7 页**，包含：Abstract、Introduction、Related Work、Method、Experiments、Conclusion 及其中所有图表。
-- **参考文献（References）不计入 7 页**，可另起页数，不限长度。
+- **参考文献（References）不计入 7 页技术内容**，但主 PDF 总长最多 9 页，即 references 最多额外 2 页。
 - **Reproducibility Checklist 不计入正文页数**，单独上传。
 - Acknowledgements 投稿版必须删除，仅 Camera-ready 版可加入。
 

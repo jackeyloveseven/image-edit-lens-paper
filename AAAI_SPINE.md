@@ -1,9 +1,10 @@
 # AAAI-27 投稿脊柱决策 (spine lock)
 
-目标: AAAI-27 主赛道, double-blind, 正文 7 页硬上限 (references 不计入、可另起页数不限长度,
-当前 1 页, 现总 8pp), supplementary 独立 PDF (审稿人无义务读 → 主线每个数字必须正文自证)。
+目标: AAAI-27 主赛道, double-blind, 正文 7 页硬上限，主 PDF 最多另含 2 页 references。
+当前 `main_aaai.pdf` 共 9 页，技术内容与 Conclusion 均止于第 7 页，References 从第 7 页底部延续至第 9 页。
+Supplementary 独立 PDF (审稿人无义务读 → 主线每个数字必须正文自证)。
 Reproducibility Checklist 不计入正文页数且需**独立提交**(不合并进 main PDF, 2026-07-14 修正,
-见 AAAI_HANDOFF.md §4 坑 1)。
+见 `AAAI_HANDOFF.md` §1/§5)。
 截止: abstract 2026-07-21 AoE / full paper 2026-07-28 AoE。
 
 ## 单一最强贡献 (the one line reviewers should remember)

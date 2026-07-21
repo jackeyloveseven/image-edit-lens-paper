@@ -36,6 +36,7 @@ A dense, every-layer sweep of \emph{car\_red} over L44--L59
 ## Generation
 
 - Script: `fig10_boundary.py` (run from this folder; regenerates the image from the data sources below)
+- Font: resolved at runtime in the order Source Sans 3 -> Arimo -> Arial/Helvetica -> DejaVu Sans; current build uses Arimo.
 
 - Data sources:
 

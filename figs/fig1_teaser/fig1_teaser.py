@@ -7,20 +7,38 @@ import matplotlib
 from matplotlib import font_manager
 
 matplotlib.use("Agg")
-for font_file in (
-    "/usr/share/fonts/truetype/croscore/Arimo-Regular.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Bold.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Italic.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-BoldItalic.ttf",
-):
-    font_manager.fontManager.addfont(font_file)
+
+
+def resolve_font_family():
+    candidates = ("Source Sans 3", "Arimo", "Arial", "Helvetica", "DejaVu Sans")
+    font_files = sorted(set(
+        font_manager.findSystemFonts(fontext="ttf")
+        + font_manager.findSystemFonts(fontext="otf")
+    ))
+    by_family = {}
+    for font_file in font_files:
+        try:
+            family = font_manager.FontProperties(fname=font_file).get_name()
+        except (OSError, RuntimeError):
+            continue
+        by_family.setdefault(family, []).append(font_file)
+    for family in candidates:
+        if family in by_family:
+            for font_file in by_family[family]:
+                font_manager.fontManager.addfont(font_file)
+            return family
+    return "DejaVu Sans"
+
+
+FONT_FAMILY = resolve_font_family()
+print(f"font: {FONT_FAMILY}")
 matplotlib.rcParams.update({
-    "font.family": "Arimo",
+    "font.family": FONT_FAMILY,
     "font.size": 8,
     "mathtext.fontset": "custom",
-    "mathtext.rm": "Arimo",
-    "mathtext.it": "Arimo:italic",
-    "mathtext.bf": "Arimo:bold",
+    "mathtext.rm": FONT_FAMILY,
+    "mathtext.it": f"{FONT_FAMILY}:italic",
+    "mathtext.bf": f"{FONT_FAMILY}:bold",
     "pdf.fonttype": 42,
     "ps.fonttype": 42,
     "axes.linewidth": 0.9,
@@ -37,6 +55,9 @@ TEAL = "#0F8FA0"
 INK = "#222222"
 MUTE = "#6B6B6B"
 GRID_BG = "#F5F5F5"
+TRANSLATION_LO = 52
+TRANSLATION_HI = 54
+BAND_ALPHA = 0.13
 
 DATA_ROOT = Path("/home/ubuntu/chengyanli/image-edit-lens")
 OUT_DIR = Path(__file__).resolve().parent
@@ -57,10 +78,9 @@ edited = Image.open(DATA_ROOT / "runs/wp3_car_red/edited.png")
 
 
 def panel_title(ax, letter, title):
-    ax.text(-0.06, 1.075, letter, transform=ax.transAxes, fontsize=10,
-            fontweight="bold", color=INK, ha="left", va="bottom")
-    ax.text(0.02, 1.075, title, transform=ax.transAxes, fontsize=10,
-            fontweight="bold", color=INK, ha="left", va="bottom")
+    ax.text(0.5, 1.075, f"{letter}  {title}", transform=ax.transAxes,
+            fontsize=10, fontweight="bold", color=INK,
+            ha="center", va="bottom")
 
 
 fig = plt.figure(figsize=(7.05, 2.72), facecolor="white")
@@ -99,7 +119,7 @@ fig.patches.append(FancyArrowPatch(
     clip_on=False,
 ))
 fig.text((left_box.x1 + right_box.x0) / 2, mid_y + 0.045, "edit",
-         fontsize=6.5, color=MUTE, ha="center", va="bottom")
+         fontsize=7, color=MUTE, ha="center", va="bottom")
 fig.text((left_box.x0 + right_box.x1) / 2, min(left_box.y0, right_box.y0) - 0.045,
          "car_red", fontsize=7, color=MUTE, ha="center", va="top")
 
@@ -125,13 +145,15 @@ heat_ax.set_xlabel("denoise step", fontsize=9, color=INK, labelpad=2)
 heat_ax.set_ylabel("layer", fontsize=9, color=INK, labelpad=2)
 heat_ax.tick_params(length=3, width=0.8, colors=INK)
 
-# The coarse grid samples L48 and L54; mark the dense-sweep L52--54 band at L54.
-translation_row = layers.index(54)
-heat_ax.add_patch(Rectangle(
-    (-0.5, translation_row - 0.46), len(steps), 0.92,
-    facecolor=RED, edgecolor=RED, alpha=0.14, linewidth=1.3,
-))
-heat_ax.text(len(steps) - 0.55, translation_row, "translation",
+# Interpolate physical layer values onto the coarse heatmap's row coordinates.
+translation_top = np.interp(TRANSLATION_LO, layers, np.arange(len(layers)))
+translation_bottom = np.interp(TRANSLATION_HI, layers, np.arange(len(layers)))
+heat_ax.axhspan(
+    translation_top, translation_bottom,
+    facecolor=RED, edgecolor=RED, alpha=BAND_ALPHA, linewidth=1.3,
+)
+heat_ax.text(len(steps) - 0.55, (translation_top + translation_bottom) / 2,
+             "translation",
              fontsize=7, color="white", fontweight="bold", ha="right", va="center",
              bbox=dict(boxstyle="round,pad=0.16", facecolor=RED,
                        edgecolor="none", alpha=0.92))

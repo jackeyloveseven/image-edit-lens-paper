@@ -44,6 +44,7 @@ A tuned lens renders the internal image the frozen head
 
 - Script: `fig12_tuned_lens.py` (recomposes the preserved 512px cells into
   the symmetric 2x3 main-paper layout; no model rerun is required).
+- Font: resolved at runtime in the order Source Sans 3 -> Arimo -> Arial/Helvetica -> DejaVu Sans; current build uses Arimo.
 
 - Data sources:
 

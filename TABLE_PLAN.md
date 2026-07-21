@@ -4,6 +4,11 @@
 > 画法遵循 [nature-skills](https://github.com/Yuan1z0825/nature-skills) 中 `nature-writing/references/experiments.md` 的表格规则，并适配 AAAI 双栏版式。  
 > 不含 Table C（levers）与 taxonomy 上提；那些仍留 supplement 或后续可选。
 
+> **实施状态（2026-07-21）**：已完成。`tab:early` 与 `tab:generalize` 已加入
+> `aaai_draft/20_experiments.tex`，caption 在上、booktabs、无竖线；重复数字已压缩。
+> Table B 为适配单栏改成四列紧凑版，但保留计划中的 boundary、early/L59 probe、transfer 和 direction cosine。
+> 主稿技术内容仍止于第 7 页，0 overfull / undefined。
+
 ---
 
 ## 0. 总规则（nature-skills × AAAI）

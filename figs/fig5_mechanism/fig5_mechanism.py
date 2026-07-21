@@ -8,20 +8,38 @@ import matplotlib
 from matplotlib import font_manager
 
 matplotlib.use("Agg")
-for font_file in (
-    "/usr/share/fonts/truetype/croscore/Arimo-Regular.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Bold.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Italic.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-BoldItalic.ttf",
-):
-    font_manager.fontManager.addfont(font_file)
+
+
+def resolve_font_family():
+    candidates = ("Source Sans 3", "Arimo", "Arial", "Helvetica", "DejaVu Sans")
+    font_files = sorted(set(
+        font_manager.findSystemFonts(fontext="ttf")
+        + font_manager.findSystemFonts(fontext="otf")
+    ))
+    by_family = {}
+    for font_file in font_files:
+        try:
+            family = font_manager.FontProperties(fname=font_file).get_name()
+        except (OSError, RuntimeError):
+            continue
+        by_family.setdefault(family, []).append(font_file)
+    for family in candidates:
+        if family in by_family:
+            for font_file in by_family[family]:
+                font_manager.fontManager.addfont(font_file)
+            return family
+    return "DejaVu Sans"
+
+
+FONT_FAMILY = resolve_font_family()
+print(f"font: {FONT_FAMILY}")
 matplotlib.rcParams.update({
-    "font.family": "Arimo",
+    "font.family": FONT_FAMILY,
     "font.size": 8,
     "mathtext.fontset": "custom",
-    "mathtext.rm": "Arimo",
-    "mathtext.it": "Arimo:italic",
-    "mathtext.bf": "Arimo:bold",
+    "mathtext.rm": FONT_FAMILY,
+    "mathtext.it": f"{FONT_FAMILY}:italic",
+    "mathtext.bf": f"{FONT_FAMILY}:bold",
     "pdf.fonttype": 42,
     "ps.fonttype": 42,
     "axes.linewidth": 0.9,
@@ -89,10 +107,10 @@ for row_idx, (layer, semantic) in enumerate(rows):
                 bbox=dict(boxstyle="round,pad=0.12", facecolor="white",
                           edgecolor="#D0D0D0", linewidth=0.35, alpha=0.92))
 
-fig.text(0.035, 0.95, "A", fontsize=10, fontweight="bold", color=INK,
-         ha="left", va="top")
-fig.text(0.062, 0.95, "Decode conventions", fontsize=10, fontweight="bold",
-         color=INK, ha="left", va="top")
+panel_a_box = outer[0, 0].get_position(fig)
+fig.text((panel_a_box.x0 + panel_a_box.x1) / 2, 0.95,
+         "A  Decode conventions", fontsize=10, fontweight="bold",
+         color=INK, ha="center", va="top")
 
 # B: probe-accuracy heatmap at the same total height.
 with open(ROOT / "runs" / "d2_probe" / "accuracy_grid.json", encoding="utf-8") as f:
@@ -128,10 +146,10 @@ ax_b.add_patch(Rectangle(
     (headline_col - 0.5, headline_row - 0.5), 1, 1,
     fill=False, edgecolor=RED, linewidth=1.8,
 ))
-fig.text(ax_b.get_position().x0, 0.95, "B", fontsize=10, fontweight="bold",
-         color=INK, ha="left", va="top")
-fig.text(ax_b.get_position().x0 + 0.027, 0.95, "Early probe", fontsize=10,
-         fontweight="bold", color=INK, ha="left", va="top")
+panel_b_box = outer[0, 1].get_position(fig)
+fig.text((panel_b_box.x0 + panel_b_box.x1) / 2, 0.95,
+         "B  Early probe", fontsize=10, fontweight="bold",
+         color=INK, ha="center", va="top")
 
 position = ax_b.get_position()
 cax = fig.add_axes([position.x1 + 0.009, position.y0, 0.012, position.height])

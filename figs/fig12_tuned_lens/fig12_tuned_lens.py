@@ -7,15 +7,33 @@ import matplotlib
 from matplotlib import font_manager
 
 matplotlib.use("Agg")
-for font_file in (
-    "/usr/share/fonts/truetype/croscore/Arimo-Regular.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Bold.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-Italic.ttf",
-    "/usr/share/fonts/truetype/croscore/Arimo-BoldItalic.ttf",
-):
-    font_manager.fontManager.addfont(font_file)
+
+
+def resolve_font_family():
+    candidates = ("Source Sans 3", "Arimo", "Arial", "Helvetica", "DejaVu Sans")
+    font_files = sorted(set(
+        font_manager.findSystemFonts(fontext="ttf")
+        + font_manager.findSystemFonts(fontext="otf")
+    ))
+    by_family = {}
+    for font_file in font_files:
+        try:
+            family = font_manager.FontProperties(fname=font_file).get_name()
+        except (OSError, RuntimeError):
+            continue
+        by_family.setdefault(family, []).append(font_file)
+    for family in candidates:
+        if family in by_family:
+            for font_file in by_family[family]:
+                font_manager.fontManager.addfont(font_file)
+            return family
+    return "DejaVu Sans"
+
+
+FONT_FAMILY = resolve_font_family()
+print(f"font: {FONT_FAMILY}")
 matplotlib.rcParams.update({
-    "font.family": "Arimo",
+    "font.family": FONT_FAMILY,
     "font.size": 8,
     "pdf.fonttype": 42,
     "ps.fonttype": 42,
@@ -63,10 +81,8 @@ for row_idx, (letter, heading) in enumerate((
 )):
     header = fig.add_subplot(grid[row_idx * 2, :])
     header.axis("off")
-    header.text(0.0, 0.55, letter, fontsize=10, fontweight="bold",
-                color=INK, ha="left", va="center")
-    header.text(0.075, 0.55, heading, fontsize=10, fontweight="bold",
-                color=INK, ha="left", va="center")
+    header.text(0.5, 0.55, f"{letter}  {heading}", fontsize=10,
+                fontweight="bold", color=INK, ha="center", va="center")
 
     for col_idx, (path, label, border, badge) in enumerate(rows[row_idx]):
         ax = fig.add_subplot(grid[row_idx * 2 + 1, col_idx])

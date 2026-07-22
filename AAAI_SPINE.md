@@ -1,7 +1,7 @@
 # AAAI-27 投稿脊柱决策 (spine lock)
 
 目标: AAAI-27 主赛道, double-blind, 正文 7 页硬上限，主 PDF 最多另含 2 页 references。
-当前 `main_aaai.pdf` 共 9 页，技术内容与 Conclusion 均止于第 7 页，References 从第 7 页底部延续至第 9 页。
+当前 `main_aaai.pdf` 共 8 页，技术内容与 Conclusion 均止于第 7 页，References 从第 7 页底部延续至第 8 页。
 Supplementary 独立 PDF (审稿人无义务读 → 主线每个数字必须正文自证)。
 Reproducibility Checklist 不计入正文页数且需**独立提交**(不合并进 main PDF, 2026-07-14 修正,
 见 `AAAI_HANDOFF.md` §1/§5)。
@@ -24,12 +24,12 @@ L52-54 带里,才把内部目标图像码翻译成绘制用的速度场。因为
    三种不同的解离,各自定位。[result, 深化]
 5. **普适 (回应最大质疑=外部效度)**: L52-54 边界 edit-family 通用 + 独立
    fine-tune (FireRed) + 4 步蒸馏 (Rapid-AIO) 复现。压成 2 段 + 1 图。[defense]
-6. **应用 (so-what)**: 只留最干净的一个——CFG 截断 step 2 后省 45% forward passes,
-   四类编辑视觉完好 (CFG 真作用=范围解析非决定编辑)。其余杠杆进 supp。[so-what]
+6. **应用 (so-what)**: CFG 截断 step 2 后省 45% forward passes；另以单栏图保留
+   15%-NFE differential preview，展示机制可直接用于候选编辑预览。[so-what]
 
 ## 下沉 supplementary (独立 PDF)
-tuned-lens 完整推导 · differential lens · 15%-NFE preview · **C21-C28 迁移梯/
-σ-索引/非线性容量曲线全链** · recompose (masks are the carrier) · rank-ladder
+tuned-lens 完整推导 · differential lens 全量电池 · **C21-C28 迁移梯/
+σ-索引/非线性容量曲线全链** · recompose 完整剂量梯 · rank-ladder
 物体身份 shells · 全 20-case battery · massive-activations 方法学警示 ·
 mask-steer 免 donor 杠杆 · saliency 修复 · 4 处自纠错完整叙事。
 
@@ -38,12 +38,14 @@ scrub 掉: yata-image-publics.flowgpt.com / R2 bucket 名 / 任何 GitHub / "we 
 at <url>" / showcase 页引用 → 全部 "anonymized" 或 "released upon acceptance"。
 确认 AAAI-27 主赛道 double-blind (提交说明) + [submission] 模式加行号/隐作者块。
 
-## 图预算 (正文最多 4-5 张; 选进正文的 2-3MB PNG 转 PDF/压 JPEG)
-- Fig1 teaser (layer-time grid + 五阶段回路)
-- Fig2 method (lens + 三原语 schematic)
-- Fig3 tuned-lens 渲染内部图像 + L52-54 边界 (可能合并 depth/mechanism)
-- Fig4 三解离 or 跨模型边界一致
-- (应用小图可并入或进 supp)
+## 图预算（当前 7 张；仅 method framework 跨栏）
+- Fig1 teaser：单栏，五阶段主线
+- Fig2 method：唯一跨栏图，lens + 三原语 schematic
+- Fig3 mechanism：单栏，早期 probe 与 decode convention
+- Fig4 boundary：单栏，L52--54 锐边界
+- Fig5 tuned lens：单栏，内部图像与 anti-image
+- Fig6 carrier：单栏，bbox 失败 vs silhouette 成功
+- Fig7 preview：单栏，15%-NFE differential preview
 
 ---
 

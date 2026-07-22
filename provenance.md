@@ -461,3 +461,18 @@ ending on page 7 and references continuing through page 9; `supplement.pdf` 32
 pages; standalone `reproducibility_checklist.pdf` 2 pages. Main and supplement
 have zero overfull boxes, undefined references, and Type 3 fonts. The checklist
 remains a separate upload and is no longer input into `main_aaai.tex`.
+
+## Main-paper single-column layout and evidence promotion (2026-07-21)
+
+Converted every main-paper figure except the layer--time method framework to a
+single-column float. Promoted two load-bearing supplementary visuals into the
+main paper without rerunning experiments: a four-panel crop of
+`i1d_recompose_grid.jpg` for the carrier-bound writability claim, and
+`fig15_preview_lever.jpg` for the differential preview at 15% NFE. The full
+dose ladders, batteries, and diagnostic chains remain supplementary.
+
+The rebuilt `main_aaai.pdf` is 8 pages: technical content and Conclusion end on
+page 7, and References continue through page 8. Validation reports zero
+overfull boxes, undefined references, and Type 3 fonts. Visual inspection
+covered all seven figures at page scale; only the method framework spans both
+columns.

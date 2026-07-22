@@ -122,25 +122,29 @@ on the images themselves, and we are explicit about where the lens is
 unreliable.
 % END expanded input: aaai_draft/00_intro
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.95\textwidth]{figs/fig1_teaser/fig1_teaser.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig1_teaser/fig1_teaser.pdf}
   \caption{\textbf{Predictable early, translated late.} \textbf{A}: source
   and realized edit. \textbf{B}: frozen-head $P(\text{red car})$ across
   layer and step; the outcome is probe-readable at L6, but translation
   into the head-readable velocity convention occurs at L52--54.
   \textbf{C}: the five measured stages used throughout the paper.}
   \label{fig:teaser}
-\end{figure*}
+\end{figure}
 
 \begin{figure*}[t]
 	\centering
 	\includegraphics[width=0.95\textwidth]{figs/fig2_method/fig2_method.pdf}
-	\caption{\textbf{Layer--time instrument.} Post-block residuals are
-		hooked on the concatenated image stream. \emph{Depth lens}: intermediate
-		state $\to$ frozen head $\to$ decode. \emph{Time lens}: step-$t$ head
-		output with $\hat{x}_0{=}x_t{-}\sigma_t v$. Both use decode-then-CLIP
-		readout on conditional and unconditional CFG passes alike.}
+	\caption{\textbf{Framework overview.} Frozen \model{} on a concatenated
+		noisy-target / clean-condition image stream with post-block residual
+		hooks (\texttt{bfloat16}). \emph{Read}: depth, time, tuned, and
+		differential lenses decode previews, then crop-level CLIP scoring on
+		matched true-CFG passes. \emph{Test}: linear probes plus ablate,
+		transplant, and steer interventions under predict--look--gate protocol.
+		\emph{Mechanism} (schematic): early decision and target-image code,
+		late L52--L54 translation into the velocity field; bottom: held-out
+		validation and training-free levers discussed in text.}
 	\label{fig:method}
 \end{figure*}
 
@@ -155,10 +159,13 @@ lens~\citep{belrose2023tuned} fits a small per-layer affine map instead.
 Both were built for autoregressive text models, where the unembedding
 gives every layer a shared, well-defined target vocabulary; a DiT
 editor has no such vocabulary; a patch's hidden state is not a
-distribution over anything until the whole network has run. We port
-both lens families to this setting -- staying on the frozen-head side
-for honesty and crossing to the learned side only to render the
-internal image -- with the linear representation
+distribution over anything until the whole network has run. Recent
+Jacobian-style grids likewise relate internal activations to output
+units along depth; we transpose that idea to layer--time readout cells
+(\S\ref{sec:method}) with decode-then-CLIP and linear probes on a frozen
+editor. We port both lens families to this setting -- staying on the
+frozen-head side for honesty and crossing to the learned side only to
+render the internal image -- with the linear representation
 hypothesis~\citep{park2024linear} licensing the informative
 disagreement between a frozen head and a probe.
 
@@ -231,72 +238,118 @@ zero-shot alternative.
 % ===== AAAI-27 spine draft: Method (~1.3 col-page target) =====
 \section{Proposed Method: A Layer--Time Lens and Intervention Probes}\label{sec:method}
 
-We study \model{}, a 60-block DiT editor whose image stream concatenates
-noisy target tokens with always-clean condition tokens
-(Figure~\ref{fig:method}). All quantities below are read from the
+Figure~\ref{fig:method} summarizes the full pipeline; here we specify each
+component. We study \model{}, a 60-block DiT editor whose image stream
+concatenates noisy target tokens with always-clean condition tokens. All
+quantities below are read from the
 \emph{post-block residual} of selected blocks via forward hooks,
 captured in the model's native \texttt{bfloat16}: image-stream
 activations reach absmax ${\sim}3{\times}10^{9}$ even at layer 0, so a cast
 to \texttt{float16} silently overflows most elements to \texttt{inf}
 (bf16 capture is a lossless copy, not a downcast).
 
-\paragraph{Four lenses.} The \emph{time lens} decodes the flow-matching
-clean-image estimate $\hat{x}_0 = x_t - \sigma_t v_\theta(x_t,t)$ through
-the VAE at step $t$: what the model currently believes it will output.
-The \emph{depth lens} asks the analogous question across \emph{depth}: it
-feeds an intermediate layer's hidden state through the model's own frozen
-final head (a non-affine \texttt{AdaLayerNormContinuous} + linear
-\texttt{proj\_out}, bit-exact identical whether invoked at layer 59 or
-re-invoked earlier) and decodes the resulting pseudo-velocity to an
-$\hat x_0$ preview. Because that head's LayerNorm is non-affine, rescaling
-an intermediate state to the terminal norm is a no-op in principle and in
-practice (raw vs.\ rescaled agree to \texttt{max\_rel\_diff}$=0$) -- the
-\emph{raw} head is the honest lens, with a standing self-consistency gate
-on every grid we report. The
-\emph{tuned lens}~\citep{belrose2023tuned} crosses to the learned side for
-one purpose -- rendering the mid-stack code back into an \emph{image} at
-every depth: a per-(layer, timestep) ridge regression from the hidden
-state ($3072$-d) to the conditional-pass velocity ($64$-d), one dictionary
-per cell, $\hat v_{\ell,t}=W_{\ell,t}h+b_{\ell,t}$ solved in closed form
-after centering ($W_{\ell,t}=V^\top H(H^\top H+\lambda I)^{-1}$), with
-$\lambda$ selected per cell on a held-out $10\%$ \emph{token} split --
-distinct from the zero-shot test below, which holds out an entire edit
-family and source image (full hyperparameters in the supplement).
+\paragraph{Notation and layer--time readout.}
+Let $h_{\ell,t}^{(i)}\!\in\!\mathbb{R}^{d}$ denote the post-block residual
+after block $\ell\!\in\!\{0,\ldots,59\}$ at denoising step $t$, for
+image-stream row $i$ (target patch, condition patch, or a hooked subset);
+$h_{\ell,t}$ stacks the rows we capture.
+Logit- and Jacobian-style lenses in language models align internal states
+with output units along depth and token position; a DiT patch has no
+vocabulary, so we define a \emph{layer--time lens} as a map from
+$(\ell,t)$ to a score on a fixed grid:
+\begin{equation}
+  \mathcal{M}_{\ell,t}
+  \;=\;
+  \mathcal{R}\!\bigl(\mathcal{D}(\mathcal{L}_{\ell,t}(h_{\ell,t}))\bigr),
+  \label{eq:lens-grid}
+\end{equation}
+where $\mathcal{L}_{\ell,t}$ is one of the lens operators below,
+$\mathcal{D}$ is VAE decode when $\mathcal{L}$ returns a latent velocity,
+and $\mathcal{R}$ crops the edited region and applies CLIP~\citep{radford2021clip}
+over labels $\{y_k\}$,
+\begin{equation}
+  [\mathcal{M}_{\ell,t}]_k
+  \;=\;
+  \mathrm{softmax}_k\!\Bigl(
+    \mathrm{CLIP}\!\bigl(y_k,\,\mathrm{crop}(\mathcal{D}(\cdot))\bigr)
+  \Bigr).
+  \label{eq:clip-readout}
+\end{equation}
+Figures~\ref{fig:teaser} and~\ref{fig:method} instantiate
+\eqref{eq:lens-grid}--\eqref{eq:clip-readout}: the image-editor analogue of
+lexical alignment grids in logit/Jacobian-lens visualizations, not a full
+$\partial \mathbf{y}/\partial h$ (a donor-scalar Jacobian basis is tested in
+the supplement and does not coincide with probe or write directions).
 
-\paragraph{A differential lens.} The tuned lens renders the whole
-internal image; to isolate the \emph{edit} from the reconstruction, we
-additionally difference it against a control. We run the same source and
-seed twice -- once with the edit prompt, once with the literal
-instruction ``keep the image unchanged'' -- and decode both through the
-same frozen dictionaries (no refit). Because the two runs share a seed,
-their step-0 latents are bit-identical, so
-$D_{\ell,t}=|\text{decode}(h_\ell^{\text{edit}})-\text{decode}(h_\ell^{\text{unchanged}})|$
-isolates the internal edit plan, the reconstruction cancelling by
-construction. A control-fidelity gate -- the correlation between the
-no-op run and the untouched source -- flags the rare case where the model
-cannot leave an image alone before any differential number is trusted.
+\paragraph{Lens operators.}
+The \emph{time lens} uses the terminal head output at step $t$:
+\begin{equation}
+  \hat{x}_0(x_t,t) = x_t - \sigma_t\, v_\theta(x_t,t),
+  \label{eq:time-lens}
+\end{equation}
+decoded through the VAE---what the model currently believes it will output.
+The \emph{depth lens} asks the same question at intermediate depth by
+re-invoking the model's frozen output head (non-affine
+\texttt{AdaLayerNormContinuous} + linear \texttt{proj\_out}, bit-exact
+whether invoked at layer 59 or earlier):
+\begin{equation}
+  v_{\ell,t} = \mathrm{Head}(h_{\ell,t}),
+  \qquad
+  \hat{x}_{0,\ell,t} = x_t - \sigma_t\, v_{\ell,t},
+  \label{eq:depth-lens}
+\end{equation}
+then $\mathcal{D}(\hat{x}_{0,\ell,t})$.
+Because \texttt{norm\_out} has no learned scale, rescaling $h_{\ell,t}$ to
+the terminal norm is a no-op (raw vs.\ rescaled agree to
+\texttt{max\_rel\_diff}$=0$); we use the raw head everywhere with a
+standing self-consistency gate on every grid.
+The \emph{tuned lens}~\citep{belrose2023tuned} fits a per-$(\ell,t)$ ridge map
+from $d{=}3072$ hidden dimensions to the $64$-d conditional-pass velocity,
+one dictionary per cell,
+\begin{equation}
+  \hat{v}_{\ell,t} = W_{\ell,t} h_{\ell,t} + b_{\ell,t},
+  \quad
+  W_{\ell,t} = V^\top H (H^\top H + \lambda I)^{-1},
+  \label{eq:tuned-lens}
+\end{equation}
+after token-wise centering; $\lambda$ is chosen per cell on a held-out
+$10\%$ \emph{token} split, distinct from zero-shot tests that hold out an
+entire edit family and source image (hyperparameters in the supplement).
+The \emph{differential lens} differences edit and control runs that share a
+seed (step-0 latents are then bit-identical):
+\begin{equation}
+  D_{\ell,t}
+  = \bigl|\mathcal{D}(\mathcal{L}_{\ell,t}(h^{\mathrm{edit}}_{\ell,t}))
+  - \mathcal{D}(\mathcal{L}_{\ell,t}(h^{\mathrm{ctrl}}_{\ell,t}))\bigr|,
+  \label{eq:diff-lens}
+\end{equation}
+isolating the internal edit plan when the unchanged prompt is a faithful
+no-op; a control-fidelity gate on correlation with the source flags cases
+where it is not.
 
-\paragraph{Semantic readout.} Neither lens is itself a score; each
-produces an image. We crop the edited region and score it zero-shot
-against a small bank of natural-language labels with
-CLIP~\citep{radford2021clip}, reporting the target-label probability. This
-is a whole-crop judgment, not a per-patch one, and inherits CLIP's failure
-modes on out-of-distribution previews; we gate on decode coherence and
-flag every violation.
+\paragraph{Linear probes.}
+Neither \eqref{eq:clip-readout} nor a lens image is itself a causal claim.
+We additionally fit a lightweight probe
+$p(y \mid h_{\ell,t}) = \mathrm{softmax}(W h_{\ell,t})$ on hidden states
+(cross-seed evaluation), reading the same $(\ell,t)$ grid in label space
+rather than pixel space---the basis mismatch against the frozen head in
+\eqref{eq:depth-lens} is central to our mechanism results.
 
-\paragraph{Intervention probes.} Reading a lens shows the representation is
-\emph{consistent with} a hypothesis, not that it is \emph{causal}. Three
-interventions, all forward-hook overwrites of the post-block residual,
-test distinct intervention-specific properties. \textbf{Ablate}: zero or
-mean-replace selected target rows at selected layers (an empty spec
-reproduces the baseline bit-for-bit); because repeated row replacement
-can be off-manifold, we use it only as a coarse stress test.
-\textbf{Transplant}: overwrite a recipient run's rows with a donor run's,
-matched by layer/step/patch -- testing \emph{sufficiency}.
-\textbf{Steer}: add a probe direction $\alpha\,d$ (in units of per-row RMS)
-without a donor pass -- testing \emph{linear writability}. All three are
-applied identically to both CFG passes to isolate the intervention rather
-than a lopsided guidance combination.
+\paragraph{Intervention probes.}
+Three forward-hook overwrites of the post-block residual test distinct
+properties, applied identically to both CFG passes:
+\begin{align}
+  h &\leftarrow \mathbf{0}\ \text{or}\ \bar{h}
+  && \text{(ablate: necessity stress test)}, \nonumber \\
+  h^{(\mathrm{rec})} &\leftarrow h^{(\mathrm{don})}
+  && \text{(transplant: sufficiency)}, \nonumber \\
+  h &\leftarrow h + \alpha d
+  && \text{(steer: linear writability)},
+  \label{eq:interventions}
+\end{align}
+with $\alpha$ in units of per-row RMS and $d$ a probe direction; an empty
+ablation spec reproduces the baseline bit-for-bit. Repeated ablation can
+drive activations off-manifold, so we treat it only as a coarse stress test.
 
 \paragraph{Protocol: predict, look, gate.} Three rules make the
 \emph{reasoning} reproducible, not just the runs. \textbf{Predict, then
@@ -376,15 +429,15 @@ $0.667$ balanced accuracy (chance $0.333$; $p{=}0.002$). Thus the outcome,
 not merely the instruction, is linearly predictable early; this does not
 claim irreversible commitment.
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.93\textwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
   \caption{\textbf{Decode convention flips; the probe reads early.}
   \textbf{A}: four \emph{car\_red} decodes reverse convention between L24
   and L59. \textbf{B}: the 3-way probe reaches $0.883$ at L6/$t$4 while
   the frozen head still reads noise (chance $0.33$).}
   \label{fig:mechanism}
-\end{figure*}
+\end{figure}
 
 \paragraph{Prediction generalizes and supports selection.}
 Table~\ref{tab:early} summarizes continuous-hue replications and held-out
@@ -461,15 +514,15 @@ events sharing a neighborhood: the target-image code survives the
 translation intact and is degraded only by the final, velocity-specific
 projection.
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig10_boundary/fig10_boundary.pdf}
   \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
   \emph{car\_red}. \textbf{A--B}: decode crossover and velocity alignment
   change in the same band at $t{=}4,16$. \textbf{C}: probe accuracy stays
   flat through L58 and drops only at L59.}
   \label{fig:boundary}
-\end{figure*}
+\end{figure}
 
 \paragraph{A tuned lens renders the internal image, layer by layer.} To
 confirm the mid-stack code is a genuine \emph{image} rather than a probe
@@ -531,13 +584,27 @@ steered region is not a recolored car but a flat red patch that
 \emph{replaces} the car's geometry -- the direction installs \emph{which}
 hue, not \emph{where to stop}. Supplying that missing ``where'' with the
 edited object's own silhouette mask turns every previously-failing dose
-into a clean in-place recolor. And conjuring an \emph{object} outruns any single direction: the
+into a clean in-place recolor (Figure~\ref{fig:carrier}). And conjuring an
+\emph{object} outruns any single direction: the
 identity probe direction is inert (the read and write subspaces
 differ), while a rank ladder over the donor$-$recipient difference
 resolves identity coarse-to-fine -- category at rank 1, a coherent
 instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
 dimension). The read and write subspaces differ, and a writable attribute
 still requires a spatial carrier.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.48\columnwidth,viewport=0 363 364 726,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\hfill
+  \includegraphics[width=0.48\columnwidth,viewport=1094 363 1458 726,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\\[-1pt]
+  \includegraphics[width=0.48\columnwidth,viewport=729 0 1094 363,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\hfill
+  \includegraphics[width=0.48\columnwidth,viewport=1094 0 1458 363,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}
+  \caption{\textbf{A spatial carrier restores clean writability.}
+  Steering red inside a bounding box eventually overwrites the car with a
+  flat patch (top); the same direction restricted to the car silhouette
+  preserves geometry across effective doses (bottom).}
+  \label{fig:carrier}
+\end{figure}
 
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
@@ -571,7 +638,7 @@ footprint, we ask whether it does so early enough to be useful. At step 2
 control-fidelity gate, $r\in[0.86,0.99]$), the median IoU between
 $D_{\text{L52},t2}$'s top mass and the true edit region is $0.33$,
 $6.6\times$ chance, and all 10 cases sharpen from step 0 to step 2
-(figure in the supplement): an object slated for removal lights up as a
+(Figure~\ref{fig:preview}): an object slated for removal lights up as a
 ghost, a keep-vs-replace background segmentation emerges unsupervised, and
 a tiny recolor glows at its exact site. Because the no-op control is
 \emph{independent of the edit prompt}, it is computed once per source
@@ -579,6 +646,16 @@ image and cached; previewing a \emph{candidate} edit then costs three
 forward passes plus one frozen-dictionary decode, not a full 20-step run
 -- a training-free way to triage many prompts against one image before
 running any to completion.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
+  \caption{\textbf{Differential preview at 15\% NFE.} Final edits (left)
+  and $D_{\mathrm{L52},t2}$ previews (right, true edit boundary in red):
+  removal, keep-vs-replace background structure, and a tiny recolor are
+  visible after only three of twenty denoising steps.}
+  \label{fig:preview}
+\end{figure}
 
 \subsection{Generalization Across Checkpoints}\label{sec:generalize}
 

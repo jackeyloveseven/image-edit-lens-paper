@@ -6,9 +6,16 @@
 
 ## Used in
 
+- AAAI submission (four-panel crop in `aaai_draft/20_experiments.tex`)
 - supplement.tex
 
 ## Target caption
+
+### AAAI submission
+
+A spatial carrier restores clean writability. Steering red inside a bounding
+box eventually overwrites the car with a flat patch; the same direction
+restricted to the car silhouette preserves geometry across effective doses.
 
 ### supplement.tex
 

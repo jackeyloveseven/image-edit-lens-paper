@@ -21,7 +21,7 @@ Validated deliverables:
 
 | File | Validation |
 |---|---|
-| `main_aaai.pdf` | 9 pages; all technical content including Conclusion ends on page 7; References occupy the remaining space through page 9; Letter; 0 overfull / undefined / Type 3 |
+| `main_aaai.pdf` | 8 pages; all technical content including Conclusion ends on page 7; References occupy the remaining space through page 8; Letter; 0 overfull / undefined / Type 3 |
 | `supplement.pdf` | 32 pages; Letter; 0 overfull / undefined / Type 3 |
 | `reproducibility_checklist.pdf` | 2 pages; standalone upload |
 | `main_aaai_non_input.tex` | flattened copy generated from the authoritative modular source |
@@ -61,6 +61,10 @@ Implemented behavior:
   and Qwen/FireRed transfer.
 - Mechanism, boundary, and tuned-lens floats placed beside or one page from
   their first discussion, instead of being grouped after Setup.
+- All main-paper figures use single-column layout except the layer--time method
+  framework, which remains cross-column.
+- Added compact carrier-mask evidence and the 15\%-NFE differential preview
+  from the supplement, directly supporting writability and practical use.
 - Shortened prose and captions to keep Conclusion on page 7.
 
 No experiment was rerun. Table values were cross-checked against existing prose,
@@ -153,13 +157,13 @@ strings main_aaai.pdf supplement.pdf reproducibility_checklist.pdf \
 
 Expected:
 
-- Main 9 pages, supplement 32, checklist 2, all Letter.
+- Main 8 pages, supplement 32, checklist 2, all Letter.
 - All count checks above return zero.
 - Page 7 visibly contains the end of Limitations, all of Conclusion, then the
   start of References.
 - Fig. 3 is adjacent to the early-probe discussion; Figs. 4 and 5 are on the
-  same page as the translation/tuned-lens discussion; Table 2 is on the same
-  page as Generalization.
+  same page as the translation/tuned-lens discussion; the carrier and preview
+  figures are adjacent to their claims; Table 2 is one page from Generalization.
 
 ## 7. Scientific boundaries
 

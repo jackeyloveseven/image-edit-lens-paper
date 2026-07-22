@@ -16,12 +16,14 @@ Validated on 2026-07-21:
 
 | Deliverable | State |
 |---|---|
-| `main_aaai.pdf` | 9 pages, Letter; technical content and Conclusion end on page 7; References continue through page 9; 0 overfull, undefined refs, or Type 3 fonts |
+| `main_aaai.pdf` | 8 pages, Letter; technical content and Conclusion end on page 7; References continue through page 8; 0 overfull, undefined refs, or Type 3 fonts |
 | `supplement.pdf` | 32 pages, Letter; regenerated with the v2 main figures; 0 overfull, undefined refs, or Type 3 fonts |
 | `reproducibility_checklist.pdf` | 2-page standalone checklist; upload separately from the main paper |
 | `main_aaai_non_input.tex` | flattened main source, regenerated with `scripts/flatten_tex.py` |
 
-The main paper now contains five figures and two compact result tables.
+The main paper now contains seven figures and two compact result tables. All
+figures are single-column except the layer--time method framework; carrier-mask
+and 15\%-NFE preview evidence are promoted from the supplement.
 `tab:early` summarizes prediction/selection; `tab:generalize` summarizes
 same-lineage translation and probe transfer.
 

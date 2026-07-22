@@ -60,15 +60,15 @@ $0.667$ balanced accuracy (chance $0.333$; $p{=}0.002$). Thus the outcome,
 not merely the instruction, is linearly predictable early; this does not
 claim irreversible commitment.
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.93\textwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
   \caption{\textbf{Decode convention flips; the probe reads early.}
   \textbf{A}: four \emph{car\_red} decodes reverse convention between L24
   and L59. \textbf{B}: the 3-way probe reaches $0.883$ at L6/$t$4 while
   the frozen head still reads noise (chance $0.33$).}
   \label{fig:mechanism}
-\end{figure*}
+\end{figure}
 
 \paragraph{Prediction generalizes and supports selection.}
 Table~\ref{tab:early} summarizes continuous-hue replications and held-out
@@ -145,15 +145,15 @@ events sharing a neighborhood: the target-image code survives the
 translation intact and is degraded only by the final, velocity-specific
 projection.
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=0.93\textwidth]{figs/fig10_boundary/fig10_boundary.pdf}
+  \includegraphics[width=\columnwidth]{figs/fig10_boundary/fig10_boundary.pdf}
   \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
   \emph{car\_red}. \textbf{A--B}: decode crossover and velocity alignment
   change in the same band at $t{=}4,16$. \textbf{C}: probe accuracy stays
   flat through L58 and drops only at L59.}
   \label{fig:boundary}
-\end{figure*}
+\end{figure}
 
 \paragraph{A tuned lens renders the internal image, layer by layer.} To
 confirm the mid-stack code is a genuine \emph{image} rather than a probe
@@ -215,13 +215,27 @@ steered region is not a recolored car but a flat red patch that
 \emph{replaces} the car's geometry -- the direction installs \emph{which}
 hue, not \emph{where to stop}. Supplying that missing ``where'' with the
 edited object's own silhouette mask turns every previously-failing dose
-into a clean in-place recolor. And conjuring an \emph{object} outruns any single direction: the
+into a clean in-place recolor (Figure~\ref{fig:carrier}). And conjuring an
+\emph{object} outruns any single direction: the
 identity probe direction is inert (the read and write subspaces
 differ), while a rank ladder over the donor$-$recipient difference
 resolves identity coarse-to-fine -- category at rank 1, a coherent
 instance by rank 4, donor-faithful by rank 64 ($2\%$ of the model
 dimension). The read and write subspaces differ, and a writable attribute
 still requires a spatial carrier.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.48\columnwidth,viewport=0 363 364 726,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\hfill
+  \includegraphics[width=0.48\columnwidth,viewport=1094 363 1458 726,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\\[-1pt]
+  \includegraphics[width=0.48\columnwidth,viewport=729 0 1094 363,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}\hfill
+  \includegraphics[width=0.48\columnwidth,viewport=1094 0 1458 363,clip]{figs/i1d_recompose_grid/i1d_recompose_grid.jpg}
+  \caption{\textbf{A spatial carrier restores clean writability.}
+  Steering red inside a bounding box eventually overwrites the car with a
+  flat patch (top); the same direction restricted to the car silhouette
+  preserves geometry across effective doses (bottom).}
+  \label{fig:carrier}
+\end{figure}
 
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
@@ -255,7 +269,7 @@ footprint, we ask whether it does so early enough to be useful. At step 2
 control-fidelity gate, $r\in[0.86,0.99]$), the median IoU between
 $D_{\text{L52},t2}$'s top mass and the true edit region is $0.33$,
 $6.6\times$ chance, and all 10 cases sharpen from step 0 to step 2
-(figure in the supplement): an object slated for removal lights up as a
+(Figure~\ref{fig:preview}): an object slated for removal lights up as a
 ghost, a keep-vs-replace background segmentation emerges unsupervised, and
 a tiny recolor glows at its exact site. Because the no-op control is
 \emph{independent of the edit prompt}, it is computed once per source
@@ -263,6 +277,16 @@ image and cached; previewing a \emph{candidate} edit then costs three
 forward passes plus one frozen-dictionary decode, not a full 20-step run
 -- a training-free way to triage many prompts against one image before
 running any to completion.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
+  \caption{\textbf{Differential preview at 15\% NFE.} Final edits (left)
+  and $D_{\mathrm{L52},t2}$ previews (right, true edit boundary in red):
+  removal, keep-vs-replace background structure, and a tiny recolor are
+  visible after only three of twenty denoising steps.}
+  \label{fig:preview}
+\end{figure}
 
 \subsection{Generalization Across Checkpoints}\label{sec:generalize}
 

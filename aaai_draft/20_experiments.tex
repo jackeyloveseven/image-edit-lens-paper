@@ -249,6 +249,55 @@ still requires a spatial carrier.
   \label{fig:carrier}
 \end{figure}
 
+\paragraph{Rank controls isolate the object write basis.} On one fixed
+61-patch lake hull, projecting only the donor--recipient difference's top
+singular modes gives a coarse-to-fine identity ladder: rank 1 already recruits
+the boat category but produces an incoherent cluster; rank 4 produces one
+coherent but wrong instance; rank 16 recovers the donor's wooden material; and
+rank 64 ($2\%$ of model width, $89\%$ of difference energy) approaches the
+full donor transplant. A same-dimensional random rank-64 basis is inert. Thus
+the ladder reflects alignment to a donor-derived write subspace, not merely
+intervention rank, and explains why a linearly readable identity probe need not
+be directly writable.
+
+\paragraph{Coherent interventions conserve attention routing.} Why does a
+full-state transplant preserve the car while direction steering overwrites it?
+Following a reference-matched routing audit used for visual-token reduction
+~\citep{cho2026restore}, a side recorder recomputes conditional-pass joint attention without changing
+the model output, over five seeds, five layers, five steps, three query groups,
+and four key groups. Relative to the natural red-edit reference, the
+content-matched transplant changes routing by only $0.0031$ total variation and
+preserves a coherent car in 5/5 seeds (Table~\ref{tab:routing}). An equal-size
+background transplant is as distorted as destructive zero/mean overwrite and
+fails in 5/5. Red-direction steering writes red in 5/5 but also has high routing
+distortion and produces the flat patch in Figure~\ref{fig:carrier}. Across
+seeds, the most distorted coherent condition remains below the least distorted
+incoherent one in 5/5 (mean gap $0.0430$, exact one-sided sign-flip
+$p{=}0.031$). This supports routing conservation as an explanation for the
+tested coherent transplant; it is not a necessity or architecture-general
+claim.
+
+\begin{table}[t]
+\caption{Attention-routing audit on the car intervention. TV is distortion
+from the natural red-edit reference ($\downarrow$); coherence is a blinded
+image-level verdict over five seeds.}
+\label{tab:routing}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Intervention & Routing TV $\downarrow$ & Coherent \\
+\midrule
+Car-state transplant & .0031 & 5/5 \\
+Red-direction steer & .0546 & 0/5 \\
+Zero overwrite & .0620 & 0/5 \\
+Mean overwrite & .0668 & 0/5 \\
+Background transplant & .0677 & 0/5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{A Preview Lever: The Differential Lens at 15\% NFE}\label{sec:difflens}
 
 The differential lens (\emph{Proposed Method}) isolates the internal
@@ -292,12 +341,10 @@ running any to completion.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
-  \caption{\textbf{Differential preview at 15\% NFE.} Final edits (left)
-  and $D_{\mathrm{L52},t2}$ previews (right, final-output difference-mask
-  boundary in red):
-  removal, keep-vs-replace background structure, and a tiny recolor are
-  visible after only three of twenty denoising steps.}
+  \includegraphics[width=0.84\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
+  \caption{\textbf{Differential preview at 15\% NFE.} Final/preview pairs for
+  removal, background replacement, and recolor after three of twenty steps;
+  red contours mark the final difference mask.}
   \label{fig:preview}
 \end{figure}
 
@@ -314,12 +361,41 @@ FireRed, rather than merely recurring at the same layer index. The full tuned
 lens ports to FireRed as well (deep-layer $R^2$ $0.97$--$0.999$; anti-image
 reproduced).
 
+\paragraph{The readout basis transfers, not only the boundary.} A three-rung
+ladder decodes FireRed with the Qwen translator dictionary frozen (L0), with
+only FireRed calibration substituted (L1), or with a fully native refit (L2).
+Across a six-case held-out battery spanning five edit families, all 108 deep
+cells (six cases $\times$ L52/56/59 $\times$ six steps) order
+$\mathrm{L0}<\mathrm{L1}<\mathrm{L2}$; recalibration recovers a median $89\%$
+of the frozen-to-native
+gap, while the fully frozen dictionary never falls below $R^2{=}0.86$. Even
+\emph{style\_ink}, a family absent from translator fitting, has a frozen floor
+of $0.885$. Thus the deep readout basis is reusable within this model lineage,
+although its calibration remains checkpoint-specific; this does not test an
+architecturally unrelated DiT.
+
+\paragraph{The differential law and preview lever transfer.} On two held-out
+FireRed photos that pass the unchanged-control gate ($r{=}0.933/0.990$), L52
+localization rises with denoising for both tree recolor ($0.90{\to}0.97$) and
+runner addition ($0.29{\to}0.84$). Their $t{=}2$ preview IoUs are $0.676$ and
+$0.217$, above the registered $0.15$ threshold and $0.05$ chance, and both
+improve over $t{=}0$ ($0.610/0.142$). Early content, gradual separation, and
+the three-step preview therefore reproduce on this fine-tuned checkpoint.
+
+\paragraph{Noise level, not schedule index, keys the dictionary.} At the Rapid
+step where fractional-position and $\sigma$ matching differ, $\sigma$ matching
+wins all six deep cells (median $+0.055$ $R^2$). Within $\sigma$ coverage, the
+frozen Qwen readout reaches $R^2{=}0.927$--$0.995$ and ties a Rapid-native refit
+in 13/24 cells; only the uncovered terminal $\sigma{=}0.02$ fails, and a matched
+entry recovers it. Thus the dictionary is keyed to noise level, not sampler
+position.
+
 \begin{table}[t]
-\caption{Cross-checkpoint translation and early readout. Transfer is
-Qwen$\to$FireRed / FireRed$\to$Qwen; L12/$t$4 direction cosine is .833.}
+\caption{Cross-checkpoint boundary/probe transfer
+(Qwen$\leftrightarrow$FireRed); L12/$t$4 direction cosine is .833.}
 \label{tab:generalize}
 \centering
-\footnotesize
+\scriptsize
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{@{}lccc@{}}
 \toprule
@@ -334,32 +410,27 @@ Rapid-AIO & L52--54 & -- & -- \\
 
 \subsection{A Training-Free Lever: Truncating Classifier-Free Guidance}\label{sec:lever}
 
-The layer--time map suggests a simple existence proof: classifier-free
-guidance may not need both forward passes at all 20 steps. Running the unconditional pass
-only for the first two steps and the conditional pass alone thereafter
-leaves all four tested edit families visually intact at a \textbf{45\% reduction
-in forward passes} (a 20-case battery confirms it, mean $1.77\times$
-speedup). Dropping CFG entirely suggests where its non-redundant role lies in these cases: recolor, removal,
-and addition still land from the conditional pass alone, but background
-swap composites the new scene \emph{around} un-erased source structure
-($P(\text{beach}){=}0.45$ vs.\ ${\ge}0.996$) -- CFG's non-redundant
-contribution here is consistent with resolving \emph{scope}, not selecting edit content. The same
-layer--time structure survives $7.7\times$ step distillation (20/20 cases
-land), so distillation compresses the sampling trajectory but not the
-structure the lens exposes.
+Running the unconditional pass only for the first two of 20 steps leaves all
+tested families intact at a \textbf{45\% reduction in forward passes}; a
+20-case battery confirms it (mean $1.77\times$ speedup). With no CFG, recolor,
+removal, and addition still land, but background replacement composites around
+un-erased source structure ($P(\text{beach}){=}0.45$ vs.\ ${\ge}0.996$),
+consistent with a non-redundant role in scope resolution. A four-step distilled
+checkpoint also lands 20/20 cases ($7.7\times$ faster), preserving the exposed
+structure while compressing the sampling trajectory.
 
 \subsection{Limitations}\label{sec:limits}
 
 Translation/intervention evidence uses Qwen plus two same-lineage checkpoints;
 Boogu supports only outcome prediction/selection. The fixed-prompt probe has
-one synthetic source; natural-image follow-ups give two replications and one
-unsuitable eye case. Selection has 12 groups per task and cannot create absent
-targets. One-way L6 hue transfer (mug$\to$tree $p{=}0.002$; reverse
-$p{=}0.968$) precludes an object-invariant subspace. Because CLIP can prefer a
-flat patch to a true recolor, quantitative claims carry pre-registered visual
-verdicts. The dense boundary and carrier intervention both center on the
-flat-art car; the carrier silhouette is derived from a source--edit pixel
-difference rather than an automatic segmentation. The preview reference is a fixed top-10\% final-output difference
-mask, which can over-expand tiny edits; its IoU is therefore a localization
-diagnostic, not segmentation ground truth. We claim tested outcome predictability, transplant sufficiency, and
-carrier-bounded writability, not irreversible commitment or necessity.
+one synthetic source and two natural-image replications; one eye case is
+unsuitable. Selection has 12 groups per task and cannot create absent targets.
+One-way L6 hue transfer (mug$\to$tree $p{=}0.002$; reverse $p{=}0.968$)
+precludes an object-invariant subspace. Because CLIP can prefer a flat patch to
+a true recolor, quantitative claims carry pre-registered visual verdicts. The
+dense boundary and carrier study center on the flat-art car; its silhouette
+comes from a source--edit difference, not automatic segmentation. The fixed
+top-10\% preview mask can over-expand tiny edits, so IoU is a localization
+diagnostic, not segmentation ground truth. We claim tested predictability,
+transplant sufficiency, and carrier-bounded writability, not commitment or
+necessity.

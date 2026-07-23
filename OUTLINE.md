@@ -1,6 +1,6 @@
 # Paper Outline (working)
 
-**Current title**: When Does an Image Edit Become Predictable? A Layer--Time Lens for Diffusion Editors
+**Current title**: Predictable Early, Translated Late: A Layer--Time Lens for Diffusion Image Editors
 
 **Current one-sentence story / motif**: 编辑不是逐层显影——最终结果 **predictable early**（固定欠指定 prompt 下，L6 已可预测）、写入 **bound to a spatial carrier**，而目标图像码只在末端 **translated late** 到 flow/velocity 执行码。这里的“早”是可预测性，不是不可逆承诺。
 

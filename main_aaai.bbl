@@ -1,4 +1,4 @@
-\begin{thebibliography}{21}
+\begin{thebibliography}{34}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
@@ -21,6 +21,13 @@ Cassano, E.; Renzulli, R.; Ahmed, R.; Grangetto, M.; and Alaniz, S. 2026.
   Diffusion Models.
 \newblock \emph{arXiv preprint arXiv:2606.31699}.
 
+\bibitem[{Cho et~al.(2026)Cho, Baek, Kim, and Ham}]{cho2026restore}
+Cho, H.; Baek, D.; Kim, Y.; and Ham, B. 2026.
+\newblock Improving Visual Token Reduction via Rectifying Distortions for
+  Efficient Multimodal {LLM} Inference.
+\newblock \emph{arXiv preprint arXiv:2606.01711}.
+\newblock Accepted at ICML 2026.
+
 \bibitem[{Guo, Wei, and Jing(2026)}]{guo2026probeselect}
 Guo, H.; Wei, H.; and Jing, B. 2026.
 \newblock Toward Early Quality Assessment of Text-to-Image Diffusion Models.
@@ -40,11 +47,52 @@ Hertz, A.; Mokady, R.; Tenenbaum, J.; Aberman, K.; Pritch, Y.; and Cohen-Or, D.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
 
+\bibitem[{Ho, Jain, and Abbeel(2020)}]{ho2020ddpm}
+Ho, J.; Jain, A.; and Abbeel, P. 2020.
+\newblock Denoising Diffusion Probabilistic Models.
+\newblock \emph{Advances in Neural Information Processing Systems (NeurIPS)},
+  33.
+
+\bibitem[{Ho and Salimans(2022)}]{ho2022cfg}
+Ho, J.; and Salimans, T. 2022.
+\newblock Classifier-Free Diffusion Guidance.
+\newblock \emph{arXiv preprint arXiv:2207.12598}.
+
+\bibitem[{Hu et~al.(2024)Hu, Shi, Fu, Roth, Ostendorf, Zettlemoyer, Smith, and
+  Krishna}]{hu2024sketchpad}
+Hu, Y.; Shi, W.; Fu, X.; Roth, D.; Ostendorf, M.; Zettlemoyer, L.; Smith,
+  N.~A.; and Krishna, R. 2024.
+\newblock Visual Sketchpad: Sketching as a Visual Chain of Thought for
+  Multimodal Language Models.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
+
 \bibitem[{Kwon, Lee, and Choi(2026)}]{kwon2026lockin}
 Kwon, D.; Lee, H.; and Choi, J. 2026.
 \newblock Breaking the Lock-in: Diversifying Text-to-Image Generation via
   Representation Modulation.
 \newblock In \emph{International Conference on Machine Learning (ICML)}.
+
+\bibitem[{Li et~al.(2025)Li, Wu, Zhang, Xia, Mao, Dong, Vuli{\'c}, and
+  Wei}]{li2025mvot}
+Li, C.; Wu, W.; Zhang, H.; Xia, Y.; Mao, S.; Dong, L.; Vuli{\'c}, I.; and Wei,
+  F. 2025.
+\newblock Imagine while Reasoning in Space: Multimodal
+  Visualization-of-Thought.
+\newblock \emph{arXiv preprint arXiv:2501.07542}.
+
+\bibitem[{Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le}]{lipman2023flowmatching}
+Lipman, Y.; Chen, R. T.~Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023.
+\newblock Flow Matching for Generative Modeling.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Liu, Gong, and Liu(2023)}]{liu2023rectifiedflow}
+Liu, X.; Gong, C.; and Liu, Q. 2023.
+\newblock Flow Straight and Fast: Learning to Generate and Transfer Data with
+  Rectified Flow.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
 
 \bibitem[{Luo et~al.(2025)Luo, Ding, Chan, Min, Callison-Burch, and
   Vidal}]{luo2025colan}
@@ -61,11 +109,22 @@ Meng, K.; Bau, D.; Andonian, A.; and Belinkov, Y. 2022.
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, volume~35.
 
+\bibitem[{Menon, Zemel, and Vondrick(2024)}]{menon2024whiteboard}
+Menon, S.; Zemel, R.; and Vondrick, C. 2024.
+\newblock Whiteboard-of-Thought: Thinking Step-by-Step Across Modalities.
+\newblock \emph{arXiv preprint arXiv:2406.14562}.
+
 \bibitem[{nostalgebraist(2020)}]{nostalgebraist2020logitlens}
 nostalgebraist. 2020.
 \newblock Interpreting {GPT}: The Logit Lens.
 \newblock LessWrong.
 \newblock Accessed 2026.
+
+\bibitem[{Park, Choe, and Veitch(2024)}]{park2024linear}
+Park, K.; Choe, Y.~J.; and Veitch, V. 2024.
+\newblock The Linear Representation Hypothesis and the Geometry of Large
+  Language Models.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
 
 \bibitem[{Peebles and Xie(2023)}]{peebles2023dit}
 Peebles, W.; and Xie, S. 2023.
@@ -102,6 +161,13 @@ Radford, A.; Kim, J.~W.; Hallacy, C.; Ramesh, A.; Goh, G.; Agarwal, S.; Sastry,
 \newblock In \emph{International Conference on Machine Learning (ICML)},
   8748--8763.
 
+\bibitem[{Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and
+  Ommer}]{rombach2022ldm}
+Rombach, R.; Blattmann, A.; Lorenz, D.; Esser, P.; and Ommer, B. 2022.
+\newblock High-Resolution Image Synthesis with Latent Diffusion Models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition (CVPR)}, 10684--10695.
+
 \bibitem[{Shi et~al.(2025)Shi, Li, Wang, Zhao, Pang, Yang, Yu, and
   Ren}]{shi2025difflens}
 Shi, Y.; Li, C.; Wang, Y.; Zhao, Y.; Pang, A.; Yang, S.; Yu, J.; and Ren, K.
@@ -110,6 +176,17 @@ Shi, Y.; Li, C.; Wang, Y.; Zhao, Y.; Pang, A.; Yang, S.; Yu, J.; and Ren, K.
   Interpretability.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}, 8192--8202.
+
+\bibitem[{Song, Meng, and Ermon(2021)}]{song2021ddim}
+Song, J.; Meng, C.; and Ermon, S. 2021.
+\newblock Denoising Diffusion Implicit Models.
+\newblock \emph{International Conference on Learning Representations (ICLR)}.
+
+\bibitem[{Su, Xia et~al.(2025)}]{su2025thinkingsurvey}
+Su, Z.; Xia, P.; et~al. 2025.
+\newblock Thinking with Images for Multimodal Reasoning: Foundations, Methods,
+  and Future Frontiers.
+\newblock \emph{arXiv preprint arXiv:2506.23918}.
 
 \bibitem[{Surkov et~al.(2025)Surkov, Wendler, Mari, Terekhov, Deschenaux, West,
   Gulcehre, and Bau}]{surkov2025sae}
@@ -140,6 +217,12 @@ Vaidyanathan, S.; Arbour, D.; Mueller, A.; Niekum, S.; and Jensen, D. 2026.
 \newblock The Curse of Multiple Mediators: Hidden Interaction Effects in
   Activation Patching.
 \newblock \emph{arXiv preprint arXiv:2606.27510}.
+
+\bibitem[{Wu et~al.(2024)Wu, Mao, Zhang, Xia, Dong, Cui, and Wei}]{wu2024vot}
+Wu, W.; Mao, S.; Zhang, Y.; Xia, Y.; Dong, L.; Cui, L.; and Wei, F. 2024.
+\newblock Mind's Eye of {LLMs}: Visualization-of-Thought Elicits Spatial
+  Reasoning in Large Language Models.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
 
 \bibitem[{Zaleska et~al.(2026)Zaleska, Popek, Wysocza{\'n}ska, and
   Deja}]{zaleska2026icm}

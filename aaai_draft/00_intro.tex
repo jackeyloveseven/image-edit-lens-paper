@@ -17,6 +17,11 @@ Diffusion Lens interprets text-encoder states; DiffLens and ICM probe or steer
 denoiser features; and DreamReader and sparse autoencoders provide broader
 extraction and feature-analysis tools
 ~\citep{toker2024diffusionlens,shi2025difflens,zaleska2026icm,prakash2026dreamreader,surkov2025sae}.
+Linear-representation work motivates a probe-readable basis, while multimodal
+reasoners externalize visual thoughts as sketches or whiteboards
+~\citep{park2024linear,hu2024sketchpad,menon2024whiteboard,wu2024vot,li2025mvot};
+we instead test for an unrendered internal image, complementing the broader
+thinking-with-images taxonomy~\citep{su2025thinkingsurvey}.
 Recent work also detects early cross-seed convergence, predicts final quality
 from early activations, or allocates adaptive image-editing budgets
 ~\citep{kwon2026lockin,guo2026probeselect,qu2026adecot}. None jointly decodes
@@ -25,6 +30,8 @@ denoising time while separating explicit-prompt readability from the realized
 outcome under a fixed prompt.
 
 A second line studies how to produce edits or intervene on hidden states.
+Modern editors build on diffusion, latent/flow formulations, and guidance
+~\citep{ho2020ddpm,song2021ddim,rombach2022ldm,lipman2023flowmatching,liu2023rectifiedflow,ho2022cfg}.
 InstructPix2Pix and Prompt-to-Prompt learn or manipulate diffusion editing
 controls~\citep{brooks2023instructpix2pix,hertz2023prompttoprompt}; ROME and
 activation-patching practice transfer hidden states, while activation

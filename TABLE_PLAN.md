@@ -9,9 +9,11 @@
 > Table B 为适配单栏改成四列紧凑版，但保留计划中的 boundary、early/L59 probe、transfer 和 direction cosine。
 > 主稿技术内容仍止于第 7 页，0 overfull / undefined。
 
-> **当前状态（2026-07-22）**：两表仍为正文 Table 1/2。主文图号已重排，
-> boundary 是 Figure 4；15%-NFE preview 已作为 Figure 7 进入正文，不再只是
-> “正文一句或日后 Table C”。本文件以下主体保留为实施历史。
+> **当前状态（2026-07-23）**：正文现有三表。原 `tab:early` 与
+> `tab:generalize` 保留，新增 `tab:routing` 作为 Table 2，承载五种干预的
+> attention-routing distortion 与 blinded coherence；原 transfer 表顺延为
+> Table 3。主稿技术内容止于第 7 页，References 位于第 8--9 页。本文件以下
+> 主体保留为实施历史。
 
 ---
 

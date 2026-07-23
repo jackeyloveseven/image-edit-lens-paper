@@ -1,6 +1,7 @@
 # image-edit-lens-paper: AAAI-27 submission repository
 
-AAAI-27 double-blind paper for a layer--time lens of diffusion image editors.
+AAAI-27 double-blind paper, **Predictable Early, Translated Late: A
+Layer--Time Lens for Diffusion Image Editors**.
 The central result is deliberately narrow: under fixed underspecified prompts,
 the realized edit is predictable from early states; in the tested Qwen lineage,
 an image-like code is translated to the velocity convention near L52--54.
@@ -12,25 +13,36 @@ Start with [`AAAI_HANDOFF.md`](AAAI_HANDOFF.md) when taking over the project.
 
 ## Current deliverables
 
-Validated on 2026-07-23 in the worktree based on commit `5f917cb`:
+Validated on 2026-07-23 at pushed paper commit `f96bf26`:
 
 | Deliverable | State |
 |---|---|
-| `main_aaai.pdf` | 8 pages, Letter; technical content and Conclusion end on page 7; References continue through page 8; 0 overfull, undefined refs, or Type 3 fonts |
+| `main_aaai.pdf` | 9 pages, Letter; technical content and Conclusion end on page 7; References occupy pages 8--9; 0 overfull, undefined refs, or Type 3 fonts |
 | `supplement.pdf` | 31 pages, Letter; regenerated from current source and verified bibliography; 0 overfull, undefined refs, or Type 3 fonts |
 | `reproducibility_checklist.pdf` | 2-page standalone checklist; upload separately from the main paper |
 | `main_aaai_non_input.tex` | flattened main source, regenerated with `scripts/flatten_tex.py` |
 
-The main paper now contains seven figures and two compact result tables. All
+The main paper now contains seven figures and three compact result tables. All
 figures are single-column except the layer--time method framework; carrier-mask
 and 15\%-NFE preview evidence are promoted from the supplement.
-`tab:early` summarizes prediction/selection; `tab:generalize` summarizes
-same-lineage translation and probe transfer.
+`tab:early` summarizes prediction/selection; `tab:routing` audits intervention
+coherence; `tab:generalize` summarizes same-lineage translation and transfer.
+
+The main paper also promotes a compact attention-routing intervention audit and
+the six-case FireRed translator-transfer battery from the supplement. These
+additions fill the seventh technical page with evidence while leaving pages
+8--9 for references.
 
 The method section now defines the layer--time score grid, CLIP readout, time,
 depth, tuned, and differential lens operators, linear probes, and the three
 interventions as explicit equations. Figure 2 is the corresponding five-stage
 framework overview and is the only cross-column figure.
+
+Related Work is intentionally integrated as two paragraphs in the Introduction.
+The latest bibliography pass verified new entries against primary records,
+removed a false early-selection citation, and corrected several titles, author
+lists, keys, and venue metadata. `allinone.md`, when present locally, is an
+internal search log and is not a source or repository deliverable.
 
 Terminology rule: use **predictable early**, **content present early**, and
 **translated late**. Do not turn probe readability into irreversible
@@ -93,8 +105,8 @@ strings main_aaai.pdf | grep -icE \
 ```
 
 Expected counts for the final four greps are zero. Page count alone is not
-enough: visually confirm that Conclusion ends on page 7 and References begins
-after it.
+enough: visually confirm that Conclusion ends on page 7 and References occupy
+pages 8--9.
 
 ## Submission split and dates
 

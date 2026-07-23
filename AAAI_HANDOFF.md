@@ -1,7 +1,7 @@
 # AAAI-27 handoff: start here
 
 This file is the self-contained entry point for an agent with no conversation
-history. Last updated 2026-07-22.
+history. Last updated 2026-07-23.
 
 ## 1. Current state
 
@@ -11,18 +11,21 @@ Repository:
 /home/ubuntu/chengyanli/image-edit-lens-paper-t3-review
 remote: https://github.com/jackeyloveseven/image-edit-lens-paper.git
 branch: main
-remote baseline before this documentation pass: 5f917cb
+current pushed paper baseline: f96bf26 (Expand main paper evidence and references)
 ```
 
-Commit `5f917cb` is pushed to `origin/main`. The working tree for this pass
-contains documentation synchronization only (and may include regenerated PDFs
-after validation); do not discard it before reviewing the scoped diff.
+`HEAD` and `origin/main` both point to `f96bf26`. After that paper push, the
+worktree contains this documentation synchronization plus untracked
+`allinone.md`, a noisy literature-search log.
+It is not a paper source or deliverable and should remain uncommitted unless a
+human explicitly asks to publish it. Review any documentation diff produced by
+this pass before committing; do not discard unrelated user changes.
 
 Validated deliverables:
 
 | File | Validation |
 |---|---|
-| `main_aaai.pdf` | 8 pages; all technical content including Conclusion ends on page 7; References occupy the remaining space through page 8; Letter; 0 overfull / undefined / Type 3 |
+| `main_aaai.pdf` | 9 pages; all technical content including Conclusion ends on page 7; References occupy pages 8--9; Letter; 0 overfull / undefined / Type 3 |
 | `supplement.pdf` | 31 pages; Letter; 0 overfull / undefined / Type 3 |
 | `reproducibility_checklist.pdf` | 2 pages; standalone upload |
 | `main_aaai_non_input.tex` | flattened copy generated from the authoritative modular source |
@@ -32,6 +35,25 @@ PDF. The reproducibility checklist is a separate OpenReview upload and must not
 be `\input` into `main_aaai.tex`.
 
 ## 2. Current implementation and recent changes
+
+### Current title, evidence, and layout pass (`f96bf26`)
+
+- Related Work is exactly two integrated paragraphs in
+  `aaai_draft/00_intro.tex`; there is no standalone Related Work section in the
+  compiled main paper. `aaai_draft/05_related.tex` is only a redirect note.
+- Added citations around lenses, diffusion interpretability, early assessment,
+  editing, activation patching/transplant, and steering. The cited metadata was
+  checked against primary arXiv, CVF, ACL, or OpenReview records before use.
+- Removed the false `ELECT` early-selection citation and corrected metadata for
+  ADE-CoT, Activation Engineering, DreamReader, Breaking the Lock-in, Look But
+  Don't Touch, and the multiple-mediators paper. Do not restore older entries
+  from chat history or `allinone.md` without re-verification.
+- Tightened the abstract, introduction, method, experiment, and supplement
+  wording around the L52--54 boundary, same-lineage replication, steering, and
+  CFG truncation. The paper now distinguishes midpoint stability from
+  timestep-dependent boundary width and avoids architecture-wide claims.
+- No experiment was rerun in this pass. Existing values were reconciled against
+  preserved run artifacts, `OUTLINE.md`, and the supplement.
 
 ### Figures
 
@@ -58,6 +80,8 @@ Implemented behavior:
 
 - `tab:early`: fixed-prompt prediction, continuous hue, and best-of-five
   selection across Qwen and Boogu.
+- `tab:routing`: five-seed attention-routing distortion and blinded coherence
+  across transplant, steering, and destructive controls.
 - `tab:generalize`: same-lineage A/C bands, early-to-terminal probe behavior,
   and Qwen/FireRed transfer.
 - Mechanism, boundary, and tuned-lens floats placed beside or one page from
@@ -66,6 +90,15 @@ Implemented behavior:
   framework, which remains cross-column.
 - Added compact carrier-mask evidence and the 15\%-NFE differential preview
   from the supplement, directly supporting writability and practical use.
+- Promoted the five-seed attention-routing audit and the six-case FireRed
+  translator-transfer battery so the seventh technical page carries evidence
+  through its end and References can begin on page 8.
+- Added the two-case FireRed differential/preview replication to complete the
+  same-lineage transfer chain without introducing a new experiment.
+- Expanded the donor-difference rank-ladder control so the promoted carrier
+  evidence includes the random-subspace check and energy/rank interpretation.
+- Promoted the Rapid-AIO noise-level matching result to explain why the tuned
+  dictionary transfers across a compressed four-step schedule.
 - Shortened prose and captions to keep Conclusion on page 7.
 
 Figure numbering in the main paper is now fixed as: Fig. 1 teaser, Fig. 2
@@ -89,7 +122,7 @@ No experiment was rerun. Table values were cross-checked against existing prose,
 - Updated per-figure `INFO.md`, `provenance.md`, `AAAI_SPINE.md`, design plans,
   README, and the local AAAI rule summary.
 - Rebuilt `supplement.pdf` after the revised Fig. 2/caption landed, keeping the
-  current source and 32-page artifact synchronized.
+  current source and 31-page artifact synchronized.
 
 ## 3. Sources of truth
 
@@ -104,6 +137,7 @@ Use this precedence order:
    criteria.
 
 Do not use `main_aaai_non_input.tex` as an editing source. It is generated.
+Do not use `allinone.md` as a citation database or source of truth.
 
 ## 4. Data and environment
 
@@ -171,13 +205,16 @@ strings main_aaai.pdf supplement.pdf reproducibility_checklist.pdf \
 
 Expected:
 
-- Main 8 pages, supplement 31, checklist 2, all Letter.
+- Main 9 pages, supplement 31, checklist 2, all Letter.
 - All count checks above return zero.
-- Page 7 visibly contains the end of Limitations, all of Conclusion, then the
-  start of References.
+- Page 7 visibly contains the end of Limitations and all of Conclusion;
+  References start on page 8 and continue onto page 9.
 - Fig. 3 is adjacent to the early-probe discussion; Figs. 4 and 5 are on the
   same page as the translation/tuned-lens discussion; the carrier and preview
-  figures are adjacent to their claims; Table 2 is one page from Generalization.
+  figures are adjacent to their claims; the routing audit is beside the
+  intervention discussion; the transfer table is on page 7.
+- Both BibTeX logs end with `warning$ -- 0`; anonymity-string checks return
+  zero hits.
 
 ## 7. Scientific boundaries
 
@@ -200,16 +237,43 @@ Do not claim:
 - That a readable linear direction is generally writable without a spatial
   carrier.
 
-## 8. Git and next action
+## 8. Submission state and immediate priorities
 
-The last pushed paper commit is `5f917cb`. This documentation synchronization
-is a new local pass. Before its next push:
+Current title:
+
+```text
+Predictable Early, Translated Late: A Layer--Time Lens for Diffusion Image Editors
+```
+
+The AAAI-27 full-paper deadline is 2026-07-28 AoE; supplementary material and
+code are due 2026-07-31 AoE. The abstract-registration deadline passed on
+2026-07-21 AoE. Upload the main PDF, supplement, and reproducibility checklist
+as separate artifacts.
+
+No new experiment is required to compile or submit the current paper. The
+remaining high-priority work is submission hygiene:
+
+1. After any textual edit, rebuild the main paper and supplement and rerun all
+   acceptance checks.
+2. Visually inspect every page at normal zoom, especially page 7 of the main
+   paper and dense supplement figure pages.
+3. Reconfirm OpenReview metadata, author anonymity, PDF filenames, topic
+   selections, and the final one-sentence TL;DR before upload.
+4. Treat new experiments or stronger claims as scope changes requiring a new
+   evidence audit, not as last-minute wording edits.
+
+## 9. Git procedure
+
+The last pushed paper commit is `f96bf26`. This handoff synchronization is a
+new local documentation pass. Before its next push:
 
 1. Run `git fetch origin` and verify the remote has not advanced.
-2. Review `git diff --check` and the full scoped diff.
-3. Rebuild and rerun every acceptance check above.
-4. Commit with a concise message describing figures, tables, and submission
-   docs.
-5. Push normally; never force-push.
+2. Keep `allinone.md` unstaged unless explicitly requested.
+3. Review `git diff --check` and the full scoped diff.
+4. Rebuild only if paper source or generated deliverables changed; for a
+   documentation-only commit, rerun the lightweight status and validation
+   checks recorded above.
+5. Commit with a concise documentation message and push normally; never
+   force-push.
 
 Do not place credentials in remotes, files, command history, or documentation.

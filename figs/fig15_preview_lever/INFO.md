@@ -13,13 +13,12 @@ Differential lens as a ~15%-NFE (t=2) preview lever: 3 of a 10-case battery, eac
 
 ### AAAI submission (aaai_draft/20_experiments.tex)
 
-The differential lens as a $\approx$15\%-NFE ($t{=}2$) preview
-		lever: three of a ten-case battery. Left: each case's final edited
-		output. Right: the differential $D$ at layer 52, step 2, with the true
-		edit region outlined in red -- an object slated for removal lights up as
-		a ghost, a keep-vs-replace background segmentation emerges unsupervised,
-		and a tiny recolor glows at its exact site, all at only 15\% of the
-		denoising trajectory.
+\textbf{Differential preview at 15\% NFE.} Final edits (left) and
+$D_{\mathrm{L52},t2}$ previews (right, true edit boundary in red): removal,
+keep-vs-replace background structure, and a tiny recolor are visible after
+only three of twenty denoising steps.
+
+Current placement: main Figure 7; supplement Figure 10.
 
 ### supplement.tex
 

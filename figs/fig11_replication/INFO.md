@@ -2,11 +2,16 @@
 
 ## Intent
 
-Cross-model replication: A/C decode-crossover layer across Qwen-Image-Edit-2511 (reference), FireRed-Image-Edit-1.1, and Rapid-AIO (all cluster L52-56); layer-band ablation success Qwen vs FireRed.
+Cross-model replication: A/C decode-crossover layer across
+Qwen-Image-Edit-2511, FireRed-Image-Edit-1.1, and Rapid-AIO (all cluster
+L52--56), plus the checkpoint-specific behavior of an off-manifold
+layer-band ablation stress test.
 
 ## Used in
 
 - supplement.tex
+
+Current placement: supplement Figure 15.
 
 ## Target caption
 
@@ -29,7 +34,8 @@ Cross-model replication of the core measurements.
 
   - runs/g4_summary.json
 
-- Note: Renders as Figure 10 in \S5.10 'Does this generalize?' (\label{fig:replication}), v2.1 addition.
+- Note: Current placement is supplement Figure 15
+  (`\label{fig:replication}`).
 
 ## Files in this folder
 

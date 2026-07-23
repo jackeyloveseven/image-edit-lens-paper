@@ -8,6 +8,8 @@ Differential lens (K3) on color_eyes: edit run's internal image already red at t
 
 - supplement.tex
 
+Current placement: supplement Figure 9.
+
 ## Target caption
 
 ### supplement.tex

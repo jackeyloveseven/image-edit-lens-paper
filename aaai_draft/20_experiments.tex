@@ -19,6 +19,11 @@ transformer classes -- FireRed-Image-Edit-1.1, an independent
 fine-tune, and Rapid-AIO, a 4-step distilled merge -- let us ask
 whether a finding persists beyond one training run
 (tested below).
+Statistical units follow the claim: explicit-prompt patch probes are basis
+diagnostics, whereas fixed-prompt tests contribute one mean-pooled vector per
+generation. Their $p$-values use fold-matched label permutations; held-out
+selection uses exact Poisson-binomial inference (Boogu) or exact within-group
+rank tests (Qwen).
 
 \subsection{The Realized Edit Is Predictable Early}\label{sec:early}
 
@@ -49,7 +54,7 @@ mid-stack ``nothing happens yet'' appearance of an LLM logit lens.
 
 \paragraph{But the realized outcome is predictable 40 layers earlier.}
 An explicit-prompt probe first reveals the basis mismatch: predicting
-which of three colors was requested reaches $0.883$ accuracy at
+which of three colors was requested reaches $0.883$ patch-token accuracy at
 \textbf{layer 6}, step 4, where the frozen head reads only
 $P(\text{red car}){=}0.111$ (Figure~\ref{fig:mechanism}). To separate
 outcome prediction from reading a color word, we hold both source and
@@ -65,8 +70,10 @@ claim irreversible commitment.
   \includegraphics[width=\columnwidth]{figs/fig5_mechanism/fig5_mechanism.pdf}
   \caption{\textbf{Decode convention flips; the probe reads early.}
   \textbf{A}: four \emph{car\_red} decodes reverse convention between L24
-  and L59. \textbf{B}: the 3-way probe reaches $0.883$ at L6/$t$4 while
-  the frozen head still reads noise (chance $0.33$).}
+  and L59. \textbf{B}: a requested-color basis diagnostic reaches $0.883$
+  patch-token accuracy at L6/$t$4 while the frozen head still reads noise
+  (chance $0.33$). Patches are not independent experimental units; the
+  generation-level fixed-prompt result is $0.667$ over 48 generations.}
   \label{fig:mechanism}
 \end{figure}
 
@@ -132,35 +139,40 @@ whole-vector reweighting, not a literal sign flip: essentially no
 individual channel of $v_\ell$ has a negative slope against $v_{59}$, mean
 $0.003$.)
 
-\paragraph{The conversion is a sharp, timestep-invariant band.} A dense
+\paragraph{The conversion location is stable; its width is timestep-dependent.} A dense
 every-layer sweep from L44 to L59 (Figure~\ref{fig:boundary}) locates the
 A/C crossover precisely: transition midpoint L53.6 at step 16 (width one
-layer) and L52.7 at step 4, the two differing by under one layer -- the
-boundary's \emph{location} is timestep-invariant. Crucially, the
+layer) and L52.7 at step 4 (width four layers). The midpoints differ by
+under one layer, so the boundary's \emph{location} is stable across these
+timesteps even though its sharpness is not. Crucially, the
 cross-seed probe accuracy is close to \emph{flat} ($0.77$--$0.84$) across
 every layer from L44 through L58 and drops only at the terminal layer L59
 ($0.68$--$0.70$). So the translation that changes what the head can read
 (L52--54) and the loss of linear separability (L59) are two \emph{distinct}
 events sharing a neighborhood: the target-image code survives the
 translation intact and is degraded only by the final, velocity-specific
-projection.
+projection. Coarse family sweeps place measurable style and background
+crossovers in the same terminal band; removal and addition remain
+inconclusive because their between-variant CLIP margins are too small.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{figs/fig10_boundary/fig10_boundary.pdf}
-  \caption{\textbf{Translation band L52--54.} Dense L44--L59 sweep on
-  \emph{car\_red}. \textbf{A--B}: decode crossover and velocity alignment
-  change in the same band at $t{=}4,16$. \textbf{C}: probe accuracy stays
-  flat through L58 and drops only at L59.}
+  \caption{\textbf{Translation near L52--54.} Dense L44--L59 sweep on
+  \emph{car\_red}. \textbf{A--B}: the decode-crossover midpoint changes by
+  under one layer between $t{=}4,16$, while transition width changes from
+  four layers to one. \textbf{C}: probe accuracy stays flat through L58 and
+  drops only at L59.}
   \label{fig:boundary}
 \end{figure}
 
-\paragraph{A tuned lens renders the internal image, layer by layer.} To
-confirm the mid-stack code is a genuine \emph{image} rather than a probe
+\paragraph{A tuned lens renders the image-like code, layer by layer.} To
+test whether the mid-stack code is image-like rather than a probe
 artifact, we fit a per-(layer, timestep) tuned lens, as described
-above, on \emph{remove}/\emph{background}/\emph{addition}
-edits and evaluate it \emph{zero-shot} on the held-out \emph{car\_red}
-color family. Held-out $R^2$ rises with depth from $0.73$--$0.89$ at L6 to
+above, on exactly three source images -- one each from
+\emph{remove}/\emph{background}/\emph{addition} -- and evaluate the entire
+\emph{car\_red} source and color family \emph{zero-shot}. Held-out $R^2$
+rises with depth from $0.73$--$0.89$ at L6 to
 $0.998$ at L59, whose frozen-head decode reproduces the true velocity
 bit-for-bit. Every tested depth down to L6 yields a coherent scene, refuting
 a pre-registered readability boundary: L52--54 marks the frozen head's
@@ -267,7 +279,7 @@ footprint, we ask whether it does so early enough to be useful. At step 2
 -- the third of 20, $\approx$15\% of the forward passes -- across a
 10-case, five-family battery of natural photographs (all passing the
 control-fidelity gate, $r\in[0.86,0.99]$), the median IoU between
-$D_{\text{L52},t2}$'s top mass and the true edit region is $0.33$,
+$D_{\text{L52},t2}$'s top mass and a final-output difference mask is $0.33$,
 $6.6\times$ chance, and all 10 cases sharpen from step 0 to step 2
 (Figure~\ref{fig:preview}): an object slated for removal lights up as a
 ghost, a keep-vs-replace background segmentation emerges unsupervised, and
@@ -282,7 +294,8 @@ running any to completion.
   \centering
   \includegraphics[width=\columnwidth]{figs/fig15_preview_lever/fig15_preview_lever.jpg}
   \caption{\textbf{Differential preview at 15\% NFE.} Final edits (left)
-  and $D_{\mathrm{L52},t2}$ previews (right, true edit boundary in red):
+  and $D_{\mathrm{L52},t2}$ previews (right, final-output difference-mask
+  boundary in red):
   removal, keep-vs-replace background structure, and a tiny recolor are
   visible after only three of twenty denoising steps.}
   \label{fig:preview}
@@ -290,7 +303,7 @@ running any to completion.
 
 \subsection{Generalization Across Checkpoints}\label{sec:generalize}
 
-Most mechanistic findings so far concern one architecture. We re-ran the depth-lens
+Most mechanistic findings so far concern one model lineage. We re-ran the depth-lens
 crossover and cross-seed probe on the two
 further checkpoints from \emph{Setup} (FireRed-Image-Edit-1.1 and
 Rapid-AIO). \textbf{The translation boundary and explicit-prompt early
@@ -335,14 +348,6 @@ layer--time structure survives $7.7\times$ step distillation (20/20 cases
 land), so distillation compresses the sampling trajectory but not the
 structure the lens exposes.
 
-\paragraph{Routing conservation explains coherent transplant.}
-A RESTORE-inspired five-seed audit~\citep{cho2026restore} finds destructive
-replacement more routing-distorting than transplant/red steering in 5/5 seeds
-(contrast $0.0356$, exact $p{=}0.03125$). Matched-donor TV is $0.0031$ with
-geometry 5/5; background-donor TV is $0.0677$ with geometry 0/5. Red steering
-writes red 5/5 but preserves geometry 0/5, matching the detection--intervention
-gap~\citep{pegoraro2026look}; this supports tested coherence only.
-
 \subsection{Limitations}\label{sec:limits}
 
 Translation/intervention evidence uses Qwen plus two same-lineage checkpoints;
@@ -352,5 +357,9 @@ unsuitable eye case. Selection has 12 groups per task and cannot create absent
 targets. One-way L6 hue transfer (mug$\to$tree $p{=}0.002$; reverse
 $p{=}0.968$) precludes an object-invariant subspace. Because CLIP can prefer a
 flat patch to a true recolor, quantitative claims carry pre-registered visual
-verdicts. We claim tested outcome predictability, transplant sufficiency, and
+verdicts. The dense boundary and carrier intervention both center on the
+flat-art car; the carrier silhouette is derived from a source--edit pixel
+difference rather than an automatic segmentation. The preview reference is a fixed top-10\% final-output difference
+mask, which can over-expand tiny edits; its IoU is therefore a localization
+diagnostic, not segmentation ground truth. We claim tested outcome predictability, transplant sufficiency, and
 carrier-bounded writability, not irreversible commitment or necessity.

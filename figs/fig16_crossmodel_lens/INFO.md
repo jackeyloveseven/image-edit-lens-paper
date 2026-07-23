@@ -8,6 +8,8 @@ Lens toolchain transfer to FireRed-Image-Edit-1.1 (K6): 3-rung transfer ladder R
 
 - supplement.tex
 
+Current placement: supplement Figure 16.
+
 ## Target caption
 
 ### supplement.tex

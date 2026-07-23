@@ -76,7 +76,7 @@
   existence proof. This supplement additionally provides, in full: the
   instruction-injection localization from a text-stream ablation, the
   differential lens, the 15\%-NFE preview lever, the edit-family
-  two-axis law, the mask-recomposition carrier law and the
+  two-axis law, the mask-recomposition carrier constraint and the
   object-identity rank ladder, a methodological caution on massive
   activations, the training-free applications (saliency, step-budget
   prediction, and mid-stack rescue), the full CFG-truncation and
@@ -178,15 +178,16 @@ mechanism: the editor carries an internal target image.} Under fixed
 underspecified prompts, the realized outcome is predictable early across
 synthetic and natural images and one independent architecture. In Qwen,
 the code is translated into
-the velocity code only in a sharp, timestep-invariant band (L52--54)
-that is consistent across the tested edit families and survives a
+the velocity code near L52--54: the crossover midpoint is stable within
+one layer across the two densely measured timesteps, while transition
+width varies from one to four layers. The boundary survives a same-lineage
 fine-tune and 4-step distillation. A per-(layer, timestep) tuned lens
 renders that target-image code directly into a coherent scene at every
 depth, confirming there is no hard readability boundary -- only a
 change of basis -- and mechanizing the mid-stack's complementary-color
 ``anti-image'' as the same code read through the wrong one
 (\S\ref{sec:tunedlens}). What one direction in that code can
-carry obeys a \emph{carrier law}: attributes are writable wherever a
+carry obeys a tested \emph{carrier constraint}: attributes are writable wherever a
 spatial mask supplies the ``where to stop''; object identity yields
 not to its probe direction -- read and write subspaces differ -- but to
 a graded rank ladder: category at rank 1, coherent instance by rank 4,
@@ -198,8 +199,8 @@ Held-out early best-of-five selection validates the readout on two architectures
 about 68\% measured compute reduction. Probe direction $+$ silhouette mask gives
 donor-free, prompt-free in-place attribute editing with a dose dial
 (\S\ref{sec:recompose}); truncating CFG after step 2 saves $45\%$ of
-forward passes with all four edit families intact, isolating CFG's real
-job as scope resolution (\S\ref{sec:cfgfreelunch}); the layer--time
+forward passes with all four edit families intact; zero-CFG failures are
+consistent with a role in scope resolution (\S\ref{sec:cfgfreelunch}); the layer--time
 structure survives step distillation at $7.7\times$ speed, licensing
 lens-based analysis of fast variants (\S\ref{sec:generalize},
 \S\ref{sec:cfgfreelunch}); and probe-derived saliency, step-budget
@@ -272,9 +273,7 @@ ICM~\citep{zaleska2026icm} supplies the key control for separating an
 explicit prompt from a realized generative choice: hold the prompt fixed,
 vary the seed, and label the final choice post hoc. Probe-Select
 \citep{guo2026probeselect} learns from early denoiser activations to predict
-final image quality, while ELECT~\citep{kim2025elect} uses zero-shot early
-latent background consistency for candidate selection in instruction editing.
-We adopt the fixed-prompt outcome protocol and held-out selection structure,
+final image quality. We adopt the fixed-prompt outcome protocol and held-out selection structure,
 but predict which outcome a fixed underspecified edit realizes, select relative
 to a requested outcome rather than overall quality or preservation, and study
 how its code changes across depth. ADE-CoT~\citep{qu2026adecot} goes further as
@@ -284,15 +283,15 @@ five-seed selector is not positioned as a competing test-time-scaling system;
 it is a held-out behavioral validation that the measured hidden state carries
 the realized attribute.
 
-Breaking the Lock-in~\citep{zhu2026lockin} is the closest temporal neighbor:
+Breaking the Lock-in~\citep{kwon2026lockin} is the closest temporal neighbor:
 it finds early cross-seed convergence in text-to-image sampling and modulates
 representations to restore diversity. Our fixed-prompt result concerns which
 outcome an image-editing DiT realizes, and our additional axis is transformer
 depth -- including the late conversion into the velocity basis -- so we do not
 interpret early predictability as irreversible lock-in. DreamReader
-\citep{sykora2026dreamreader} is the closest tooling neighbor, unifying
+\citep{prakash2026dreamreader} is the closest tooling neighbor, unifying
 representation extraction, patching, steering, and stitching for text-to-image
-U-Nets. Our scope is narrower: a frozen-head/tuned layer--time lens for a joint
+models. Our scope is narrower: a frozen-head/tuned layer--time lens for a joint
 text--image DiT editor, with held-out outcome prediction and rendered failure
 audits rather than a general-purpose editing toolkit.
 
@@ -307,9 +306,9 @@ confounded metrics) that motivate our later rejection of whole-token
 ablation as a fine-grained necessity test. Transplant is interpreted
 only as sufficiency. This boundary is reinforced by recent work showing that
 features can be easy to detect yet produce visual artifacts under
-off-distribution steering~\citep{pegoraro2026look}, and that activation
-patching with multiple mediators does not identify a unique causal pathway
-without stronger assumptions~\citep{zhang2026curse}. Activation
+off-distribution steering~\citep{cassano2026look}, and that activation
+patching with multiple mediators can hide substantial interaction effects
+~\citep{vaidyanathan2026curse}. Activation
 addition~\citep{turner2023actadd} steers language-model generations by
 adding a hand- or data-derived direction to the residual stream at
 inference time without any gradient step; \S\ref{sec:interventions} and
@@ -522,7 +521,7 @@ applied to every experiment in the paper. \textbf{Predict, then run.}
 Every intervention experiment was pre-registered: the expected outcome
 per condition was written down before launching the run, and
 refutations are reported as prominently as confirmations -- several of
-our headline findings, including the carrier law
+our headline findings, including the carrier constraint
 (\S\ref{sec:recompose}) and distillation resilience
 (\S\ref{sec:cfgfreelunch}), are pre-registered predictions that failed
 in an informative direction. \textbf{Look at every image.} Zero-shot
@@ -819,8 +818,8 @@ candidate near the requested target hue.
   \label{fig:boundary}
 \end{figure*}
 
-\textbf{A dense boundary sweep confirms the transition is sharp and
-timestep-invariant.} The four-variant crossover and the L59 probe dip
+\textbf{A dense boundary sweep separates stable location from variable
+sharpness.} The four-variant crossover and the L59 probe dip
 above were both measured on the coarse, $\sim$6-layer grid used
 throughout this paper. To ask how narrow the translation actually is, we
 re-ran the A/C crossover, the cosine-to-$v_{59}$ trace, and the cross-seed
@@ -926,12 +925,12 @@ explains why: the mid-stack code is image-like, and $\hat x_0 = x_t -
 \sigma v$ flips the sign of an image-like quantity when it is forced
 through a head built to consume a velocity-like one.
 
-\textbf{The translator is a model property, not an edit property.}
+\textbf{The translator transfers across the tested held-out edits.}
 Trained with zero color edits, it renders the held-out color edit
-perfectly at every depth: the goal-to-flow translation the L52--54
-band performs late is, for readout purposes, close to a
-per-(layer, timestep) affine change of basis that holds across edit
-families, not a fact about \emph{car\_red} specifically.
+coherently at every tested depth. For readout purposes, the goal-to-flow
+translation near L52--54 is therefore well approximated by a
+per-(layer, timestep) affine change of basis across this battery, rather
+than being specific to \emph{car\_red}.
 
 \textbf{Family generality, and the time axis.} The identical frozen
 per-(layer, timestep) dictionaries above -- fit once on
@@ -1001,7 +1000,7 @@ predictions: $D_{\ell,t} = |\text{decode}(h_\ell^{\text{edit}}) -
 plan, with the reconstruction component of the tuned-lens decode
 canceling out by construction (up to later-step collateral trajectory
 divergence between the two runs, discussed below). We report three
-statistics of $D$ against the ground-truth edit region $R$ (the
+statistics of $D$ against a final-output difference mask $R$ (the
 top-10\% of the two runs' final-output pixel difference,
 $\approx$10\% of patches by construction): $\mathrm{loc}$, the fraction
 of $D$'s own top-5\% mass that falls inside $R$ (chance level
@@ -1119,8 +1118,8 @@ bokeh-dense scene under visual inspection, not a structural failure
 like \emph{car\_red}'s.
 
 \textbf{The preview is already informative at $t{=}2$.} Median IoU
-between $D_{\text{L52},t2}$'s own top-10\% mass and the ground-truth
-region $R$ is $0.33$ across the 10 cases -- $6.6\times$ the
+between $D_{\text{L52},t2}$'s own top-10\% mass and the final-output
+difference mask $R$ is $0.33$ across the 10 cases -- $6.6\times$ the
 $\approx$0.05 chance level -- ranging $0.13$--$0.81$
 (\emph{remove\_duckfloat} highest). Every one of the 10 cases improves
 from $t{=}0$ to $t{=}2$ ($10/10$, exceeding the pre-registered
@@ -1141,7 +1140,7 @@ addition cases place \#2 and \#4 of 8 spatial cases by IoU (and
 \#2/\#3 by a threshold-free AUROC re-analysis), and the single lowest
 score on both metrics belongs to \emph{color\_eyes} -- the same case
 Figure~\ref{fig:difflens} shows previews \emph{best} to the eye. The
-mechanism is the ground-truth definition itself: $R$ is fixed at the
+mechanism is the reference-mask definition itself: $R$ is fixed at the
 top-10\% of pixels regardless of how large the true edit is, so a
 genuinely tiny edit (the cat's two eyes) gets an $R$ padded roughly
 $10\times$ by collateral fur divergence, and every metric computed
@@ -1151,7 +1150,7 @@ predicted ordering re-emerges: \emph{add\_runner}'s AUROC of $0.607$ is
 the worst score among them. This is the sixth documented instance in
 this paper of a quantitative readout diverging from the visual truth
 (\S\ref{sec:limits} catalogs the first five, all CLIP) -- and the first
-where the culprit is not CLIP but the mask that defines ground truth
+where the culprit is not CLIP but the mask used as a geometric reference
 for a purely geometric metric.
 
 \begin{figure}[t]
@@ -1160,8 +1159,8 @@ for a purely geometric metric.
   \caption{The differential lens as a $t{=}2$ ($\approx$15\% NFE)
   preview lever: three of the ten-case battery
   (\S\ref{sec:previewlever}). Left: each case's final edited output.
-  Right: $D_{\text{L52},t2}$ (grayscale) with the ground-truth edit
-  region $R$'s boundary overlaid in red. \emph{remove\_duckfloat}: the
+  Right: $D_{\text{L52},t2}$ (grayscale) with the final-output difference
+  mask $R$'s boundary overlaid in red. \emph{remove\_duckfloat}: the
   whole object slated for removal lights up as a duck-shaped ghost (IoU
   $0.81$, AUROC $0.995$). \emph{bg\_tatami}: a keep-vs-replace
   segmentation emerges unsupervised -- the three food bowls the prompt
@@ -1169,7 +1168,7 @@ for a purely geometric metric.
   \emph{color\_eyes}: two glowing eyes again, at only 15\% of the
   denoising trajectory -- visually the sharpest preview in the battery
   despite the lowest IoU/AUROC, because the fixed top-10\%
-  ground-truth mask $R$ is padded roughly $10\times$ by collateral fur
+  reference mask $R$ is padded roughly $10\times$ by collateral fur
   divergence around this tiny true edit (a metric artifact, not a
   preview failure).}
   \label{fig:previewlever}
@@ -1482,7 +1481,7 @@ distortion (TV $0.0546$) and produces a flat patch in 5/5. Thus the audit
 supports attention-routing conservation as an explanation for the tested
 coherent transplant and strengthens the carrier-bounded writability reading of
 steering, consistent with the broader detection--intervention gap reported by
-\citet{pegoraro2026look}. It does not make whole-token replacement a valid necessity test, nor
+\citet{cassano2026look}. It does not make whole-token replacement a valid necessity test, nor
 does it establish token reduction, speedup, architecture-general conservation,
 or transfer of RESTORE's positional calibration.
 

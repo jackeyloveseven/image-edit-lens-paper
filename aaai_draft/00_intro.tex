@@ -10,16 +10,35 @@ story and finds it wrong. In the model we study, the realized edit is
 \emph{translated late}, in the last few blocks, into the flow field that does
 the painting.
 
-The logit lens~\citep{nostalgebraist2020logitlens} and tuned
-lens~\citep{belrose2023tuned} track a language model's next-token
-prediction by projecting intermediate residuals through its final
-unembedding. DiT image editors~\citep{peebles2023dit,qwen2025image} have
-no analogous vocabulary: a patch hidden state is not an output
-distribution, so asking what a layer is drawing has required running the
-model to the end.
+Prior work provides partial readouts of generative internals. The logit and
+tuned lenses project transformer residuals through a final or learned output
+map~\citep{nostalgebraist2020logitlens,belrose2023tuned}. In diffusion,
+Diffusion Lens interprets text-encoder states; DiffLens and ICM probe or steer
+denoiser features; and DreamReader and sparse autoencoders provide broader
+extraction and feature-analysis tools
+~\citep{toker2024diffusionlens,shi2025difflens,zaleska2026icm,prakash2026dreamreader,surkov2025sae}.
+Recent work also detects early cross-seed convergence, predicts final quality
+from early activations, or allocates adaptive image-editing budgets
+~\citep{kwon2026lockin,guo2026probeselect,qu2026adecot}. None jointly decodes
+an instruction-based DiT's image stream across both transformer depth and
+denoising time while separating explicit-prompt readability from the realized
+outcome under a fixed prompt.
+
+A second line studies how to produce edits or intervene on hidden states.
+InstructPix2Pix and Prompt-to-Prompt learn or manipulate diffusion editing
+controls~\citep{brooks2023instructpix2pix,hertz2023prompttoprompt}; ROME and
+activation-patching practice transfer hidden states, while activation
+engineering adds steering directions
+~\citep{meng2022rome,heimersheim2024activation,turner2023actadd}. Concept
+Lancet already uses representation transplant for diffusion editing
+~\citep{luo2025colan}. Recent analyses further show that detectable diffusion
+features can fail under steering and that multi-mediator patching can hide
+interaction effects~\citep{cassano2026look,vaidyanathan2026curse}. We therefore
+use transplant only as a sufficiency test and steering only as a bounded
+writability test, not as a standalone editing method or a necessity proof.
 
 We build a layer--time lens for a production DiT editor,
-\model{} (60 blocks), by decoding intermediate residual streams through
+\model{} (60 blocks)~\citep{peebles2023dit,qwen2025image}, by decoding intermediate residual streams through
 the model's own frozen output head, and -- crucially -- pair passive
 readings with linear probes and controlled activation
 interventions (ablation, transplant, steering) that test what those
@@ -45,18 +64,19 @@ visual verdicts, and bit-exact gates.
 \item \textbf{A mechanism: the editor thinks with an internal image.}
 The realized edit is predictable early under a fixed underspecified
 instruction, carried as a target-image code, and translated into the
-velocity code only in a sharp, timestep-invariant band (layers
-52--54, transition width one layer) that is consistent across the edit
-families tested and survives an independent fine-tune and a 4-step
-distillation. Transplant establishes sufficiency; steering and a
-rank ladder show that readable attributes require a spatial carrier and
-a variable-dependent write subspace.
+velocity code near layers 52--54. Across the two densely measured
+timesteps, the crossover midpoint differs by under one layer while its
+width varies from one to four layers; the boundary also replicates in a
+same-lineage fine-tune and a 4-step distillation. Transplant establishes
+sufficiency; in the tested recolor setting, steering and a rank ladder show
+that readable attributes require a spatial carrier and a
+variable-dependent write subspace.
 \item \textbf{Validation and a lever.} Held-out early best-of-five selection
 validates the readout on Qwen and an independent architecture, with about
 68\% measured compute reduction. Separately, truncating classifier-free
 guidance after step 2 saves 45\% of forward passes across tested edit
-families, suggesting CFG's non-redundant role here is scope resolution
-rather than outcome selection.
+families; dropping CFG entirely produces failures consistent with a
+non-redundant role in scope resolution rather than outcome selection.
 \end{itemize}
 This is exploratory, single-model-family work; every verdict was made
 on the images themselves, and we are explicit about where the lens is

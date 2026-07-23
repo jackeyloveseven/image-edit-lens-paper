@@ -5,6 +5,11 @@
 适用范围：`fig1_teaser`、`fig5_mechanism`、`fig10_boundary`、`fig12_tuned_lens`。  
 **不含** `fig2_method`（pipeline）。
 
+> **当前实现（2026-07-22，commit `5f917cb`）**：本文件是设计宪法和历史工单。
+> 当前正文编号为 Fig1 teaser、Fig2 framework（唯一跨栏）、Fig3 mechanism、
+> Fig4 boundary、Fig5 tuned lens、Fig6 carrier、Fig7 preview。本文覆盖的四张图
+> 均已按单栏版式验收；技术内容与 Conclusion 止于第 7 页。
+
 字号策略采用 **偏大气** 一档：面板标题接近正文（AAAI 正文 ≈10 pt），轴与刻度略小，避免挤爆双栏。
 
 ---
@@ -122,9 +127,9 @@
 
 ### 1.5 验收标准
 
-- [ ] 缩小到半栏宽仍能读出五阶段名
-- [ ] 不看正文也能说出 “early / late”
-- [ ] 无散文式长标题、无压数据标注
+- [x] 缩小到半栏宽仍能读出五阶段名
+- [x] 不看正文也能说出 “early / late”
+- [x] 无散文式长标题、无压数据标注
 
 ---
 
@@ -167,15 +172,15 @@
 
 ### 2.5 验收标准
 
-- [ ] 左右顶边齐、色条不破坏对称
-- [ ] 读者能指出 “哪一格是 headline”
-- [ ] 打印后小图仍可辨车色（必要时略放大格）
+- [x] 左右顶边齐、色条不破坏对称
+- [x] 读者能指出 “哪一格是 headline”
+- [x] 打印后小图仍可辨车色（必要时略放大格）
 
 ---
 
-## 3. Figure 5 — Boundary（翻译带）
+## 3. Figure 4 — Boundary（翻译带）
 
-文件：`figs/fig10_boundary/`（正文 Figure 5）。
+文件：`figs/fig10_boundary/`（正文 Figure 4；supplement Figure 6）。
 
 ### 3.1 主 claim
 
@@ -206,15 +211,15 @@
 
 ### 3.5 验收标准
 
-- [ ] 三栏真正镜像对称（含标题/字母位置）
-- [ ] 不看 legend 位置也知道 band 是 translation
-- [ ] A 图数据区无大块遮挡
+- [x] 三栏真正镜像对称（含标题/字母位置）
+- [x] 不看 legend 位置也知道 band 是 translation
+- [x] A 图数据区无大块遮挡
 
 ---
 
-## 4. Figure 4 — Tuned lens（内部图像）
+## 4. Figure 5 — Tuned lens（内部图像）
 
-文件：`figs/fig12_tuned_lens/`（正文 Figure 4）。
+文件：`figs/fig12_tuned_lens/`（正文 Figure 5；supplement Figure 7）。
 
 ### 4.1 主 claim
 
@@ -246,9 +251,9 @@ Row 2 (t = 12):  raw L36 (anti-image) | tuned L36 | final output
 
 ### 4.4 验收标准
 
-- [ ] 无大块空白
-- [ ] 两行叙事与正文两句一一对应
-- [ ] 缩放后标签仍清晰；输出用 PNG@300dpi 或 PDF 嵌入无损图
+- [x] 无大块空白
+- [x] 两行叙事与正文两句一一对应
+- [x] 缩放后标签仍清晰；输出用 PNG@300dpi 或 PDF 嵌入无损图
 
 ---
 
@@ -257,10 +262,10 @@ Row 2 (t = 12):  raw L36 (anti-image) | tuned L36 | final output
 | 正文表述 | 必须出现在 |
 |---------|-----------|
 | predictable early / L6 | Fig1-B 侧标 + Fig3-B 红框 |
-| translated late / L52–54 | Fig1-B band + Fig1-C Translation + Fig5 三图 band |
-| target-image vs velocity | Fig3-A 两行语义 + Fig4 下行 raw vs tuned |
+| translated late / L52–54 | Fig1-B band + Fig1-C Translation + Fig4 三图 band |
+| target-image vs velocity | Fig3-A 两行语义 + Fig5 下行 raw vs tuned |
 | five stages 名称 | Fig1-C 与 Intro/Experiments **逐字一致** |
-| probe flat, drop at L59 | Fig5-C |
+| probe flat, drop at L59 | Fig4-C |
 
 Fig1-C 五阶段名称（与正文一致）：
 
@@ -274,9 +279,9 @@ Fig1-C 五阶段名称（与正文一致）：
 
 ## 6. 实施优先级（按收益）
 
-1. **Fig4 Tuned lens** — 对称性一票否决级
+1. **Fig5 Tuned lens** — 对称性一票否决级
 2. **Fig1 Teaser** — 第一印象与五阶段对齐
-3. **Fig5 Boundary** — 共享 legend + L52–54 band（改动小、很顶会）
+3. **Fig4 Boundary** — 共享 legend + L52–54 band（改动小、很顶会）
 4. **Fig3 Mechanism** — 网格与短标题精修
 
 对应脚本（改图时优先动这些）：
@@ -290,11 +295,11 @@ Fig1-C 五阶段名称（与正文一致）：
 
 ## 7. 最终 checklist（AAAI / CVPR 级别）
 
-- [ ] 四图同一字体、色板、字母规范
-- [ ] 偏大气字号阶梯已落实（面板标题 10 pt，轴 9 pt，刻度 7.5–8 pt，格内 ≥7 pt）
-- [ ] 每图一个主 claim，标题 ≤4 词
-- [ ] 网格对称，无半行留白、无 legend 压曲线
-- [ ] L52–54 / L6 在相关图上几何一致
-- [ ] 矢量 PDF + 必要位图 300dpi；`pdffonts` 无 Type 3
-- [ ] 打印灰度仍可区分实线/虚线与 band
-- [ ] 重导出后重编译 `main_aaai.pdf`，确认正文仍 ≤7 页技术内容
+- [x] 四图同一字体、色板、字母规范
+- [x] 偏大气字号阶梯已落实（面板标题 10 pt，轴 9 pt，刻度 7.5–8 pt，格内 ≥7 pt）
+- [x] 每图一个主 claim，标题 ≤4 词
+- [x] 网格对称，无半行留白、无 legend 压曲线
+- [x] L52–54 / L6 在相关图上几何一致
+- [x] 矢量 PDF + 必要位图 300dpi；`pdffonts` 无 Type 3
+- [x] 打印灰度仍可区分实线/虚线与 band
+- [x] 重导出后重编译 `main_aaai.pdf`，确认正文仍 ≤7 页技术内容

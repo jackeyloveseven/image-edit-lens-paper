@@ -13,15 +13,12 @@ Four ways to decode a layer's frozen-head output (standard/sign-flip/direct-v/ne
 
 ### AAAI submission (aaai_draft/20_experiments.tex)
 
-Left: four ways of turning an intermediate layer's
-  frozen-head output into an image for \emph{car\_red} at $t{=}4$ (A:
-  standard $\hat{x}_0{=}x_t{-}\sigma_t v_\ell$; B: sign-flipped; C:
-  $v_\ell$ decoded directly; D: $-v_\ell$ decoded directly) -- at L24
-  the standard decode is wrong-colored while the sign-flipped/direct
-  decodes already look red, and at L59 this reverses. Right: cross-seed
-  3-way probe accuracy (chance $=0.33$) by layer/step; the headline
-  cell L6/$t$4 ($0.883$) is far above the frozen-head reading at the
-  same cell, and probe accuracy drops at L59 relative to L48--L54.
+\textbf{Decode convention flips; the probe reads early.} \textbf{A}:
+four \emph{car\_red} decodes reverse convention between L24 and L59.
+\textbf{B}: the 3-way probe reaches $0.883$ at L6/$t$4 while the frozen
+head still reads noise (chance $0.33$).
+
+Current placement: main Figure 3; supplement Figure 5.
 
 ### supplement.tex
 

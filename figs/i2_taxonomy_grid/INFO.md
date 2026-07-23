@@ -8,6 +8,9 @@
 
 - supplement.tex
 
+Current placement: supplement Figure 22b, paired with the carrier grid in
+combined Figure 22.
+
 ## Target caption
 
 ### supplement.tex

@@ -8,6 +8,8 @@ Depth-lens decode thumbnails + P(red car) vs layer curves: flat/wrong-colored de
 
 - supplement.tex
 
+Current placement: supplement Figure 4.
+
 ## Target caption
 
 ### supplement.tex

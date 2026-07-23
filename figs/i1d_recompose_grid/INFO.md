@@ -17,6 +17,9 @@ A spatial carrier restores clean writability. Steering red inside a bounding
 box eventually overwrites the car with a flat patch; the same direction
 restricted to the car silhouette preserves geometry across effective doses.
 
+Current placement: four-panel crop as main Figure 6; full grid is supplement
+Figure 22a, paired with the taxonomy grid in Figure 22.
+
 ### supplement.tex
 
 (empty -- see combined caption in the figure environment, see note below)

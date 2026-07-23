@@ -8,6 +8,8 @@ Zero-retrain transfer to held-out add_runner edit, decoded through the same K1 t
 
 - supplement.tex
 
+Current placement: supplement Figure 8.
+
 ## Target caption
 
 ### supplement.tex

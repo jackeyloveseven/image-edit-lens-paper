@@ -15,26 +15,33 @@ to \texttt{float16} silently overflows most elements to \texttt{inf}
 Let $h_{\ell,t}^{(i)}\!\in\!\mathbb{R}^{d}$ denote the post-block residual
 after block $\ell\!\in\!\{0,\ldots,59\}$ at denoising step $t$, for
 image-stream row $i$ (target patch, condition patch, or a hooked subset);
-$h_{\ell,t}$ stacks the rows we capture.
+$h^{\mathrm{tar}}_{\ell,t}$ stacks the target-patch rows used for all
+image-space readouts below (condition rows are captured only for explicitly
+stated controls). A lens operator
+$\mathcal{L}_{\ell,t}:\mathbb{R}^{n\times d}\!\to\!\mathbb{R}^{n\times64}$
+maps these residuals to a target-grid velocity estimate $\tilde v_{\ell,t}$.
 Logit- and Jacobian-style lenses in language models align internal states
 with output units along depth and token position; a DiT patch has no
 vocabulary, so we define a \emph{layer--time lens} as a map from
-$(\ell,t)$ to a score on a fixed grid:
+$(\ell,t)$ to an image and then a score on a fixed grid:
 \begin{equation}
-  \mathcal{M}_{\ell,t}
-  \;=\;
-  \mathcal{R}\!\bigl(\mathcal{D}(\mathcal{L}_{\ell,t}(h_{\ell,t}))\bigr),
+  I_{\ell,t}
+  = \mathcal{V}\!\left(\Pi_t\!\left(
+  \mathcal{L}_{\ell,t}(h^{\mathrm{tar}}_{\ell,t})\right)\right),
+  \qquad
+  \Pi_t(\tilde v)=x_t-\sigma_t\tilde v,
   \label{eq:lens-grid}
 \end{equation}
-where $\mathcal{L}_{\ell,t}$ is one of the lens operators below,
-$\mathcal{D}$ is VAE decode when $\mathcal{L}$ returns a latent velocity,
-and $\mathcal{R}$ crops the edited region and applies CLIP~\citep{radford2021clip}
-over labels $\{y_k\}$,
+where $\mathcal{V}$ is the frozen VAE decoder. We score a fixed edit-region
+crop of $I_{\ell,t}$ with CLIP ViT-L/14~\citep{radford2021clip}. With
+unit-normalized image and prompt-ensembled text embeddings $e_I,e_T$, and
+CLIP's learned logit scale $\gamma$, the forced-choice probability over the
+reported label bank $\{y_k\}$ is
 \begin{equation}
   [\mathcal{M}_{\ell,t}]_k
   \;=\;
   \mathrm{softmax}_k\!\Bigl(
-    \mathrm{CLIP}\!\bigl(y_k,\,\mathrm{crop}(\mathcal{D}(\cdot))\bigr)
+    \gamma\, e_T(y_k)^\top e_I(\mathrm{crop}(I_{\ell,t}))
   \Bigr).
   \label{eq:clip-readout}
 \end{equation}
@@ -56,13 +63,13 @@ re-invoking the model's frozen output head (non-affine
 \texttt{AdaLayerNormContinuous} + linear \texttt{proj\_out}, bit-exact
 whether invoked at layer 59 or earlier):
 \begin{equation}
-  v_{\ell,t} = \mathrm{Head}(h_{\ell,t}),
+  v_{\ell,t} = \mathrm{Head}(h^{\mathrm{tar}}_{\ell,t}),
   \qquad
   \hat{x}_{0,\ell,t} = x_t - \sigma_t\, v_{\ell,t},
   \label{eq:depth-lens}
 \end{equation}
-then $\mathcal{D}(\hat{x}_{0,\ell,t})$.
-Because \texttt{norm\_out} has no learned scale, rescaling $h_{\ell,t}$ to
+then $I_{\ell,t}=\mathcal{V}(\hat{x}_{0,\ell,t})$.
+Because \texttt{norm\_out} has no learned scale, rescaling $h^{\mathrm{tar}}_{\ell,t}$ to
 the terminal norm is a no-op (raw vs.\ rescaled agree to
 \texttt{max\_rel\_diff}$=0$); we use the raw head everywhere with a
 standing self-consistency gate on every grid.
@@ -70,7 +77,7 @@ The \emph{tuned lens}~\citep{belrose2023tuned} fits a per-$(\ell,t)$ ridge map
 from $d{=}3072$ hidden dimensions to the $64$-d conditional-pass velocity,
 one dictionary per cell,
 \begin{equation}
-  \hat{v}_{\ell,t} = W_{\ell,t} h_{\ell,t} + b_{\ell,t},
+  \hat{v}_{\ell,t} = W_{\ell,t} h^{\mathrm{tar}}_{\ell,t} + b_{\ell,t},
   \quad
   W_{\ell,t} = V^\top H (H^\top H + \lambda I)^{-1},
   \label{eq:tuned-lens}
@@ -82,8 +89,8 @@ The \emph{differential lens} differences edit and control runs that share a
 seed (step-0 latents are then bit-identical):
 \begin{equation}
   D_{\ell,t}
-  = \bigl|\mathcal{D}(\mathcal{L}_{\ell,t}(h^{\mathrm{edit}}_{\ell,t}))
-  - \mathcal{D}(\mathcal{L}_{\ell,t}(h^{\mathrm{ctrl}}_{\ell,t}))\bigr|,
+  = \bigl|I^{\mathrm{edit}}_{\ell,t}
+  - I^{\mathrm{ctrl}}_{\ell,t}\bigr|,
   \label{eq:diff-lens}
 \end{equation}
 isolating the internal edit plan when the unchanged prompt is a faithful

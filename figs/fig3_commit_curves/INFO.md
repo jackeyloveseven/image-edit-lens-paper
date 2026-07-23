@@ -8,6 +8,8 @@ Time-lens P(target)@L59 vs denoising step for 8 of 10 battery cases: most edits 
 
 - supplement.tex
 
+Current placement: supplement Figure 3.
+
 ## Target caption
 
 ### supplement.tex

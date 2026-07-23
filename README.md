@@ -12,12 +12,12 @@ Start with [`AAAI_HANDOFF.md`](AAAI_HANDOFF.md) when taking over the project.
 
 ## Current deliverables
 
-Validated on 2026-07-21:
+Validated on 2026-07-23 in the worktree based on commit `5f917cb`:
 
 | Deliverable | State |
 |---|---|
 | `main_aaai.pdf` | 8 pages, Letter; technical content and Conclusion end on page 7; References continue through page 8; 0 overfull, undefined refs, or Type 3 fonts |
-| `supplement.pdf` | 32 pages, Letter; regenerated with the v2 main figures; 0 overfull, undefined refs, or Type 3 fonts |
+| `supplement.pdf` | 31 pages, Letter; regenerated from current source and verified bibliography; 0 overfull, undefined refs, or Type 3 fonts |
 | `reproducibility_checklist.pdf` | 2-page standalone checklist; upload separately from the main paper |
 | `main_aaai_non_input.tex` | flattened main source, regenerated with `scripts/flatten_tex.py` |
 
@@ -26,6 +26,16 @@ figures are single-column except the layer--time method framework; carrier-mask
 and 15\%-NFE preview evidence are promoted from the supplement.
 `tab:early` summarizes prediction/selection; `tab:generalize` summarizes
 same-lineage translation and probe transfer.
+
+The method section now defines the layer--time score grid, CLIP readout, time,
+depth, tuned, and differential lens operators, linear probes, and the three
+interventions as explicit equations. Figure 2 is the corresponding five-stage
+framework overview and is the only cross-column figure.
+
+Terminology rule: use **predictable early**, **content present early**, and
+**translated late**. Do not turn probe readability into irreversible
+commitment, destructive ablation into necessity, or Qwen-lineage replication
+into architecture-wide universality.
 
 ## Repository layout
 
@@ -88,7 +98,7 @@ after it.
 
 ## Submission split and dates
 
-- Abstract registration: 2026-07-21 AoE.
+- Abstract registration: 2026-07-21 AoE (passed).
 - Full paper: 2026-07-28 AoE.
 - Supplementary material and code: 2026-07-31 AoE.
 - Upload `main_aaai.pdf`, `supplement.pdf`, and

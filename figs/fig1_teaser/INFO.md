@@ -15,16 +15,13 @@ frozen-head translation and marks both L6 and L52--54 geometrically.
 
 ### AAAI submission (main_aaai.tex)
 
-A layer--time lens for a DiT image editor. Decoding the
-  frozen output head at intermediate layers of \emph{car\_red} gives a
-  $P(\text{red car})$ grid across layer and denoising step (center); a
-  L52--54 translation band is where the head-readable
-  signal first appears, but a linear probe shows the edit is already
-  linearly decodable from layer 6. We read this as a five-stage
-  picture (right): the instruction is injected early,
-  the realized outcome is predictable from layer 6, most of the stack
-  then carries a target-image code, a narrow band (L52--54) translates
-  it into the velocity code, and layer 59's frozen head reads it out.
+\textbf{Predictable early, translated late.} \textbf{A}: source and
+realized edit. \textbf{B}: frozen-head $P(\text{red car})$ across layer
+and step; the outcome is probe-readable at L6, but translation into the
+head-readable velocity convention occurs at L52--54. \textbf{C}: the five
+measured stages used throughout the paper.
+
+Current placement: main Figure 1; supplement Figure 1.
 
 ### supplement.tex
 

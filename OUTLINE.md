@@ -1,32 +1,37 @@
 # Paper Outline (working)
 
-**Working title**: When Is the Edit Decided? A Layer–Time Lens on How a Diffusion Editor Thinks with an Internal Image（v2.4 改副题，定位 thinking-with-images 领域）
+**Current title**: When Does an Image Edit Become Predictable? A Layer--Time Lens for Diffusion Editors
 
-**One-sentence story / motif（v2.4 起全文主线，abstract/intro/各节开头/conclusion 前后呼应）**: 编辑不是逐层显影——它 **decided early**（属性目标 L6 即线性在场）、**bound to a spatial carrier**（空间 carrier 决定能否被干净渲染）、**translated late**（最后几层才把 goal/image code 翻译成 flow 执行码）。编辑器在画之前先用一张内部图像思考；lens 让这个思考过程（含挣扎：novel structure 晚起笔、缺 carrier 时的归属招募）可观察、可操纵。
+**Current one-sentence story / motif**: 编辑不是逐层显影——最终结果 **predictable early**（固定欠指定 prompt 下，L6 已可预测）、写入 **bound to a spatial carrier**，而目标图像码只在末端 **translated late** 到 flow/velocity 执行码。这里的“早”是可预测性，不是不可逆承诺。
 
-**v2.4 三条创新点（贡献段已收敛 6→3）**：①工具+纪律——首个 DiT 编辑器 layer–time lens + 三干预原语（写语义精确声明）+ falsification-first 协议（预注册/逐图目检/位精确门控，§protocol 新小节）；②机制——内部图像思考（早决策/晚翻译边界族普适且过蒸馏，carrier law + 三种解离：可读≠因果必要≠线性可写）；③杠杆——机制直接变现（mask+方向免训练原位编辑、CFG 截断省 45%、决策结构过 4 步蒸馏 7.7×、saliency/step-budget/rescue）。
+**当前三条创新点**：①工具+纪律——DiT 编辑器 layer--time lens、四种 lens operator、三干预原语与 falsification-first 协议；②机制——结果早可预测、内部图像码晚翻译、carrier law，以及可读≠必要≠可写的解离；③杠杆——15%-NFE preview、CFG 截断省 45%、held-out selection。跨模型结论限定在测试的 Qwen 谱系；Boogu 只支持 prediction/selection。
 
 **领域定位（related work 新增 Thinking with images 段）**：外显派（Visual Sketchpad/Whiteboard-of-Thought/VoT/MVoT/OpenAI o3、Su et al. 2025 survey）把中间图像画在像素接口上；我们补机制的另一半——中间图像在编辑器内部**潜在地**存在（mid-stack target-image code），可读/可评/可操纵而无需渲染。
 
 ## Claims → evidence map (fill as experiments land)
 
+**Terminology guardrail (2026-07-22):** 下表保留部分历史实验 shorthand
+（如 commit/decision）。写入主论文时必须翻译为 saturation、predictability 或
+content presence；不得据此声称 irreversible commitment。带“普适/架构属性”的历史
+措辞只可在测试 family 或 Qwen 谱系范围内使用。
+
 | # | Claim | Evidence | Status |
 |---|---|---|---|
-| C1 | Edit commit time is **edit-dependent** and lens-measurable: color edit commits at t=0 (P(red)@L59 ≈0.93 flat); background swap commits at t≥4 (L59 t0 still original fence, P(beach)=0.029→0.90@t4) | WP3 + A1 both cases | ✅ done |
+| C1 | Time-lens target saturation/onset is edit-dependent: color is near-final at t=0, while the tested background swap reaches the target later | WP3 + A1 both cases | ✅ done |
 | C2 | Along depth, edit content becomes head-readable sharply between **L48→L54** (of 60); final layer carries it fully; mid layers decode to **complementary-color** renderings (structure present, velocity sign unresolved) | A1 contact sheets + CLIP grid; correctness gate: L59 lens ≡ model output bit-exact | ✅ done |
 | C2b | Raw frozen head is the honest lens: norm_out (AdaLayerNormContinuous, non-affine LayerNorm) per-token-normalizes away the ~30× deep-layer norm growth; rescale is a no-op in principle | A1 三重验证（权重模拟 2e-6 / 全管线 11/255 / 目检一致） | ✅ done |
 | C3 | Causal localization：(a) 空间严格局域（in/out 26×）；(b) step 窗口——car 任一窗口无碍 0.92-0.96（可从条件 token 重推），beach 早窗毁灭 0.014 单调衰减；(c) 层带——car 早层致命 L0-11→0.049 / 深层无害 L48-59→0.826，beach 反向 L48-59→0.040；(d) 条件 token 全零仍 P(red)≥0.96 但场景全失（fidelity 57-79），只断早层条件访问最伤（79.4）→源图 grounding 在早层 | WP5 + A3 (23 runs, a3_summary.json) | ✅ done |
-| **C7** | **可读性 ≠ 因果必要性（主发现）**：lens 可读深度（L48-54）与因果关键层带解离，方向依编辑类型——car 的可读处是下游回声（决策早锁于浅层），beach 的深层真正承重 | A3 层带扫描 × A1 lens 网格对照 | ✅ done |
-| C4 | Edit intent is transplantable across runs via hidden-state swap（预测：早中层可移植、深层不可，与 A3 一致才闭环） | A4 running | 🔄 |
+| **C7** | **可读性 ≠ 因果必要性**：lens 可读深度（L48--54）与 ablation sensitivity 解离；whole-token overwrite 只作压力测试，不作细粒度 necessity 定位 | A3 层带扫描 × A1 lens 网格对照 | ✅ done |
+| C4 | Hidden-state transplant across runs is sufficient to install the tested edit; this is a sufficiency result, not unique-path necessity | A4 transplant + content control | ✅ done |
 | C5 | Naive deep-layer magnitude readouts are dominated by massive activations (methodological caution; outlier channels e.g. ch673) | WP4: L59 norm ~2.6e9, bg hotter than edit; mid layers OK | ✅ done |
-| C6 | Findings hold across edit categories (color/remove/add/background/style) | A5 battery | pending |
+| C6 | Timing and readout findings are evaluated across color/remove/add/background/style batteries, with family-specific caveats | A5/G5/H1 batteries | ✅ done |
 
 | **C8** | **机制：两套码**——中层残差是"目标图像码"（x₀ 方向正号，骑在噪声分量上），末端 ~6 blocks 做图像码→速度码翻译（图像方向分量符号在 L48→54 翻转）；四变体解码交叉钉死，全局符号假说被否 | D1 (runs/d1_signflip) | ✅ done |
-| **C9** | **决策码线性在场**：跨 seed probe L6·t4=0.883（冻结头同处 0.005-0.14）；L0·t0 恰随机（决策于前几 block 形成）；L59 跌至 0.68-0.75（速度码破坏决策可分性） | D2 (runs/d2_probe) | ✅ done |
+| **C9** | **结果码早期线性可读**：跨-seed probe L6·t4=0.883，而冻结头同处仍近噪声；L59 可分性下降。该结果是 predictability，不是不可逆 decision | D2 (runs/d2_probe) | ✅ done |
 | **C10** | **起笔时刻分化（修订假说被量化推翻）**：修订事件 0/10（质心全程冻结，目检"搬家"是缩略图伪影）；真实分化 = add_boat 延迟起笔（t4，IoU 0.52→1.00 原位渐进成形）vs 其余 9 例 t0 打印型（IoU≥0.67 且平坦）；灰度 diff 对纯色相变化致盲须用 RGB | E2 (runs/e2_revision) | ✅ done（含自我纠错，写进 method 诚实性段落） |
-| C11 | 提交时刻梯度=布局新颖度（色/风格 t0-2 → 换景 t0-2 → 加物 t7）；removal 类 CLIP 标签失效已标记 | A5 aggregate | ✅ done |
-| C12 | 实用杠杆：决策显著图修复热力图（E1）/ lens 预测可砍步数（E3a）/ 早层移植抢救弱编辑（E3b） | E1/E3 running | 🔄 |
-| **C13** | **两轴律（H1a）**：翻译边界族普适（可测处全落 L52-53：style 53.0/53.1、bg 52.1；removal/addition CLIP margin 太弱只能说符号模式一致，名义 53.4-55.9）；决策深度分裂——外观族浅层可读（style L6/t4=0.80、L12/t4=0.94；bg 0.93/0.96）vs 结构族深层结晶（removal L36 才 0.88；addition t≥4 峰值 0.81）。L59 probe 下跌本身族依赖（color 显著/bg 轻/style 无 0.97-0.99） | H1a (runs/h1a/) | ✅ done, 论文 §families |
+| C11 | Saturation/onset 按编辑类型分化；novel-structure insertion 较晚，removal 类 CLIP 标签失效已标记 | A5/G5 aggregate | ✅ done |
+| C12 | 实用杠杆：probe saliency、步数预算、弱编辑 transplant rescue；正文保留 15%-NFE preview 与 CFG truncation，完整应用图在 supplement | E1/E3/K4/X1 | ✅ done |
+| **C13** | **两轴律（H1a）**：在可可靠测量的测试 edit families 中，translation boundary 落在 L52--53 邻域；probe-readability depth 随 family 分裂，且 L59 probe drop 也依 family 而变 | H1a (runs/h1a/) | ✅ done, 论文 §families |
 | **C14** | **可操纵性谱系（H1b）+ G1 修订**：方向携带 geometry-free 语义（色相/风格/空无）装不下形——移除唯一干净 steer（L36，外区 diff 1.91）；风格部分（wash +0.23）；原位改色=平色块覆写几何（G1'干净扳红'为三选一 CLIP 伪结论，目检修订为 crude）；换背景只完成擦除半程（旧背景抹平、沙滩未现 -0.01）；加物两深度全败（糊块）。随机对照 +0.001。判定以目检 verdict 为主（visual_verdicts.json），CLIP 仅佐证 | H1b (runs/h1b_steer/) + G1 复审 | ✅ done, 论文 §families + §steer 自纠段 |
 
 | **C15** | **属性/carrier 原位可分离（I1/I1b/R1）**：投影掉 rank-1/2 颜色子空间（仅占行范数 ~1.2%）即去色不伤形（擦除半程）；写入半程语义敏感——累积 push 任何剂量都淹没 carrier（G1 平块=过量非不可能），逐层 clamp（先投影再写坐标）α=8 首次实现纯方向原位改色不毁形 | I1 (runs/i1_recompose/) + I1b (runs/i1b_write_fix/)，目检 verdicts | ✅ done |
@@ -45,9 +50,9 @@
 | **C28** | **末步 L52/56 崩溃=内在非线性(train-val 平台化,数据不可约)+ 小 N 泛化 gap + 层梯度（K9，嵌套学习曲线 N=3→6→9→12）**：关闭 C27 留下的"非线性 vs 3 例拟合容量"开放轴。用现有 12 训练案例做嵌套学习曲线,固定 held-out car_red/style_ink,step19=崩溃步、step16=健康对照。**决定性诊断是 train-val(P4)**：step19 train-val 在 L52 平台化 **~0.80(0.79/0.83/0.81/0.80)**、L56 ~0.90 **跨全 N 不变**——线性映射连自己训练都拟不到 0.80 以上、任何 N 都突破不了=**表达力天花板=内在非线性**(非欠采样;容量不足会让 train-val 随 N 爬向 1.0)。held-out 确有真实上升(N3→N6:car L52 0.65→0.76、ink 0.27→0.54)但 N6→N12 平台化**收敛到 train-val 天花板**(car L52 held-out 0.785 vs tv 0.805 gap 仅 0.02 完全收敛;ink L52 0.574 仍有 0.23 gap=更难案例),P5 组分对照(N6vsN6'/N9vsN9' 全<0.055)证上升是真 N 效应非案例组分。**层梯度**:L59 完美线性(tv 0.998 直喂速度头)→L56 弱天花板 0.90→L52 强天花板 0.80,末步非线性随离末块距离加深。**两成分干净分离**:天花板=非线性(数据不可约)、小 N gap=容量(可关但只决定逼近天花板速度非天花板位置)。门全 PASS(G1 位精确,G2 max 0.0184<0.02 最松格恰是预判噪声格 style_ink L52_t19、step16 健康锚≤0.0018 零漂移)。P1/P3/P4/P5 确认;P2 点预测(Δ<0.15)被否(实测 Δ=+0.22 落模糊带,确有小 N 容量效应),但预注册模糊带 tie-break(连 train-val 读)使之决定性收敛非线性——诚实报"naive 从 N3 就平的预期太强"。精度界:非线性是对**线性读出类**而言(ridge on raw hidden),精确表述"0.80 以上不可线性解"非"信息不存在"(MLP 探针可能多解);N 封顶 12 但 train-val 平台化使 >12 改天花板不太可能(外推)。收紧 [[C21]]:仿射可解码在全深度成立**唯末步中深层例外且该例外经证是内在非线性** | K9 (runs/k9_capacity_curve/)，目检 verdicts + advisor 框架 | ✅ done，已回填论文（§generalize K8 段后新段，**26pp** 零错零新 overfull，25→26pp 系末页 onset/IoU 图页再被顶后一页非空页；三条精度界逐句核对无软化）+展示页 **v7.0**（K9 定案小节+learning_curve/composition 两图+prediction ledger K9 行+claim ledger C28 行+谨慎项更新，已传 R2）；**C25→C28 研究链闭环** |
 | **C19** | **蒸馏韧性（X2）**：预注册『carrier 需求预测蒸馏失败（addition 最脆）』被有利方向推翻——4 步 Rapid-AIO 五族 20/20 编辑目检全活（加物仅姿态漂移、style/bg 仅调色差），2.5s/案例=7.7×；与 G4 边界原位保留互证：**步数蒸馏压缩采样轨迹但不压缩决策结构** | X2 (runs/x2_distill_battery/)，目检 verdicts | ✅ done，已回填论文（X 阶段小节，v2.3 起） |
 
-## 大道至简（论文 abstract/intro 的中枢句）
+## 大道至简（当前可引用口径）
 
-> 编辑模型用两套码思考：前 ~48 层在**目标图像码**里构思（决策自 L6 起线性在场；保留类第一步即终稿，发明类延迟数步起笔、原位渐进成形）；最后 ~12 层只做**翻译**——把"想要什么"转成"怎么画"。因此一切输出头式透镜看到的都是译文而非原文：读原文要换基（probe），验原文要动刀（干预）。
+> 在测试设置中，最终编辑结果从早层状态即可预测，而大部分深度携带的目标图像码到 L52--54 邻域才被翻译成输出头使用的 velocity convention。Probe 读出、frozen-head readability、transplant sufficiency 与 linear writability 是四个不同问题。
 
 **v2.2 增补（H 阶段终版）**：
 > 方向向量装得下"什么"（色相/风格/空无），装不下"形"（几何）。唯一不需要几何的目标状态是"空无"——所以移除是唯一能被一根方向干净完成的编辑。Erasure is linear because emptiness has no shape.
@@ -56,24 +61,22 @@
 
 ## Sections
 
-1. **Introduction** — logit lens for LLMs vs. nothing comparable for image editors; questions: *when* (time), *where* (depth), *which tokens* (space) is an edit decided? Contributions: (i) layer–time lens for DiT editors (training-free, frozen-head), (ii) findings C1–C4, (iii) open tool.
-2. **Related work** — logit lens / tuned lens / Jacobian lens (jlens); diffusion model interpretability; activation patching / causal tracing; DiT editing models.
-3. **Preliminaries** — QwenImageEditPlus: flow matching, joint text–image blocks, token layout (target first, condition at t=0 via zero_cond_t), true CFG.
-4. **Method** — (a) capture (bf16 必须, hook 语义: post-block residual); (b) time lens: x0_t = latents − σ_t·v; (c) depth lens: frozen norm_out+proj_out on intermediate hidden (raw vs RMS-rescaled variants, honest comparison); (d) readout: decode-then-CLIP (region-level; why per-patch CLIP is unsound); (e) interventions: ablate (post-block overwrite semantics), swap.
-5. **Experiments** — 5.1 emergence in time (C1); 5.2 emergence in depth (C2, flagship figure: layer×step contact sheet + CLIP heatmap); 5.3 causal localization (C3: spatial/step-window/layer-window/condition-token); 5.4 transplant (C4); 5.5 multi-case stats (C6); 5.6 magnitude pitfall (C4→method caution box).
-6. **Limitations & honest interpretation** — exploratory tool; CLIP zero-shot noisy on abstract labels; single model; not mechanistic proof; no claims about "intent" in a human sense.
-7. **Conclusion**.
+1. **Introduction** — problem, two integrated related-work paragraphs, three contributions, conservative claim boundary.
+2. **Proposed Method** — explicit layer--time grid, four lenses, CLIP readout, probes, interventions, predict--look--gate.
+3. **Experiments** — early predictability; late translation/two codes; transplant and carrier-bounded writability; differential preview; same-lineage generalization; CFG truncation.
+4. **Limitations** — single-family mechanistic scope, Boogu boundary, CLIP and ablation caveats.
+5. **Conclusion**.
 
 ## Figures plan
 
-- Fig.1 teaser: source→edited + the layer×time lens grid with the "decision moment" annotated
-- Fig.2 method diagram (token layout + where the lens taps; concept-fig 规范: ≤4词短标签, 说明进 caption)
-- Fig.3 time-emergence curves (P(edit) vs step, multi-case)
-- Fig.4 depth-emergence contact sheet + CLIP layer×step heatmap
-- Fig.5 causal ablation: spatial (WP5 images) + step/layer window curves
-- Fig.6 swap transplant qualitative
-- Fig.7 magnitude pitfall (L59 vs mid-layer heatmaps)
+- Fig.1 teaser（单栏）: early predictability / late translation / five stages
+- Fig.2 framework（唯一跨栏）: editor, four lenses, probes/interventions, mechanism, levers
+- Fig.3 mechanism（单栏）: decode convention + early probe
+- Fig.4 boundary（单栏）: dense L52--54 translation band
+- Fig.5 tuned lens（单栏）: internal image vs anti-image
+- Fig.6 carrier（单栏）: bbox overwrite vs silhouette-preserving write
+- Fig.7 preview（单栏）: differential preview at 15% NFE
 
 ## Format
 
-arXiv preprint, two-column (article + custom style or `neurips`-like preprint style), pdflatex, figures PDF/PNG≤300dpi mix; 编译产物与源码在 paper/，遵循 CANONICAL 式真值表习惯：所有图的数据来源记录在 paper/provenance.md。
+AAAI-27 double-blind submission, `aaai2027.sty`, Letter, 7 technical pages plus references. Authoritative source is `main_aaai.tex` + `aaai_draft/*.tex`; `main_aaai_non_input.tex` is generated. All figure lineage lives in `figs/<name>/INFO.md` and `provenance.md`.

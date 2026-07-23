@@ -8,6 +8,8 @@ Appendix self-correction case: IoU-vs-final onset curves for 6 non-global-edit c
 
 - supplement.tex
 
+Current placement: supplement Figure 23.
+
 ## Target caption
 
 ### supplement.tex
@@ -29,7 +31,10 @@ The self-correction case from \S\ref{sec:limits}. Top: IoU
   - runs/e2_revision/summary.json
   - runs/e2_revision/boat_storyboard.png
 
-- Note: Script filename predates later figure insertions; renders in Appendix A (\label{fig:onset}). The 20-case onset-vs-novelty/area extension (runs/g5_onset_law/summary.json) is reported as prose in \S5.1 rather than a separate figure -- a standalone scatter was tried and cost 1pp, cut in favor of prose stating the same numbers.
+- Note: Script filename predates later figure insertions; current placement is
+  supplement Figure 23 (`\label{fig:onset}`). The 20-case
+  onset-vs-novelty/area extension is reported as prose rather than a separate
+  figure.
 
 ## Files in this folder
 

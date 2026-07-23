@@ -1,4 +1,4 @@
-\begin{thebibliography}{30}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Belrose et~al.(2023)Belrose, Furman, Smith, Halawi, Ostrovsky,
@@ -14,18 +14,18 @@ Brooks, T.; Holynski, A.; and Efros, A.~A. 2023.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}.
 
-\bibitem[{Cho et~al.(2026)Cho, Baek, Kim, and Ham}]{cho2026restore}
-Cho, H.; Baek, D.; Kim, Y.; and Ham, B. 2026.
-\newblock Improving Visual Token Reduction via Rectifying Distortions for
-  Efficient Multimodal {LLM} Inference.
-\newblock \emph{arXiv preprint arXiv:2606.01711}.
-\newblock Accepted at ICML 2026.
+\bibitem[{Cassano et~al.(2026)Cassano, Renzulli, Ahmed, Grangetto, and
+  Alaniz}]{cassano2026look}
+Cassano, E.; Renzulli, R.; Ahmed, R.; Grangetto, M.; and Alaniz, S. 2026.
+\newblock Look But Don't Touch with Sparse Autoencoders for Unlearning in
+  Diffusion Models.
+\newblock \emph{arXiv preprint arXiv:2606.31699}.
 
 \bibitem[{Guo, Wei, and Jing(2026)}]{guo2026probeselect}
 Guo, H.; Wei, H.; and Jing, B. 2026.
 \newblock Toward Early Quality Assessment of Text-to-Image Diffusion Models.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
-  Recognition (CVPR)}, 13186--13195.
+  Recognition (CVPR)}, 38410--38419.
 
 \bibitem[{Heimersheim and Nanda(2024)}]{heimersheim2024activation}
 Heimersheim, S.; and Nanda, N. 2024.
@@ -40,47 +40,11 @@ Hertz, A.; Mokady, R.; Tenenbaum, J.; Aberman, K.; Pritch, Y.; and Cohen-Or, D.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
 
-\bibitem[{Ho and Salimans(2022)}]{ho2022cfg}
-Ho, J.; and Salimans, T. 2022.
-\newblock Classifier-Free Diffusion Guidance.
-\newblock \emph{arXiv preprint arXiv:2207.12598}.
-
-\bibitem[{Hu et~al.(2024)Hu, Shi, Fu, Roth, Ostendorf, Zettlemoyer, Smith, and
-  Krishna}]{hu2024sketchpad}
-Hu, Y.; Shi, W.; Fu, X.; Roth, D.; Ostendorf, M.; Zettlemoyer, L.; Smith,
-  N.~A.; and Krishna, R. 2024.
-\newblock Visual Sketchpad: Sketching as a Visual Chain of Thought for
-  Multimodal Language Models.
-\newblock In \emph{Advances in Neural Information Processing Systems}.
-
-\bibitem[{Kim et~al.(2025)Kim, Lee, Kim, and Lee}]{kim2025elect}
-Kim, J.; Lee, S.; Kim, N.; and Lee, S. 2025.
-\newblock {ELECT}: Early Latent Consistency for Zero-Shot Candidate Selection
-  in Instruction-Guided Image Editing.
-\newblock In \emph{IEEE/CVF International Conference on Computer Vision
-  (ICCV)}, 8209--8218.
-
-\bibitem[{Li et~al.(2025)Li, Wu, Zhang, Xia, Mao, Dong, Vuli{\'c}, and
-  Wei}]{li2025mvot}
-Li, C.; Wu, W.; Zhang, H.; Xia, Y.; Mao, S.; Dong, L.; Vuli{\'c}, I.; and Wei,
-  F. 2025.
-\newblock Imagine while Reasoning in Space: Multimodal
-  Visualization-of-Thought.
-\newblock \emph{arXiv preprint arXiv:2501.07542}.
-
-\bibitem[{Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
-  Le}]{lipman2023flowmatching}
-Lipman, Y.; Chen, R. T.~Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023.
-\newblock Flow Matching for Generative Modeling.
-\newblock In \emph{International Conference on Learning Representations
-  (ICLR)}.
-
-\bibitem[{Liu, Gong, and Liu(2023)}]{liu2023rectifiedflow}
-Liu, X.; Gong, C.; and Liu, Q. 2023.
-\newblock Flow Straight and Fast: Learning to Generate and Transfer Data with
-  Rectified Flow.
-\newblock In \emph{International Conference on Learning Representations
-  (ICLR)}.
+\bibitem[{Kwon, Lee, and Choi(2026)}]{kwon2026lockin}
+Kwon, D.; Lee, H.; and Choi, J. 2026.
+\newblock Breaking the Lock-in: Diversifying Text-to-Image Generation via
+  Representation Modulation.
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
 
 \bibitem[{Luo et~al.(2025)Luo, Ding, Chan, Min, Callison-Burch, and
   Vidal}]{luo2025colan}
@@ -103,28 +67,23 @@ nostalgebraist. 2020.
 \newblock LessWrong.
 \newblock Accessed 2026.
 
-\bibitem[{Park, Choe, and Veitch(2024)}]{park2024linear}
-Park, K.; Choe, Y.~J.; and Veitch, V. 2024.
-\newblock The Linear Representation Hypothesis and the Geometry of Large
-  Language Models.
-\newblock In \emph{International Conference on Machine Learning (ICML)}.
-
 \bibitem[{Peebles and Xie(2023)}]{peebles2023dit}
 Peebles, W.; and Xie, S. 2023.
 \newblock Scalable Diffusion Models with Transformers.
 \newblock In \emph{IEEE/CVF International Conference on Computer Vision
   (ICCV)}.
 
-\bibitem[{Pegoraro, Johnson, and Nixon(2026)}]{pegoraro2026look}
-Pegoraro, A.; Johnson, D.~D.; and Nixon, J. 2026.
-\newblock Look But Don't Touch: Visual Features in Diffusion Models Are Easy to
-  Detect but Hard to Steer.
-\newblock \emph{arXiv preprint arXiv:2606.31699}.
+\bibitem[{Prakash et~al.(2026)Prakash, Oozeer, Lan, Samkharadze, Howard, Lee,
+  Nathawani, Raval, and Abdullah}]{prakash2026dreamreader}
+Prakash, N.; Oozeer, N.; Lan, M.; Samkharadze, L.; Howard, P.; Lee, R. K.-W.;
+  Nathawani, D.; Raval, S.; and Abdullah, A. 2026.
+\newblock {DreamReader}: An Interpretability Toolkit for Text-to-Image Models.
+\newblock \emph{arXiv preprint arXiv:2603.13299}.
 
-\bibitem[{Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Yu, Sun, Bai, Chu, Gou,
-  Xiong, and Cai}]{qu2026adecot}
-Qu, X.; Yuan, Z.; Tang, J.; Chen, R.; Tang, D.; Yu, M.; Sun, L.; Bai, Y.; Chu,
-  X.; Gou, G.; Xiong, G.; and Cai, Y. 2026.
+\bibitem[{Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Sun, Bai, Chu, Gou, and
+  Xiong}]{qu2026adecot}
+Qu, X.; Yuan, Z.; Tang, J.; Chen, R.; Tang, D.; Sun, Y.; Bai, L.; Chu, Y.; Gou,
+  X.; and Xiong, G. 2026.
 \newblock From Scale to Speed: Adaptive Test-Time Scaling for Image Editing.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}, 23272--23282.
@@ -160,14 +119,6 @@ Surkov, V.; Wendler, C.; Mari, A.; Terekhov, M.; Deschenaux, J.; West, R.;
   Models.
 \newblock In \emph{Advances in Neural Information Processing Systems}.
 
-\bibitem[{Sykora et~al.(2026)Sykora, Williams, Hu, Duan, Zhou, Wetzstein, and
-  Aigerman}]{sykora2026dreamreader}
-Sykora, Q.; Williams, F.; Hu, Y.; Duan, P.; Zhou, B.; Wetzstein, G.; and
-  Aigerman, N. 2026.
-\newblock {DreamReader}: Interpreting and Editing Diffusion Models via
-  Representation Extraction.
-\newblock \emph{arXiv preprint arXiv:2603.13299}.
-
 \bibitem[{Toker et~al.(2024)Toker, Orgad, Ventura, Arad, and
   Belinkov}]{toker2024diffusionlens}
 Toker, M.; Orgad, H.; Ventura, M.; Arad, D.; and Belinkov, Y. 2024.
@@ -180,14 +131,15 @@ Toker, M.; Orgad, H.; Ventura, M.; Arad, D.; and Belinkov, Y. 2024.
   and MacDiarmid}]{turner2023actadd}
 Turner, A.~M.; Thiergart, L.; Leech, G.; Udell, D.; Vazquez, J.~J.; Mini, U.;
   and MacDiarmid, M. 2023.
-\newblock Activation Addition: Steering Language Models Without Optimization.
+\newblock Steering Language Models With Activation Engineering.
 \newblock \emph{arXiv preprint arXiv:2308.10248}.
 
-\bibitem[{Wu et~al.(2024)Wu, Mao, Zhang, Xia, Dong, Cui, and Wei}]{wu2024vot}
-Wu, W.; Mao, S.; Zhang, Y.; Xia, Y.; Dong, L.; Cui, L.; and Wei, F. 2024.
-\newblock Mind's Eye of {LLMs}: Visualization-of-Thought Elicits Spatial
-  Reasoning in Large Language Models.
-\newblock In \emph{Advances in Neural Information Processing Systems}.
+\bibitem[{Vaidyanathan et~al.(2026)Vaidyanathan, Arbour, Mueller, Niekum, and
+  Jensen}]{vaidyanathan2026curse}
+Vaidyanathan, S.; Arbour, D.; Mueller, A.; Niekum, S.; and Jensen, D. 2026.
+\newblock The Curse of Multiple Mediators: Hidden Interaction Effects in
+  Activation Patching.
+\newblock \emph{arXiv preprint arXiv:2606.27510}.
 
 \bibitem[{Zaleska et~al.(2026)Zaleska, Popek, Wysocza{\'n}ska, and
   Deja}]{zaleska2026icm}
@@ -195,17 +147,6 @@ Zaleska, K.; Popek, {\L}.; Wysocza{\'n}ska, M.; and Deja, K. 2026.
 \newblock Attention, May I Have Your Decision? Localizing Generative Choices in
   Diffusion Models.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
-  Recognition (CVPR)}, 9818--9828.
-
-\bibitem[{Zhang, Hegde, and Zhang(2026)}]{zhang2026curse}
-Zhang, J.; Hegde, C.; and Zhang, Y. 2026.
-\newblock The Curse of Multiple Mediators in Activation Patching.
-\newblock \emph{arXiv preprint arXiv:2606.20945}.
-
-\bibitem[{Zhu et~al.(2026)Zhu, Chen, Lin, Zhang, and Qi}]{zhu2026lockin}
-Zhu, Y.; Chen, R.; Lin, W.; Zhang, J.; and Qi, Y. 2026.
-\newblock Breaking the Lock-in: Diversifying Text-to-Image Generation via
-  Representation Modulation.
-\newblock In \emph{International Conference on Machine Learning (ICML)}.
+  Recognition (CVPR)}, 18053--18063.
 
 \end{thebibliography}

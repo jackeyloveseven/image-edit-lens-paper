@@ -8,6 +8,8 @@ Rapid-AIO L52 decode ladder (K7) under the sigma-matched three-rung translator d
 
 - supplement.tex
 
+Current placement: supplement Figure 17.
+
 ## Target caption
 
 ### supplement.tex

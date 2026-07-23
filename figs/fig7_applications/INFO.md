@@ -8,6 +8,8 @@ Three practical applications of the lens: decision-saliency map beats raw magnit
 
 - supplement.tex
 
+Current placement: supplement Figure 14.
+
 ## Target caption
 
 ### supplement.tex
@@ -35,7 +37,8 @@ Three practical uses of the lens. Left: a saliency map built
   - runs/e3_earlyexit/summary.json
   - runs/e3_rescue/summary.json
 
-- Note: Script filename predates later figure insertions; renders as a later-numbered figure (\label{fig:apps}).
+- Note: Script filename predates later figure insertions; current label is
+  supplement Figure 14 (`\label{fig:apps}`).
 
 ## Files in this folder
 

@@ -11,6 +11,8 @@ query group and layer.
 
 - `supplement.tex`
 
+Current placement: supplement Figure 13.
+
 ## Generation
 
 - Script: `fig20_attention_conservation.py`

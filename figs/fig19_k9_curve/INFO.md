@@ -8,6 +8,8 @@ Nested learning curve (K9) isolating nonlinearity from fit capacity: (a) held-ou
 
 - supplement.tex
 
+Current placement: supplement Figure 19.
+
 ## Target caption
 
 ### supplement.tex

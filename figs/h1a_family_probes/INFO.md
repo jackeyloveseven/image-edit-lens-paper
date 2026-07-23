@@ -8,6 +8,8 @@ Cross-seed 3-class probe accuracy per edit family (5 layers x 3 steps): appearan
 
 - supplement.tex
 
+Current placement: supplement Figure 20.
+
 ## Target caption
 
 ### supplement.tex

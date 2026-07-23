@@ -6,37 +6,18 @@ Causal ablation (layer-band A, step-window B) + transplant (C), car_red vs beach
 
 ## Used in
 
-- AAAI submission (main_aaai.tex, via aaai_draft/*.tex)
-- supplement.tex
+- supplement.tex only (the main paper retains transplant results in prose)
 
 ## Target caption
 
-### AAAI submission (aaai_draft/20_experiments.tex)
-
-Causal ablation and transplant, \emph{car\_red} vs.\
-  \emph{beach\_background}. \textbf{A}: ablating a band of layers shows
-  opposite profiles -- car needs its \emph{early} layers, beach needs
-  its \emph{late} ones. \textbf{B}: ablating a window of steps shows
-  car tolerates any single window, beach is destroyed by ablating the
-  earliest one. \textbf{C}: transplanting a donor \emph{car\_red} run's
-  hidden state into a \emph{car\_green} recipient, at any of four layer
-  bands, is \emph{sufficient} to flip the output back to red --
-  including the L48--59 band, which panel A shows is \emph{not
-  necessary} for the car edit at all.
-
 ### supplement.tex
 
-Causal ablation and transplant, \emph{car\_red} vs.\
-  \emph{beach\_background}. \textbf{A}: ablating a band of layers (all
-  20 steps) shows opposite profiles -- car needs its \emph{early} layers,
-  beach needs its \emph{late} ones. \textbf{B}: ablating a window of
-  steps (4 mid layers, [12,24,36,48]) shows car tolerates any single
-  window, beach is destroyed by ablating the earliest one. \textbf{C}:
-  transplanting a donor \emph{car\_red} run's hidden state into a
-  \emph{car\_green} recipient, at any of four layer bands, is
-  \emph{sufficient} to flip the output back to red -- including the
-  L48--59 band, which panel A shows is \emph{not necessary} for the
-  car edit at all.
+Historical whole-token stress tests and transplant. \textbf{A--B}:
+zero-overwrite scores are retained as a methodological negative; exact-region
+re-audit shows the edited tokens are driven off-manifold, so these panels
+cannot localize fine-grained necessity. \textbf{C}: transplanting a donor
+\emph{car\_red} state into a \emph{car\_green} recipient at any tested band
+is sufficient to move the output toward red.
 
 ## Generation
 
@@ -47,7 +28,7 @@ Causal ablation and transplant, \emph{car\_red} vs.\
   - runs/a3_summary.json (layerwindow + stepwindow scans)
   - runs/a4_summary.json
 
-- Note: Script filename predates later figure insertions; renders as a later-numbered figure in the compiled PDF (see \label{fig:causal}).
+- Note: Current placement is supplement Figure 11 (`\label{fig:causal}`).
 
 ## Files in this folder
 

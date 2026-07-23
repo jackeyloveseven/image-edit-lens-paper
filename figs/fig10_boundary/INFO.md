@@ -14,14 +14,10 @@ band (A: decode crossover, B: cosine similarity to terminal v, C: probe accuracy
 
 ### AAAI submission (aaai_draft/20_experiments.tex)
 
-A dense, every-layer sweep of \emph{car\_red} over L44--L59
-  sharpens the coarse L48/L54 snap to a precise boundary.
-  \textbf{A}: the standard decode and the direct-$v$ decode cross
-  between L52 and L54 at both steps shown. \textbf{B}: cosine
-  similarity of the intermediate pseudo-velocity to the terminal
-  $v_{59}$ rises sharply in the same band. \textbf{C}: cross-seed probe
-  accuracy is flat from L44 through L58 and drops only at the terminal
-  layer.
+\textbf{Translation band L52--54.} Dense L44--L59 sweep on
+\emph{car\_red}. \textbf{A--B}: decode crossover and velocity alignment
+change in the same band at $t{=}4,16$. \textbf{C}: probe accuracy stays
+flat through L58 and drops only at L59.
 
 ### supplement.tex
 
@@ -42,7 +38,8 @@ A dense, every-layer sweep of \emph{car\_red} over L44--L59
 
   - runs/g2_boundary/boundary_summary.json (cross-checked against sweep.json and dense_probe_accuracy.json, same numbers)
 
-- Note: Script kept its build-order name; renders as Figure 6 in \S5.3 (\label{fig:boundary}), v2.1 addition.
+- Note: Script kept its build-order name. Current placement is main Figure 4
+  and supplement Figure 6 (`\label{fig:boundary}`).
 
 ## Files in this folder
 

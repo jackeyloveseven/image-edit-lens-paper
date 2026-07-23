@@ -1,4 +1,4 @@
-\begin{thebibliography}{35}
+\begin{thebibliography}{34}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -130,41 +130,33 @@ Katarzyna Zaleska, {\L}ukasz Popek, Monika Wysocza{\'n}ska, and Kamil Deja.
 \newblock Attention, may i have your decision? localizing generative choices in
   diffusion models.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
-  Recognition (CVPR)}, pages 9818--9828, 2026.
+  Recognition (CVPR)}, pages 18053--18063, 2026.
 
 \bibitem[Guo et~al.(2026)Guo, Wei, and Jing]{guo2026probeselect}
 Huanlei Guo, Hongxin Wei, and Bingyi Jing.
 \newblock Toward early quality assessment of text-to-image diffusion models.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
-  Recognition (CVPR)}, pages 13186--13195, 2026.
+  Recognition (CVPR)}, pages 38410--38419, 2026.
 
-\bibitem[Kim et~al.(2025)Kim, Lee, Kim, and Lee]{kim2025elect}
-Jaehyun Kim, Sangryul Lee, Namil Kim, and Sanghoon Lee.
-\newblock {ELECT}: Early latent consistency for zero-shot candidate selection
-  in instruction-guided image editing.
-\newblock In \emph{IEEE/CVF International Conference on Computer Vision
-  (ICCV)}, pages 8209--8218, 2025.
-
-\bibitem[Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Yu, Sun, Bai, Chu, Gou,
-  Xiong, and Cai]{qu2026adecot}
-Xiangyan Qu, Zhenlong Yuan, Jing Tang, Rui Chen, Datao Tang, Meng Yu, Lei Sun,
-  Yancheng Bai, Xiangxiang Chu, Gaopeng Gou, Gang Xiong, and Yujun Cai.
+\bibitem[Qu et~al.(2026)Qu, Yuan, Tang, Chen, Tang, Sun, Bai, Chu, Gou, and
+  Xiong]{qu2026adecot}
+Xiangyan Qu, Zhenlong Yuan, Jing Tang, Rui Chen, Datao Tang, Yuming Sun, Lei
+  Bai, Yancheng Chu, Xiangxiang Gou, and Gaopeng Xiong.
 \newblock From scale to speed: Adaptive test-time scaling for image editing.
 \newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
   Recognition (CVPR)}, pages 23272--23282, 2026.
 
-\bibitem[Zhu et~al.(2026)Zhu, Chen, Lin, Zhang, and Qi]{zhu2026lockin}
-Yilun Zhu, Rongchang Chen, Wang Lin, Junwu Zhang, and Yuan Qi.
+\bibitem[Kwon et~al.(2026)Kwon, Lee, and Choi]{kwon2026lockin}
+Dahee Kwon, Haeun Lee, and Jaesik Choi.
 \newblock Breaking the lock-in: Diversifying text-to-image generation via
   representation modulation.
 \newblock In \emph{International Conference on Machine Learning (ICML)}, 2026.
 
-\bibitem[Sykora et~al.(2026)Sykora, Williams, Hu, Duan, Zhou, Wetzstein, and
-  Aigerman]{sykora2026dreamreader}
-Quinlan Sykora, Francis Williams, Yushi Hu, Peiqi Duan, Bolei Zhou, Gordon
-  Wetzstein, and Noam Aigerman.
-\newblock {DreamReader}: Interpreting and editing diffusion models via
-  representation extraction.
+\bibitem[Prakash et~al.(2026)Prakash, Oozeer, Lan, Samkharadze, Howard, Lee,
+  Nathawani, Raval, and Abdullah]{prakash2026dreamreader}
+Nirmalendu Prakash, Narmeen Oozeer, Michael Lan, Luka Samkharadze, Phillip
+  Howard, Roy Ka-Wei Lee, Dhruv Nathawani, Shivam Raval, and Amirali Abdullah.
+\newblock {DreamReader}: An interpretability toolkit for text-to-image models.
 \newblock \emph{arXiv preprint arXiv:2603.13299}, 2026.
 
 \bibitem[Meng et~al.(2022)Meng, Bau, Andonian, and Belinkov]{meng2022rome}
@@ -178,22 +170,27 @@ Stefan Heimersheim and Neel Nanda.
 \newblock How to use and interpret activation patching.
 \newblock \emph{arXiv preprint arXiv:2404.15255}, 2024.
 
-\bibitem[Pegoraro et~al.(2026)Pegoraro, Johnson, and Nixon]{pegoraro2026look}
-Anna Pegoraro, Daniel~D. Johnson, and Jeremy Nixon.
-\newblock Look but don't touch: Visual features in diffusion models are easy to
-  detect but hard to steer.
+\bibitem[Cassano et~al.(2026)Cassano, Renzulli, Ahmed, Grangetto, and
+  Alaniz]{cassano2026look}
+Enrico Cassano, Riccardo Renzulli, Rayyan Ahmed, Marco Grangetto, and Stephan
+  Alaniz.
+\newblock Look but don't touch with sparse autoencoders for unlearning in
+  diffusion models.
 \newblock \emph{arXiv preprint arXiv:2606.31699}, 2026.
 
-\bibitem[Zhang et~al.(2026)Zhang, Hegde, and Zhang]{zhang2026curse}
-Jingling Zhang, Chinmay Hegde, and Yao Zhang.
-\newblock The curse of multiple mediators in activation patching.
-\newblock \emph{arXiv preprint arXiv:2606.20945}, 2026.
+\bibitem[Vaidyanathan et~al.(2026)Vaidyanathan, Arbour, Mueller, Niekum, and
+  Jensen]{vaidyanathan2026curse}
+Sankaran Vaidyanathan, David Arbour, Aaron Mueller, Scott Niekum, and David
+  Jensen.
+\newblock The curse of multiple mediators: Hidden interaction effects in
+  activation patching.
+\newblock \emph{arXiv preprint arXiv:2606.27510}, 2026.
 
 \bibitem[Turner et~al.(2023)Turner, Thiergart, Leech, Udell, Vazquez, Mini, and
   MacDiarmid]{turner2023actadd}
 Alexander~Matt Turner, Lisa Thiergart, Gavin Leech, David Udell, Juan~J.
   Vazquez, Ulisse Mini, and Monte MacDiarmid.
-\newblock Activation addition: Steering language models without optimization.
+\newblock Steering language models with activation engineering.
 \newblock \emph{arXiv preprint arXiv:2308.10248}, 2023.
 
 \bibitem[Brooks et~al.(2023)Brooks, Holynski, and

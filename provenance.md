@@ -2,6 +2,27 @@
 
 One line each: what it shows -> data source(s) -> generating script.
 
+## Current compiled snapshot (2026-07-22, commit `5f917cb`)
+
+- Main PDF: 8 Letter pages; technical content and Conclusion end on page 7;
+  References continue through page 8.
+- Supplement: 32 Letter pages. Reproducibility checklist: 2 Letter pages.
+- Main figures: Fig. 1 teaser, Fig. 2 framework (only cross-column figure),
+  Fig. 3 mechanism, Fig. 4 boundary, Fig. 5 tuned lens, Fig. 6 carrier crop,
+  Fig. 7 differential preview.
+- Main tables: Table 1 early prediction/selection; Table 2 cross-checkpoint
+  translation/readout.
+- The method source now contains explicit equations for the layer--time grid,
+  CLIP readout, four lenses, linear probes, and three interventions. The current
+  Fig. 2 PDF is an illustration asset; `fig2_method.py` is historical and does
+  not reproduce it.
+- Validation: zero overfull boxes, undefined references, Type 3 fonts, and
+  anonymity-string hits in the main PDF.
+
+The dated material below is an append-only historical record. Figure numbers in
+old entries describe the layout at that date; use the snapshot above and each
+`figs/<name>/INFO.md` for current placement.
+
 **2026-07-16: per-figure folders are now the primary source of truth for
 figure provenance.** `figs/` was restructured from a flat directory (all
 image files + scripts loose together) into one subfolder per figure

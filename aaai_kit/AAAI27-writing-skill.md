@@ -2,6 +2,10 @@
 
 用于指导 AAAI-27 投稿论文的写作、排版与检查，避免因格式或流程问题被 desk reject。
 
+> 项目状态（2026-07-22）：Abstract 截止已过；Full Paper（2026-07-28 AoE）
+> 与 Supplementary/Code（2026-07-31 AoE）尚未到期。当前仓库使用
+> `main_aaai.tex` + `aaai2027.sty` + `aaai2027.bst`，不是下文模板示例名。
+
 ---
 
 ## 1. 关键时间节点
@@ -25,9 +29,9 @@
 
 ## 2. 模板与文件选择
 
-- **投稿阶段**：使用 `AnonymousSubmission2027.tex`（默认开启双盲匿名）。
+- **本仓库投稿入口**：`main_aaai.tex`，加载 `\usepackage[submission]{aaai2027}`。
 - **录用后**：切换为 `CameraReady2027.tex`，补充作者、单位、邮箱、ORCID、Acknowledgements。
-- 配套文件：`aaai27.sty`、`aaai.bst`、`references.bib`。
+- 本仓库配套文件：`aaai2027.sty`、`aaai2027.bst`、`references.bib`。
 - **禁止修改**模板的页边距、字号、行距、字体、双栏结构。
 
 写作全程建议只用 Anonymous 版本，录用后再切换，不要中途混用。
@@ -108,10 +112,10 @@
 
 写作/定稿前逐项确认：
 
-- [ ] 使用 `AnonymousSubmission2027.tex` 而非 CameraReady 模板
+- [ ] 使用 `main_aaai.tex` 的 `[submission]` 模式，而非 CameraReady 模板
 - [ ] 双栏、US Letter、PDF、Type 1/TrueType 字体，未改动模板样式
 - [ ] 正文（含图表）≤ 7 页
-- [ ] References 另起，不计页数
+- [ ] 技术内容在第 7 页内结束；References 可紧随其后，主 PDF 总长 ≤9 页
 - [ ] 已删除作者信息、单位、邮箱、ORCID、致谢
 - [ ] 全文无暴露身份的自引表述或个人链接
 - [ ] Method、Experiments 是重点，Related Work / Conclusion 精简

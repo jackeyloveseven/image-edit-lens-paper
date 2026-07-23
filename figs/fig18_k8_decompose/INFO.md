@@ -8,6 +8,8 @@ Decomposing K7's terminal-step collapse (K8): (a) Q1 dose-response as borrowed-d
 
 - supplement.tex
 
+Current placement: supplement Figure 18.
+
 ## Target caption
 
 ### supplement.tex

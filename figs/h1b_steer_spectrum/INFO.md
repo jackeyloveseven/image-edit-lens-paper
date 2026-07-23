@@ -8,6 +8,8 @@ Steering each edit family's own probe direction into a neutral recipient at shal
 
 - supplement.tex
 
+Current placement: supplement Figure 21.
+
 ## Target caption
 
 ### supplement.tex

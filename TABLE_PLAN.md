@@ -9,6 +9,10 @@
 > Table B 为适配单栏改成四列紧凑版，但保留计划中的 boundary、early/L59 probe、transfer 和 direction cosine。
 > 主稿技术内容仍止于第 7 页，0 overfull / undefined。
 
+> **当前状态（2026-07-22）**：两表仍为正文 Table 1/2。主文图号已重排，
+> boundary 是 Figure 4；15%-NFE preview 已作为 Figure 7 进入正文，不再只是
+> “正文一句或日后 Table C”。本文件以下主体保留为实施历史。
+
 ---
 
 ## 0. 总规则（nature-skills × AAAI）
@@ -128,7 +132,7 @@ chance or random-selection baselines in parentheses where applicable.}
 - 文件：`aaai_draft/20_experiments.tex`
 - 小节：`\subsection{Generalization Across Checkpoints}`（`sec:generalize`）
 - 锚点：段首 claim 后立刻给表，再留 2–3 句解释 cosine / toolchain。
-- 与 Fig5（单模型 dense sweep）分工：**图 = 曲线形状；表 = 跨模型汇总**。
+- 与 Fig4（单模型 dense sweep）分工：**图 = 曲线形状；表 = 跨模型汇总**。
 
 ### 2.3 建议表头（单栏）
 
@@ -192,11 +196,12 @@ Early probe is explicit-prompt 3-way accuracy unless noted.}
 
 | 内容 | 去向 |
 |------|------|
-| CFG until-2、45% NFE、diff preview IoU | 正文一句或日后 Table C；本次不做 |
+| CFG until-2、45% NFE | 正文 prose（不另建 Table C） |
+| diff preview IoU / qualitative preview | 正文 prose + Figure 7；完整 battery 留 supplement |
 | 10-case saturation battery | supplement `tab:battery` |
 | Text-injection bands | supplement `tab:injection` |
 | Steer / rank / Jacobian taxonomy | supplement `tab:taxonomy` |
-| 逐层 A/C 曲线点 | Figure 5（boundary） |
+| 逐层 A/C 曲线点 | Figure 4（boundary） |
 
 ---
 
@@ -214,11 +219,11 @@ pdflatex main_aaai.tex && bibtex main_aaai && pdflatex main_aaai.tex && pdflatex
 
 6. 验收：
 
-- [ ] 主文恰好两张新表（A+B），caption 在上、无竖线
-- [ ] 技术正文 ≤7 页
-- [ ] 表中数字与正文/OUTLINE 一致
-- [ ] 无 undefined ref；尽量无 overfull
-- [ ] Abstract / Intro 若点到这些结果，仍与表一致（不必在 abstract 里引用表号）
+- [x] 主文恰好两张新表（A+B），caption 在上、无竖线
+- [x] 技术正文 ≤7 页
+- [x] 表中数字与正文/OUTLINE 一致
+- [x] 无 undefined ref；尽量无 overfull
+- [x] Abstract / Intro 若点到这些结果，仍与表一致（不必在 abstract 里引用表号）
 
 ---
 
@@ -226,7 +231,7 @@ pdflatex main_aaai.tex && bibtex main_aaai && pdflatex main_aaai.tex && pdflatex
 
 | 载体 | 职责 |
 |------|------|
-| Fig1 / Fig3 / Fig5 | 机制形状（early vs late、两码、band） |
+| Fig1 / Fig3 / Fig4 / Fig5 | 机制形状（early vs late、两码、band、internal image） |
 | **Table A** | 跨任务/跨架构的 **可预测性与 selection** 汇总 + \(p\) |
 | **Table B** | 跨 checkpoint 的 **边界与 probe** 汇总 |
 | Supplement tables | 完整电池、ablation 细表、taxonomy |

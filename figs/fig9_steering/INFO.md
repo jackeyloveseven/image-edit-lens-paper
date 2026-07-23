@@ -8,6 +8,8 @@ Steering dose-response: P(red)/P(green) vs steer strength alpha, with random-dir
 
 - supplement.tex
 
+Current placement: supplement Figure 12.
+
 ## Target caption
 
 ### supplement.tex
@@ -28,7 +30,8 @@ Steering the same \emph{car\_green} recipient toward red by
 
   - runs/g1_steer/summary.json
 
-- Note: Script filename predates later figure insertions; renders as Figure 8, after transplant (\label{fig:steer}).
+- Note: Script filename predates later figure insertions; current placement is
+  supplement Figure 12 (`\label{fig:steer}`).
 
 ## Files in this folder
 

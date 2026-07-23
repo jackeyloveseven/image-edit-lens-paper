@@ -13,15 +13,12 @@ Tuned lens (K1) renders a coherent internal image at every depth from t=0 on hel
 
 ### AAAI submission (aaai_draft/20_experiments.tex)
 
-A tuned lens renders the internal image the frozen head
-  cannot read. Top: per-(layer, timestep) ridge translators, fit on
-  \emph{remove}/\emph{background}/\emph{addition} edits and evaluated
-  zero-shot on the held-out \emph{car\_red} color edit, decode a
-  coherent scene at every depth at $t{=}0$, watching the edit enter the
-  internal image layer by layer. Bottom: at $t{=}12$ the raw frozen
-  head renders the identical L36 hidden state as a color-inverted
-  ghost -- the complement of the true scene -- while the tuned lens at
-  the same cell is already coherent.
+\textbf{Internal image vs.\ frozen-head ghost.} \textbf{A}: the
+zero-shot tuned lens shows the edit enter a coherent internal image at
+$t{=}0$. \textbf{B}: for the same L36/$t$12 state, the frozen head yields
+an anti-image while the tuned lens recovers the edited scene.
+
+Current placement: main Figure 5; supplement Figure 7.
 
 ### supplement.tex
 

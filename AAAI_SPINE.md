@@ -5,25 +5,27 @@
 Supplementary 独立 PDF (审稿人无义务读 → 主线每个数字必须正文自证)。
 Reproducibility Checklist 不计入正文页数且需**独立提交**(不合并进 main PDF, 2026-07-14 修正,
 见 `AAAI_HANDOFF.md` §1/§5)。
-截止: abstract 2026-07-21 AoE / full paper 2026-07-28 AoE。
+时间状态（2026-07-22）: abstract 截止 2026-07-21 AoE 已过；full paper 截止
+2026-07-28 AoE；supplement/code 截止 2026-07-31 AoE。
 
 ## 单一最强贡献 (the one line reviewers should remember)
-**"我们造了第一个面向扩散图像编辑器的 tuned-lens,用它证明:编辑不是逐步显影,而是
-*决定得早、翻译得晚*——在靠近栈顶一条锐利(~1 层)、时间步不变、且跨模型通用的
-L52-54 带里,才把内部目标图像码翻译成绘制用的速度场。因为读数是因果的,它们直接
-变成免训练杠杆。"**
+**"我们造了面向扩散图像编辑器的 layer--time / tuned lens,并发现:编辑不是逐步显影,而是
+*结果早可预测、代码晚翻译*——在靠近栈顶一条锐利(~1 层)、时间步不变、且在测试的
+Qwen 谱系 checkpoint 中复现的
+L52-54 带里,才把内部目标图像码翻译成绘制用的速度场。读数与 transplant / steer
+干预相互校验，并导出免训练杠杆。"**
 
 ## 脊柱 (spine) — 决定谁留正文的判据: 对头条 claim 是否 load-bearing
 1. **Instrument**: layer-time tuned-lens + 冻结头 logit-lens 类比 + 三因果原语
    (ablation / transplant / steer)。这是使一切可见的仪器。[method, ~1.5pp]
-2. **When — decided early**: 编辑 L6 即线性可读 (cross-seed probe 0.88),
+2. **When — predictable early**: 编辑结果 L6 即线性可读 (cross-seed probe 0.88),
    而冻结头到 L48-54 才可读。头号反直觉。[result, 脊柱]
 3. **Translate late — two codes**: 大半栈携带线性可读的目标图像码,在 L52-54
    锐带 (transition width ≤1 层, 四变体解码确认) 翻译成速度码。[result, 脊柱]
 4. **三解离 (深化脊柱, 很可能是最新颖点)**: 可读 ≠ 因果必要 ≠ 线性可写——
    三种不同的解离,各自定位。[result, 深化]
-5. **普适 (回应最大质疑=外部效度)**: L52-54 边界 edit-family 通用 + 独立
-   fine-tune (FireRed) + 4 步蒸馏 (Rapid-AIO) 复现。压成 2 段 + 1 图。[defense]
+5. **测试范围内的外部效度**: L52-54 邻域在测试 edit families、独立 fine-tune
+   (FireRed) 与 4 步蒸馏 (Rapid-AIO) 中复现；不外推到无关架构。[defense]
 6. **应用 (so-what)**: CFG 截断 step 2 后省 45% forward passes；另以单栏图保留
    15%-NFE differential preview，展示机制可直接用于候选编辑预览。[so-what]
 
@@ -49,7 +51,13 @@ at <url>" / showcase 页引用 → 全部 "anonymized" 或 "released upon accept
 
 ---
 
-## AAAI 摘要 draft v1 (~185 词, 一条脊柱)
+## 当前摘要口径
+
+以下不再维护独立 draft；权威文本是 `main_aaai.tex` 的 `abstract`。摘要必须使用
+“predictable early”，不能写成 irreversible decision/commitment；Boogu 只支持
+prediction/selection，不支持 Qwen 的 translation mechanism。
+
+## 历史 AAAI 摘要 draft v1（仅留档）
 
 Between reading "turn the car red" and painting it, what does a diffusion image
 editor do? The mechanics suggest gradual development -- sixty transformer blocks

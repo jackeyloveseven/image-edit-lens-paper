@@ -5,9 +5,13 @@
 > **仍不含** `fig2_method`（pipeline）。  
 > **第一版全文**：见 `FIGURE_REDESIGN.md`（总原则、色板、字号阶梯仍有效；本文件只写 **v1 未落实 / 新发现** 的项）。
 
-> **实施状态（2026-07-21）**：已完成。四图标题均按面板/行居中；Fig1 使用按物理层坐标插值的 L52--54 band；
-> micro-label 下限为 7 pt；Fig5-C 自动留出 0.05 y 轴余量；四脚本均使用可移植字体 fallback，当前解析为 Arimo；
-> 主稿重编译后技术内容止于第 7 页，0 overfull / undefined / Type 3。
+> **当前状态（2026-07-22，commit `5f917cb`）**：本工单已完成并进入历史维护。
+> 四图标题均按面板/行居中；Fig1 使用按物理层坐标插值的 L52--54 band；
+> micro-label 下限为 7 pt；当前正文编号为 Fig1 teaser / Fig3 mechanism /
+> Fig4 boundary / Fig5 tuned lens。Fig4-C 自动留出 0.05 y 轴余量；四脚本均
+> 使用可移植字体 fallback，当前解析为 Arimo。主稿为 8 页，技术内容和
+> Conclusion 止于第 7 页，0 overfull / undefined / Type 3。Fig2 framework
+> 已单独重制并成为唯一跨栏图。
 
 ---
 
@@ -16,10 +20,10 @@
 | # | 项 | 图 | 严重度 |
 |---|----|----|--------|
 | 1 | **所有主图**的面板小标题（`A`/`B`/`C`…）各自相对面板 **水平居中** | Fig1 / Fig3 / Fig4 / Fig5 | P0 |
-| 2 | `translation` 做成真正的 **L52–54 半透明带**，与 Fig5 几何一致 | Fig1 | P0 |
+| 2 | `translation` 做成真正的 **L52–54 半透明带**，与 Fig4 几何一致 | Fig1 | P0 |
 | 3 | 所有 micro-label / 箭头字 ≥ **7 pt** | Fig1（及扫一遍其余图） | P1 |
 | 4 | 核对正文 PDF 中图与引用段的邻近（浮动体） | `20_experiments.tex` | P1 |
-| 5 | Fig5-C y 轴略留白；Fig3-A 列标题防挤 | Fig5 / Fig3 | P2 |
+| 5 | Fig4-C y 轴略留白；Fig3-A 列标题防挤 | Fig4 / Fig3 | P2 |
 | 6 | 字体路径可移植（勿写死仅 Linux Arimo 路径） | 全部脚本 | P2 |
 
 改完后重导出 PDF/PNG，并重编译 `main_aaai.pdf`，确认技术正文仍止于第 7 页。
@@ -34,12 +38,12 @@
 |----|------|-------------------|
 | Fig1 Teaser | `fig1_teaser.py` | `A Edit example` · `B Layer-time lens` · `C Measured stages` |
 | Fig3 Mechanism | `fig5_mechanism.py` | `A Decode conventions` · `B Early probe` |
-| Fig4 Tuned lens | `fig12_tuned_lens.py` | `A Edit enters internal image` · `B Head fails, lens succeeds`（行级标题，相对整行 3 格网格水平居中；若现为左对齐则改为居中） |
-| Fig5 Boundary | `fig10_boundary.py` | `A A/C crossover` · `B Alignment to v59` · `C Probe accuracy` |
+| Fig5 Tuned lens | `fig12_tuned_lens.py` | `A Edit enters internal image` · `B Head fails, lens succeeds`（行级标题，相对整行 3 格网格水平居中） |
+| Fig4 Boundary | `fig10_boundary.py` | `A A/C crossover` · `B Alignment to v59` · `C Probe accuracy` |
 
 **规则（四图同一套）：**
 
-- 每个面板（或 Fig4 的每一行）的 **字母 + 标题作为一组**，相对 **该面板/该行内容区** 水平居中（`ha="center"`，中心约 `x=0.5` in axes / row coords）。
+- 每个面板（或 Fig5 的每一行）的 **字母 + 标题作为一组**，相对 **该面板/该行内容区** 水平居中（`ha="center"`，中心约 `x=0.5` in axes / row coords）。
 - **禁止** 字母贴左、标题贴左的分置写法（当前若干脚本的 `letter` 在 `x≈-0.08`、`title` 在 `x≈0.02` 即属此类）。
 - 同一图内各面板标题 **基线齐平**（同一 `y`）；字号 10 pt bold，Ink。
 - 推荐：`ax.text(0.5, 1.08, f"{letter}  {title}", transform=ax.transAxes, ha="center", ...)` 或 `set_title(..., loc="center")`。
@@ -47,9 +51,9 @@
 
 **验收：**
 
-- [ ] Fig1 / Fig3 / Fig5：每个 `A`/`B`/`C` 标题相对各自面板居中
-- [ ] Fig4：`A`/`B` 行标题相对该行三格整体居中（或明确居中于行内容宽）
-- [ ] 目检无「标题贴左、图在中间」的错位感
+- [x] Fig1 / Fig3 / Fig4：每个 `A`/`B`/`C` 标题相对各自面板居中
+- [x] Fig5：`A`/`B` 行标题相对该行三格整体居中
+- [x] 目检无「标题贴左、图在中间」的错位感
 
 ---
 
@@ -65,26 +69,26 @@
 
 推荐实现见 §0.1；Fig1 额外验收：
 
-- [ ] 三栏标题的视觉中心与各自面板（A 双图块 / B 热图+色条整体 / C 阶段条）水平中轴对齐
-- [ ] 三栏标题 **基线齐平**（同一 `y`）
-- [ ] 字母仍为粗体 10 pt；标题同字号，Ink 色
+- [x] 三栏标题的视觉中心与各自面板（A 双图块 / B 热图+色条整体 / C 阶段条）水平中轴对齐
+- [x] 三栏标题 **基线齐平**（同一 `y`）
+- [x] 字母仍为粗体 10 pt；标题同字号，Ink 色
 
-### 1.2 P0 · Translation 带与 Fig5 一致
+### 1.2 P0 · Translation 带与 Fig4 一致
 
 **现状**：脚本对 `layers.index(54)` 画约一行高的强调，标签 `translation`；**不是** L52–54 跨层 band。
 
-**目标**（对齐 `FIGURE_REDESIGN.md` §1.4 与 Fig5）：
+**目标**（对齐 `FIGURE_REDESIGN.md` §1.4 与 Fig4）：
 
-- 在热图上画半透明带，覆盖 **L52 与 L54 之间的行**（含两端；与 Fig5 的 `axvspan(52, 54)` 语义一致）。
-- 色：`Red @ 12–15% alpha`（或与 Fig5 同源常量）。
+- 在热图上画半透明带，覆盖 **L52 与 L54 之间的行**（含两端；与 Fig4 的 `axvspan(52, 54)` 语义一致）。
+- 色：`Red @ 12–15% alpha`（或与 Fig4 同源常量）。
 - 标签写在带内或带旁：`translation`，白字或 Red 字，**≥7 pt**，勿遮住过多格子。
 - 删除“只框 L54 一行”的旧逻辑。
 
 **验收**：
 
-- [ ] 带的垂直范围对应 L52–54（在离散 layer 轴上覆盖正确行）
-- [ ] Fig1-B 与 Fig5 三图的 translation 区间读感一致
-- [ ] 与右侧 C 栏 **Translation / L52–54** 盒子仍语义对齐（引导线可选保留）
+- [x] 带的垂直范围对应 L52–54（在离散 layer 轴上覆盖正确行）
+- [x] Fig1-B 与 Fig4 三图的 translation 区间读感一致
+- [x] 与右侧 C 栏 **Translation / L52–54** 盒子仍语义对齐（引导线可选保留）
 
 ### 1.3 P1 · 字号下限
 
@@ -97,7 +101,7 @@
 
 ---
 
-## 2. Figure 5 — Boundary（小修）
+## 2. Figure 4 — Boundary（小修）
 
 文件：`figs/fig10_boundary/fig10_boundary.py`
 
@@ -117,7 +121,9 @@
 
 ### 2.4 与 Fig1 联动
 
-- Fig1 改 band 时，**复用同一常量**（如 `TRANSLATION_LO, TRANSLATION_HI = 52, 54` 与同一 `BAND_ALPHA`），避免两图 band 宽窄/颜色不一致。
+- Fig1 与当前 Fig4 boundary **复用同一常量**（如
+  `TRANSLATION_LO, TRANSLATION_HI = 52, 54` 与同一 `BAND_ALPHA`），避免
+  两图 band 宽窄/颜色不一致。
 
 ---
 
@@ -147,7 +153,7 @@
 
 ---
 
-## 4. Figure 4 — Tuned lens
+## 4. Figure 5 — Tuned lens
 
 文件：`figs/fig12_tuned_lens/fig12_tuned_lens.py`
 
@@ -162,7 +168,7 @@
 
 ### 4.3 可选增强（P3，时间不够可跳过）
 
-- 正文现为单栏 `0.98\columnwidth`：若双栏打印偏小，可改为 `figure*` + `0.92\textwidth`（需重编译确认不超页）。
+- 正文现为单栏 `0.98\columnwidth`，按当前“仅 framework 跨栏”规则保持，不再改为 `figure*`。
 - B 行 `tuned L36` 与 `final` 几乎相同：可不改图；若改，仅微调 final 的标注或 crop，**不要**破坏 2×3。
 
 ---
@@ -240,12 +246,12 @@ pdflatex main_aaai.tex && bibtex main_aaai && pdflatex main_aaai.tex && pdflatex
 
 ## 9. 本轮完成定义（DoD）
 
-- [ ] Fig1 / Fig3 / Fig5 面板小标题相对各面板 **居中**；Fig4 行标题相对各行 **居中**；同图基线齐
-- [ ] Fig1 热图为 **L52–54 band**，标签 `translation`，与 Fig5 一致
-- [ ] 图内无 <7 pt 的说明文字
-- [ ] 正文图浮动不再整块堆在 Setup 后（目检通过）
-- [ ] 重编译通过，正文技术内容 ≤7 页
-- [ ] （可选）字体 fallback + Fig5-C ylim + Fig3 列标题
+- [x] Fig1 / Fig3 / Fig4 面板小标题相对各面板居中；Fig5 行标题相对各行居中
+- [x] Fig1 热图为 **L52–54 band**，标签 `translation`，与 Fig4 一致
+- [x] 图内无 <7 pt 的说明文字
+- [x] 正文图浮动与首次讨论同页或邻页
+- [x] 重编译通过，正文技术内容止于第 7 页
+- [x] 字体 fallback + Fig4-C ylim + Fig3 列标题
 
 ---
 
@@ -253,4 +259,5 @@ pdflatex main_aaai.tex && bibtex main_aaai && pdflatex main_aaai.tex && pdflatex
 
 - `FIGURE_REDESIGN.md` = 完整设计宪法（仍有效）。
 - **本文件 `FIGURE_REDESIGN_v2.md`** = 基于当前仓库实拍效果的 **第二轮增量工单**。  
-Codex 应落实本文件缺口；**面板/行标题居中是四图统一 P0**，不要只改 Fig1。Fig4 的 2×3 网格与 Fig5 共享 legend **不要无关重排**，只改标题对齐等列出项。
+Codex 应落实本文件缺口；**面板/行标题居中是四图统一 P0**，不要只改 Fig1。
+当前 Fig5 保持 2×3 网格，Fig4 保持共享 legend；不要无关重排。

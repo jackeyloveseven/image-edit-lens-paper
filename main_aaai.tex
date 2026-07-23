@@ -46,12 +46,13 @@ head and pairs readouts with linear probes and activation interventions
 prompts, the \emph{realized} outcome is predictable from early layers
 while the frozen head still reads noise (car color: $0.667$ balanced
 accuracy vs.\ chance $0.333$, $p{=}0.002$). That target-image code is
-\emph{translated late} into the velocity field in a sharp,
-timestep-invariant band (layers 52--54 of 60). The boundary persists
-across tested edit families, an independent fine-tune, and a four-step
-distilled checkpoint; held-out early best-of-five selection validates the
-readout on a second architecture. Transplant establishes sufficiency;
-steering shows writable hue requires a spatial carrier. Truncating
+\emph{translated late} into the velocity field near layers 52--54 of 60:
+the crossover midpoint changes by under one layer between tested timesteps,
+although its width is timestep-dependent. The boundary replicates in an
+independent fine-tune and a four-step distilled checkpoint of the same
+Qwen lineage; held-out early best-of-five selection validates the readout
+on a second architecture. Transplant establishes sufficiency; in the tested
+recolor setting, steering shows writable hue requires a spatial carrier. Truncating
 classifier-free guidance after step two saves 45\% of forward passes on
 tested edits.
 \end{abstract}
@@ -83,10 +84,6 @@ tested edits.
 		validation and training-free levers discussed in text.}
 	\label{fig:method}
 \end{figure*}
-
-\input{aaai_draft/05_related}
-
-
 
 \input{aaai_draft/10_method}
 
